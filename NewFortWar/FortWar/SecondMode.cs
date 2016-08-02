@@ -13,16 +13,16 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace NewFortWar
+namespace FortWar
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
-    public partial class MainWindow : Window
+    class SecondMode
     {
-        public MainWindow()
+        Canvas MainCanvas;
+        Window MainWindow;
+        int[,] gameField = new int[54, 54];
+        public void Build (Canvas mainCanvas, Window MainWindow)
         {
-            InitializeComponent();
+
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace NewFortWar
+namespace FortWar
 {
     /// <summary>
     /// Логика взаимодействия для App.xaml
