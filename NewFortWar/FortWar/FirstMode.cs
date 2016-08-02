@@ -19,6 +19,7 @@ namespace FortWar
     {
         ArtificialIntellect aI = new ArtificialIntellect();
         MainMenu mainMenu = new MainMenu();
+        bool IsLoad;
         //описание
         BitmapImage source0, source1, source2, source3, source4, source5, source6;
         int[,] gameField = new int[55, 55];
@@ -33,6 +34,7 @@ namespace FortWar
         Image[,] imageField;
         public void Build  (Canvas mainCanvas, Window mainWindow, bool isLoad)
         {
+            IsLoad = isLoad;
             if(!isLoad)
             {
                 fieldHeight = Properties.Settings.Default.gameHeight;
@@ -51,16 +53,33 @@ namespace FortWar
             //Чистим без вилки
             MainCanvas.Children.Clear();
             //Теперь поле
-            for(int i = 0; i <= fieldHeight; i++)
+            if (!isLoad)
             {
-                for(int j = 0; j <= fieldWidth; j++)
+                for (int i = 0; i <= fieldHeight; i++)
                 {
-                    gameField[i,j] = 0;
+                    for (int j = 0; j <= fieldWidth; j++)
+                    {
+                        gameField[i, j] = 0;
+                    }
+                }
+                //Первые замки
+                gameField[Properties.Settings.Default.firstPlayerCityY - 1, Properties.Settings.Default.firstPlayerCityX - 1] = 1;
+                gameField[Properties.Settings.Default.secondPlayerCityY - 1, Properties.Settings.Default.secondPlayerCityX - 1] = 2;
+            }
+            else
+            {
+                String text = System.IO.File.ReadAllText("FirstModeSave.map");
+                fieldHeight = ((int)text[0] - 48) * 10 + (int)text[1] - 48;
+                fieldWidth = ((int)text[2] - 48) * 10 + (int)text[3] - 48;
+                for(int i = 0; i < fieldHeight; i++)
+                {
+                    for(int j = 0; j < fieldWidth; j++)
+                    {
+                        gameField[i, j] = (int)text[i * fieldWidth + j + 4] - 48;
+                    }
                 }
             }
-            //Первые замки
-            gameField[Properties.Settings.Default.firstPlayerCityY - 1, Properties.Settings.Default.firstPlayerCityX - 1] = 1;
-            gameField[Properties.Settings.Default.secondPlayerCityY - 1, Properties.Settings.Default.secondPlayerCityX - 1] = 2;
+
             MakeField();
         }
         //Красим  соседние с кликом клетки
@@ -412,8 +431,11 @@ namespace FortWar
                     imageMargin.Top -= (imageHeight / 2) * 0.97;
                 imageMargin.Left = 0;
             }
-            steep(Properties.Settings.Default.firstPlayerCityY - 1, Properties.Settings.Default.firstPlayerCityX - 1, 0);
-            steep(Properties.Settings.Default.secondPlayerCityY - 1, Properties.Settings.Default.secondPlayerCityX - 1, 1);
+            if (!IsLoad)
+            {
+                steep(Properties.Settings.Default.firstPlayerCityY - 1, Properties.Settings.Default.firstPlayerCityX - 1, 0);
+                steep(Properties.Settings.Default.secondPlayerCityY - 1, Properties.Settings.Default.secondPlayerCityX - 1, 1);
+            }
             if(Properties.Settings.Default.gameBot == 2)
             {
                 for(int i = 0; i < Properties.Settings.Default.numberSteeps; i++)
@@ -584,6 +606,23 @@ namespace FortWar
                 MessageBoxButton buttons = MessageBoxButton.YesNo;
                 if (MessageBox.Show("Действительно ли вы хотите выйти? \n Текущая игра будет сохранена", "Подтверждение выхода", buttons) == MessageBoxResult.Yes)
                 {
+                    String text = "";
+                    if (fieldHeight < 10)
+                        text += "0" + fieldHeight.ToString();
+                    else
+                        text += fieldHeight.ToString();
+                    if (fieldWidth < 10)
+                        text += "0" + fieldWidth.ToString();
+                    else
+                        text += fieldWidth.ToString();
+                    for(int i = 0; i < fieldHeight; i++)
+                    {
+                        for(int j = 0; j < fieldWidth; j++)
+                        {
+                            text += gameField[i, j].ToString();
+                        }
+                    }
+                    System.IO.File.WriteAllText("FirstModeSave.map",text);
                     Properties.Settings.Default.savedMode = 0;
                     Properties.Settings.Default.isGameSaved = true;
                     Properties.Settings.Default.Save();
