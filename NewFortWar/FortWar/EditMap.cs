@@ -24,7 +24,7 @@ namespace FortWar
         Window MainWindow;
         Canvas MainCanvas;
         //Само поле
-        //0 - Пустя клеточка, 1 - горы, 2 - река, 3 - клетка первого, 4 - клеткаа второго, 5 - горы первого, 6 - горы второго, 7 - замок первого, 8 - замок второго, 9 - крепость первого, 10 - крепость второго
+        //0 - Пустя клеточка, 1 - горы, 2 - река, 3 - клетка первого, 4 - клеткаа второго, 5 - горы первого, 6 - горы второго, 7 - крепость первого, 8 - крепость второго, 9 - замок первого, 10 - замок второго
         private int[, ] field = new int[55, 55];
         //Соурсы к картинкам поля. Номера аналогичные. Присваиваются в методе MakeSources
         BitmapImage[] Sources = new BitmapImage[11];
@@ -91,11 +91,41 @@ namespace FortWar
             //Все соурсы в конце
         }
         //Метод, присваивающий соурсы. Описан в начале
-        private void MakeSources()
+        private void InitSources()
         {
             Sources[0].BeginInit();
             Sources[0].UriSource = new Uri("Geks0.png", UriKind.Relative);
             Sources[0].EndInit();
+            Sources[1].BeginInit();
+            Sources[1].UriSource = new Uri("Geks7.png", UriKind.Relative);
+            Sources[1].EndInit();
+            Sources[2].BeginInit();
+            Sources[2].UriSource = new Uri("Geks10.png", UriKind.Relative);
+            Sources[2].EndInit();
+            Sources[3].BeginInit();
+            Sources[3].UriSource = new Uri("Geks5.png", UriKind.Relative);
+            Sources[3].EndInit();
+            Sources[4].BeginInit();
+            Sources[4].UriSource = new Uri("Geks6.png", UriKind.Relative);
+            Sources[4].EndInit();
+            Sources[5].BeginInit();
+            Sources[5].UriSource = new Uri("Geks8.png", UriKind.Relative);
+            Sources[5].EndInit();
+            Sources[6].BeginInit();
+            Sources[6].UriSource = new Uri("Geks9.png", UriKind.Relative);
+            Sources[6].EndInit();
+            Sources[7].BeginInit();
+            Sources[7].UriSource = new Uri("Geks3.png", UriKind.Relative);
+            Sources[7].EndInit();
+            Sources[8].BeginInit();
+            Sources[8].UriSource = new Uri("Geks4.png", UriKind.Relative);
+            Sources[8].EndInit();
+            Sources[9].BeginInit();
+            Sources[9].UriSource = new Uri("Geks1.png", UriKind.Relative);
+            Sources[9].EndInit();
+            Sources[10].BeginInit();
+            Sources[10].UriSource = new Uri("Geks2.png", UriKind.Relative);
+            Sources[10].EndInit();
         }
     }
 }

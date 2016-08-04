@@ -124,6 +124,18 @@
   <ItemGroup>
     <Resource Include="Geks6.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Geks7.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Geks10.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Geks8.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Geks9.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
