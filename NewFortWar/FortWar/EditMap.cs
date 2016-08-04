@@ -26,6 +26,8 @@ namespace FortWar
         //Само поле
         //0 - Пустя клеточка, 1 - горы, 2 - река, 3 - клетка первого, 4 - клеткаа второго, 5 - горы первого, 6 - горы второго, 7 - замок первого, 8 - замок второго, 9 - крепость первого, 10 - крепость второго
         private int[, ] field = new int[55, 55];
+        //Соурсы к картинкам поля. Номера аналогичные. Присваиваются в методе MakeSources
+        BitmapImage[] Sources = new BitmapImage[11];
         //Высота и ширина поля
         private int loadedFieldHeight = 0, loadedFieldWidth = 0;
         //Абсолютная высота и ширина шестиугольничков imageWidth здесь для удобства (т.к. всегда равен imageHeight * 1.1547 = (2 / sqrt(3))
@@ -88,6 +90,12 @@ namespace FortWar
                 imageHeight = imageWidth / 1.1547;
             //Все соурсы в конце
         }
-
+        //Метод, присваивающий соурсы. Описан в начале
+        private void MakeSources()
+        {
+            Sources[0].BeginInit();
+            Sources[0].UriSource = new Uri("Geks0.png", UriKind.Relative);
+            Sources[0].EndInit();
+        }
     }
 }
