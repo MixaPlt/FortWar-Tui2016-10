@@ -627,6 +627,7 @@ namespace FortWar
                     Properties.Settings.Default.isGameSaved = true;
                     Properties.Settings.Default.Save();
                     mainMenu.Build(MainCanvas, MainWindow);
+                    MainWindow.KeyUp -= AnyKeyUp;
                 }
             }
         }
