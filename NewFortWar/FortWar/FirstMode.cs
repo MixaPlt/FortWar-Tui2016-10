@@ -357,16 +357,13 @@ namespace FortWar
             //Определяем размеры шестиугольничков по формулкам
             double imageWidth, imageHeight;
             //1.1547 - соотношение сторон шестиугольника
-            if (MainWindow.Width / (1.5 * (fieldWidth / 2 + 1) + fieldWidth % 2) < (MainWindow.Height / ((double)(fieldHeight) + 3)))
-            {
-                imageWidth = MainWindow.Width / (1.5 * (fieldWidth / 2 + 1) + fieldWidth % 2);
-                imageHeight = imageWidth / 1.156;
-            }
+            imageWidth = MainWindow.Width * 4 / (3 * fieldWidth + 1);
+            imageHeight = (MainWindow.Height - 26) / (fieldHeight + 0.5);
+            if (imageWidth > imageHeight * 1.1547)
+                imageWidth = imageHeight * 1.1547;
             else
-            {
-                imageHeight = (MainWindow.Height / ((double)(fieldHeight) + 3));
-                imageWidth = imageHeight * 1.157;
-            }
+                imageHeight = imageWidth / 1.1547;
+            MessageBox.Show(String.Format("{0}", imageHeight));
             imageField = new Image[55, 55];
             Thickness imageMargin = new Thickness() { Top = 0, Left = 0 };
             for (int i = 0; i < fieldHeight; i++)

@@ -17,7 +17,7 @@ namespace FortWar
 {
     public partial class MainWindow : Window
     {
-        public int windowMode;
+        public static int windowMode;
         public MainWindow()
         {
             InitializeComponent();
@@ -31,7 +31,7 @@ namespace FortWar
         //Properties.Settings.Default.windowMode - режим окна
         private void isWindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
-            switch(windowMode)
+            switch(Properties.Settings.Default.windowMode)
             {
                 case 0:
                     {

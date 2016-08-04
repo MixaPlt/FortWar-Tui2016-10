@@ -328,53 +328,53 @@ namespace FortWar
         }
 
         //Сохранение настроек для первого режима
-        private void SaveSettings ()
+        private bool SaveSettings ()
         {
             MyFunctions myFunctions = new MyFunctions();
             //Проверка корректности данных
             if (myFunctions.StringToInt(gameHeightBox.Text) == 0)
-                return;
+                return false;
             if (myFunctions.StringToInt(gameWidthBox.Text) == 0)
-                return;
+                return false;
             if (myFunctions.StringToInt(firstCityX.Text) == 0)
-                return;
+                return false;
             if (myFunctions.StringToInt(firstCityY.Text) == 0)
-                return;
+                return false;
             if (myFunctions.StringToInt(secondCityX.Text) == 0)
-                return;
+                return false;
             if (myFunctions.StringToInt(secondCityY.Text) == 0)
-                return;
+                return false;
             if (myFunctions.StringToInt(numberSteepsBox.Text) == 0)
-                return;
+                return false;
             if(myFunctions.StringToInt(gameHeightBox.Text) < myFunctions.StringToInt(firstCityY.Text))
             {
                 MessageBox.Show("Введены некорректные данные");
-                return;
+                return false;
             }
             if (myFunctions.StringToInt(gameWidthBox.Text) < myFunctions.StringToInt(firstCityX.Text))
             {
                 MessageBox.Show("Введены некорректные данные");
-                return;
+                return false;
             }
             if (myFunctions.StringToInt(gameHeightBox.Text) < myFunctions.StringToInt(secondCityY.Text))
             {
                 MessageBox.Show("Введены некорректные данные");
-                return;
+                return false;
             }
             if (myFunctions.StringToInt(gameWidthBox.Text) < myFunctions.StringToInt(secondCityX.Text))
             {
                 MessageBox.Show("Введены некорректные данные");
-                return;
+                return false;
             }
             if (myFunctions.StringToInt(gameWidthBox.Text) > 50 || myFunctions.StringToInt(gameHeightBox.Text) > 50)
             {
                 MessageBox.Show("Введены некорректные данные");
-                return;
+                return false;
             }
             if (myFunctions.StringToInt(firstCityY.Text) == myFunctions.StringToInt(secondCityY.Text) && myFunctions.StringToInt(firstCityX.Text) == myFunctions.StringToInt(secondCityX.Text))
             {
                 MessageBox.Show("Введены некорректные данные");
-                return;
+                return false;
             }
             //Сохранение
             Properties.Settings.Default.gameHeight = myFunctions.StringToInt(gameHeightBox.Text);
@@ -387,6 +387,7 @@ namespace FortWar
             Properties.Settings.Default.mainWindowHeight = (int)MainWindow.Height;
             Properties.Settings.Default.mainWindowWidth = (int)MainWindow.Width;
             Properties.Settings.Default.Save();
+            return true;
         }
         private void SecondModeAgreeSettings(object sender, RoutedEventArgs e)
         {
@@ -415,9 +416,11 @@ namespace FortWar
         //Кнопка редактирования карты для втрго режима
         private void SecondModeChangeMap(object sender, RoutedEventArgs e)
         {
-            SaveSettings();
-            EditMap editMap = new FortWar.EditMap();
-            editMap.Build(MainCanvas, MainWindow);
+            if (SaveSettings())
+            {
+                EditMap editMap = new FortWar.EditMap();
+                editMap.Build(MainCanvas, MainWindow);
+            }
         }
     }
 }

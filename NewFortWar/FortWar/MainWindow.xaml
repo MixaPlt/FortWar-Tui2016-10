@@ -8,7 +8,7 @@
         MinHeight="480" MinWidth="640" SizeChanged="isWindowSizeChanged"
         Title="FortWar" Height="350" Width="525" Background="Cyan" x:Name="mainWindow">
     <Grid>
-        <Canvas x:Name="mainCanvas">
+        <Canvas x:Name="mainCanvas" Margin="0,0,0,0">
         </Canvas>
     </Grid>
 </Window>

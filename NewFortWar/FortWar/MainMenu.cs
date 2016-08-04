@@ -23,6 +23,7 @@ namespace FortWar
         //Метод, создающий на координатном поле mainCanvas главное меню
         public void Build(Canvas mainCanvas, Window mainWindow)
         {
+            Properties.Settings.Default.windowMode = 0;
             MainWindow = mainWindow;
             MainCanvas = mainCanvas;
             //Очистка поля

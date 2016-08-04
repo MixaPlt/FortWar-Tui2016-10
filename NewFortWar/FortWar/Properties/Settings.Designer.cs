@@ -211,5 +211,17 @@ namespace FortWar.Properties {
                 this["savedMode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool secondModeIsSaved {
+            get {
+                return ((bool)(this["secondModeIsSaved"]));
+            }
+            set {
+                this["secondModeIsSaved"] = value;
+            }
+        }
     }
 }
