@@ -68,15 +68,26 @@ namespace FortWar
             }
             else
             {
-                String text = System.IO.File.ReadAllText("FirstModeSave.map");
-                fieldHeight = ((int)text[0] - 48) * 10 + (int)text[1] - 48;
-                fieldWidth = ((int)text[2] - 48) * 10 + (int)text[3] - 48;
-                for(int i = 0; i < fieldHeight; i++)
+                try
                 {
-                    for(int j = 0; j < fieldWidth; j++)
+                    String text = System.IO.File.ReadAllText("FirstModeSave.map");
+                    fieldHeight = ((int)text[0] - 48) * 10 + (int)text[1] - 48;
+                    fieldWidth = ((int)text[2] - 48) * 10 + (int)text[3] - 48;
+                    playerSteep = (int)text[4] - 48;
+                    for (int i = 0; i < fieldHeight; i++)
                     {
-                        gameField[i, j] = (int)text[i * fieldWidth + j + 4] - 48;
+                        for (int j = 0; j < fieldWidth; j++)
+                        {
+                            gameField[i, j] = (int)text[i * fieldWidth + j + 5] - 48;
+                        }
                     }
+                }
+                catch(System.IO.FileNotFoundException)
+                {
+                    Properties.Settings.Default.isGameSaved = false;
+                    Properties.Settings.Default.Save();
+                    MessageBox.Show("Файл сохранения повреждён.\nПерезапуск исправит проблему");
+                    Environment.Exit(0);
                 }
             }
 
@@ -363,7 +374,6 @@ namespace FortWar
                 imageWidth = imageHeight * 1.1547;
             else
                 imageHeight = imageWidth / 1.1547;
-            MessageBox.Show(String.Format("{0}", imageHeight));
             imageField = new Image[55, 55];
             Thickness imageMargin = new Thickness() { Top = 0, Left = 0 };
             for (int i = 0; i < fieldHeight; i++)
@@ -451,7 +461,7 @@ namespace FortWar
                 EndGame(2);
             }
             else
-                if(Properties.Settings.Default.botSteep == 0 && Properties.Settings.Default.gameBot == 1)
+                if(Properties.Settings.Default.botSteep == 0 && Properties.Settings.Default.gameBot == 1 && playerSteep == 0)
                 {
                     pair botSteep = aI.FirstModeFirstBot(gameField, 0);
                     steep(botSteep.y, botSteep.x, 0);
@@ -505,7 +515,7 @@ namespace FortWar
             }
             return false;
         }
-        public void geksimage_Click(object sender, MouseEventArgs e)
+        private void geksimage_Click(object sender, MouseEventArgs e)
         {
             for (int i = 0; i < fieldHeight; i++)
             {
@@ -584,6 +594,7 @@ namespace FortWar
                 }
             }
             MainWindow.KeyUp -= AnyKeyUp;
+            MainCanvas.MouseUp -= geksimage_Click;
             Properties.Settings.Default.isGameSaved = false;
             Properties.Settings.Default.Save();
             if (firstPlayerPoints > secondPlayerPoints)
@@ -601,7 +612,7 @@ namespace FortWar
             if (e.Key == Key.Escape)
             {
                 MessageBoxButton buttons = MessageBoxButton.YesNo;
-                if (MessageBox.Show("Действительно ли вы хотите выйти? \n Текущая игра будет сохранена", "Подтверждение выхода", buttons) == MessageBoxResult.Yes)
+                if (MessageBox.Show("Действительно ли вы хотите выйти?\nТекущая игра будет сохранена", "Подтверждение выхода", buttons) == MessageBoxResult.Yes)
                 {
                     String text = "";
                     if (fieldHeight < 10)
@@ -612,6 +623,7 @@ namespace FortWar
                         text += "0" + fieldWidth.ToString();
                     else
                         text += fieldWidth.ToString();
+                    text += playerSteep.ToString();
                     for(int i = 0; i < fieldHeight; i++)
                     {
                         for(int j = 0; j < fieldWidth; j++)
@@ -625,6 +637,7 @@ namespace FortWar
                     Properties.Settings.Default.Save();
                     mainMenu.Build(MainCanvas, MainWindow);
                     MainWindow.KeyUp -= AnyKeyUp;
+                    MainCanvas.MouseUp -= geksimage_Click;
                 }
             }
         }
