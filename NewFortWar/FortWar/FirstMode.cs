@@ -22,7 +22,7 @@ namespace FortWar
         bool IsLoad;
         //описание
         BitmapImage source0, source1, source2, source3, source4, source5, source6;
-        int[,] gameField = new int[55, 55];
+        Hexagon[, ] field = new Hexagon[55, 55];
         int playerSteep = new int();
         int fieldWidth = 0, fieldHeight = 0;
         int[] steeps = new int[2];
@@ -30,8 +30,6 @@ namespace FortWar
         //5 = поле первого 6 = поле второго
         Window MainWindow;
         Canvas MainCanvas;
-        //Массив картинок поля
-        Image[,] imageField;
         public void Build  (Canvas mainCanvas, Window mainWindow, bool isLoad)
         {
             IsLoad = isLoad;
@@ -59,12 +57,12 @@ namespace FortWar
                 {
                     for (int j = 0; j <= fieldWidth; j++)
                     {
-                        gameField[i, j] = 0;
+                        field[i, j] = new Hexagon() { X = j, Y = i, V = 0 };
                     }
                 }
                 //Первые замки
-                gameField[Properties.Settings.Default.firstPlayerCityY - 1, Properties.Settings.Default.firstPlayerCityX - 1] = 1;
-                gameField[Properties.Settings.Default.secondPlayerCityY - 1, Properties.Settings.Default.secondPlayerCityX - 1] = 2;
+                field[Properties.Settings.Default.firstPlayerCityY - 1, Properties.Settings.Default.firstPlayerCityX - 1].V = 1;
+                field[Properties.Settings.Default.secondPlayerCityY - 1, Properties.Settings.Default.secondPlayerCityX - 1].V = 2;
             }
             else
             {
@@ -78,7 +76,7 @@ namespace FortWar
                     {
                         for (int j = 0; j < fieldWidth; j++)
                         {
-                            gameField[i, j] = (int)text[i * fieldWidth + j + 5] - 48;
+                            field[i, j].V = (int)text[i * fieldWidth + j + 5] - 48;
                         }
                     }
                 }
@@ -97,231 +95,231 @@ namespace FortWar
         private void steep (int x, int y, int f)
         {
             //Я гуманитарий, поэтому x - строчка, y - столбец 
-            if (gameField[x, y] == 0 || gameField[x, y] > 4)
+            if (field[x, y].V == 0 || field[x, y].V > 4)
                 if (f == 0)
                 {
-                    imageField[x, y].Source = source3;
-                    gameField[x, y] = 3;
+                    field[x, y].Source = source3;
+                    field[x, y].V = 3;
                 }
                 else
                 {
-                    imageField[x, y].Source = source4;
-                    gameField[x, y] = 4;
+                    field[x, y].Source = source4;
+                    field[x, y].V = 4;
                 }
             if(y % 2 == 0)
             {
                 if (x > 0)
                 {
-                    if (gameField[x - 1, y] == 0 || gameField[x - 1, y] == 6 - f)
+                    if (field[x - 1, y].V == 0 || field[x - 1, y].V == 6 - f)
                     {
-                        gameField[x - 1, y] = 5 + f;
+                        field[x - 1, y].V = 5 + f;
                         if (f == 0)
-                            imageField[x - 1, y].Source = source5;
+                            field[x - 1, y].Source = source5;
                         else
-                            imageField[x - 1, y].Source = source6;
+                            field[x - 1, y].Source = source6;
 
                     }
-                    if (gameField[x - 1, y] == 4 - f)
+                    if (field[x - 1, y].V == 4 - f)
                     {
-                        gameField[x - 1, y] = 3 + f;
+                        field[x - 1, y].V = 3 + f;
                         if (f == 0)
-                            imageField[x - 1, y].Source = source3;
+                            field[x - 1, y].Source = source3;
                         else
-                            imageField[x - 1, y].Source = source4;
+                            field[x - 1, y].Source = source4;
 
                     }
-                    if ((gameField[x - 1, y + 1] == 0 || gameField[x - 1, y + 1] == 6 - f)&&(y + 1 < fieldWidth))
+                    if ((field[x - 1, y + 1].V == 0 || field[x - 1, y + 1].V == 6 - f)&&(y + 1 < fieldWidth))
                     {
-                        gameField[x - 1, y + 1] = 5 + f;
+                        field[x - 1, y + 1].V = 5 + f;
                         if (f == 0)
-                            imageField[x - 1, y + 1].Source = source5;
+                            field[x - 1, y + 1].Source = source5;
                         else
-                            imageField[x - 1, y + 1].Source = source6;
+                            field[x - 1, y + 1].Source = source6;
                     }
-                    if ((gameField[x - 1, y + 1] == 4 - f) && (y + 1 < fieldWidth))
+                    if ((field[x - 1, y + 1].V == 4 - f) && (y + 1 < fieldWidth))
                     {
-                        gameField[x - 1, y + 1] = 3 + f;
+                        field[x - 1, y + 1].V = 3 + f;
                         if (f == 0)
-                            imageField[x - 1, y + 1].Source = source3;
+                            field[x - 1, y + 1].Source = source3;
                         else
-                            imageField[x - 1, y + 1].Source = source4;
+                            field[x - 1, y + 1].Source = source4;
                     }
                 }
                 if(y > 0)
                 {
-                    if (gameField[x, y - 1] == 0 || gameField[x, y - 1] == 6 - f)
+                    if (field[x, y - 1].V == 0 || field[x, y - 1].V == 6 - f)
                     {
-                        gameField[x, y - 1] = 5 + f;
+                        field[x, y - 1].V = 5 + f;
                         if (f == 0)
-                            imageField[x, y - 1].Source = source5;
+                            field[x, y - 1].Source = source5;
                         else
-                            imageField[x, y - 1].Source = source6;
+                            field[x, y - 1].Source = source6;
                     }
-                    if (gameField[x, y - 1] == 4 - f)
+                    if (field[x, y - 1].V == 4 - f)
                     {
-                        gameField[x, y - 1] = 3 + f;
+                        field[x, y - 1].V = 3 + f;
                         if (f == 0)
-                            imageField[x, y - 1].Source = source3;
+                            field[x, y - 1].Source = source3;
                         else
-                            imageField[x, y - 1].Source = source4;
+                            field[x, y - 1].Source = source4;
                     }
                     if (x > 0)
-                        if (gameField[x - 1, y - 1] == 0 || gameField[x - 1, y - 1] == 6 - f)
+                        if (field[x - 1, y - 1].V == 0 || field[x - 1, y - 1].V == 6 - f)
                         {
-                            gameField[x - 1, y - 1] = 5 + f;
+                            field[x - 1, y - 1].V = 5 + f;
                             if (f == 0)
-                                imageField[x - 1, y - 1].Source = source5;
+                                field[x - 1, y - 1].Source = source5;
                             else
-                                imageField[x - 1, y - 1].Source = source6;
+                                field[x - 1, y - 1].Source = source6;
                         }
                     if(x > 0)
-                    if (gameField[x - 1, y - 1] == 4 - f)
+                    if (field[x - 1, y - 1].V == 4 - f)
                     {
-                        gameField[x - 1, y - 1] = 3 + f;
+                        field[x - 1, y - 1].V = 3 + f;
                         if (f == 0)
-                            imageField[x - 1, y - 1].Source = source3;
+                            field[x - 1, y - 1].Source = source3;
                         else
-                            imageField[x - 1, y - 1].Source = source4;
+                            field[x - 1, y - 1].Source = source4;
                     }
                 }
-                if ((gameField[x + 1, y] == 0 || gameField[x + 1, y] == 6 - f) && (x + 1 < fieldHeight))
+                if ((field[x + 1, y].V == 0 || field[x + 1, y].V == 6 - f) && (x + 1 < fieldHeight))
                 {
-                    gameField[x + 1, y] = 5 + f;
+                    field[x + 1, y].V = 5 + f;
                     if (f == 0)
-                        imageField[x + 1, y].Source = source5;
+                        field[x + 1, y].Source = source5;
                     else
-                        imageField[x + 1, y].Source = source6;
+                        field[x + 1, y].Source = source6;
                 }
-                if ((gameField[x + 1, y] == 4 - f) && (x + 1 < fieldHeight))
+                if ((field[x + 1, y].V == 4 - f) && (x + 1 < fieldHeight))
                 {
-                    gameField[x + 1, y] = 3 + f;
+                    field[x + 1, y].V = 3 + f;
                     if (f == 0)
-                        imageField[x + 1, y].Source = source3;
+                        field[x + 1, y].Source = source3;
                     else
-                        imageField[x + 1, y].Source = source4;
+                        field[x + 1, y].Source = source4;
                 }
 
-                if ((gameField[x, y + 1] == 0 || gameField[x, y + 1] == 6 - f) && (y + 1 < fieldWidth))
+                if ((field[x, y + 1].V == 0 || field[x, y + 1].V == 6 - f) && (y + 1 < fieldWidth))
                 {
-                    gameField[x, y + 1] = 5 + f;
+                    field[x, y + 1].V = 5 + f;
                     if (f == 0)
-                        imageField[x, y + 1].Source = source5;
+                        field[x, y + 1].Source = source5;
                     else
-                        imageField[x, y + 1].Source = source6;
+                        field[x, y + 1].Source = source6;
                 }
-                if ((gameField[x, y + 1] == 4 - f))
+                if ((field[x, y + 1].V == 4 - f))
                 {
-                    gameField[x, y + 1] = 3 + f;
+                    field[x, y + 1].V = 3 + f;
                     if (f == 0)
-                        imageField[x, y + 1].Source = source3;
+                        field[x, y + 1].Source = source3;
                     else
-                        imageField[x, y + 1].Source = source4;
+                        field[x, y + 1].Source = source4;
                 }
             }
             else
             {
                 if (x > 0)
                 {
-                    if (gameField[x - 1, y] == 0 || gameField[x - 1, y] == 6 - f)
+                    if (field[x - 1, y].V == 0 || field[x - 1, y].V == 6 - f)
                     {
-                        gameField[x - 1, y] = 5 + f;
+                        field[x - 1, y].V = 5 + f;
                         if (f == 0)
-                            imageField[x - 1, y].Source = source5;
+                            field[x - 1, y].Source = source5;
                         else
-                            imageField[x - 1, y].Source = source6;
+                            field[x - 1, y].Source = source6;
                     }
-                    if (gameField[x - 1, y] == 4 - f)
+                    if (field[x - 1, y].V == 4 - f)
                     {
-                        gameField[x - 1, y] = 3 + f;
+                        field[x - 1, y].V = 3 + f;
                         if (f == 0)
-                            imageField[x - 1, y].Source = source3;
+                            field[x - 1, y].Source = source3;
                         else
-                            imageField[x - 1, y].Source = source4;
+                            field[x - 1, y].Source = source4;
                     }
                 }
                 if (y > 0)
                 {
-                    if (gameField[x, y - 1] == 0 || gameField[x, y - 1] == 6 - f)
+                    if (field[x, y - 1].V == 0 || field[x, y - 1].V == 6 - f)
                     {
-                        gameField[x, y - 1] = 5 + f;
+                        field[x, y - 1].V = 5 + f;
                         if (f == 0)
-                            imageField[x, y - 1].Source = source5;
+                            field[x, y - 1].Source = source5;
                         else
-                            imageField[x, y - 1].Source = source6;
+                            field[x, y - 1].Source = source6;
                     }
-                    if (gameField[x, y - 1] == 4 - f)
+                    if (field[x, y - 1].V == 4 - f)
                     {
-                        gameField[x, y - 1] = 3 + f;
+                        field[x, y - 1].V = 3 + f;
                         if (f == 0)
-                            imageField[x, y - 1].Source = source3;
+                            field[x, y - 1].Source = source3;
                         else
-                            imageField[x, y - 1].Source = source4;
+                            field[x, y - 1].Source = source4;
                     }
-                    if ((gameField[x + 1, y - 1] == 0 || gameField[x + 1, y - 1] == 6 - f) && (x + 1 < fieldHeight))
+                    if ((field[x + 1, y - 1].V == 0 || field[x + 1, y - 1].V == 6 - f) && (x + 1 < fieldHeight))
                     {
-                        gameField[x + 1, y - 1] = 5 + f;
+                        field[x + 1, y - 1].V = 5 + f;
                         if (f == 0)
-                            imageField[x + 1, y - 1].Source = source5;
+                            field[x + 1, y - 1].Source = source5;
                         else
-                            imageField[x + 1, y - 1].Source = source6;
+                            field[x + 1, y - 1].Source = source6;
                     }
-                    if ((gameField[x + 1, y - 1] == 4 - f) && (x + 1 < fieldHeight))
+                    if ((field[x + 1, y - 1].V == 4 - f) && (x + 1 < fieldHeight))
                     {
-                        gameField[x + 1, y - 1] = 3 + f;
+                        field[x + 1, y - 1].V = 3 + f;
                         if (f == 0)
-                            imageField[x + 1, y - 1].Source = source3;
+                            field[x + 1, y - 1].Source = source3;
                         else
-                            imageField[x + 1, y - 1].Source = source4;
+                            field[x + 1, y - 1].Source = source4;
                     }
-                    if ((gameField[x + 1, y + 1] == 0 || gameField[x + 1, y + 1] == 6 - f) && (y + 1 < fieldWidth) && (x + 1 < fieldHeight))
+                    if ((field[x + 1, y + 1].V == 0 || field[x + 1, y + 1].V == 6 - f) && (y + 1 < fieldWidth) && (x + 1 < fieldHeight))
                     {
-                        gameField[x + 1, y + 1] = 5 + f;
+                        field[x + 1, y + 1].V = 5 + f;
                         if (f == 0)
-                            imageField[x + 1, y + 1].Source = source5;
+                            field[x + 1, y + 1].Source = source5;
                         else
-                            imageField[x + 1, y + 1].Source = source6;
+                            field[x + 1, y + 1].Source = source6;
                     }
-                    if ((gameField[x + 1, y + 1] == 4 - f) && (y + 1 < fieldWidth) && (x + 1 < fieldHeight))
+                    if ((field[x + 1, y + 1].V == 4 - f) && (y + 1 < fieldWidth) && (x + 1 < fieldHeight))
                     {
-                        gameField[x + 1, y + 1] = 3 + f;
+                        field[x + 1, y + 1].V = 3 + f;
                         if (f == 0)
-                            imageField[x + 1, y + 1].Source = source3;
+                            field[x + 1, y + 1].Source = source3;
                         else
-                            imageField[x + 1, y + 1].Source = source4;
+                            field[x + 1, y + 1].Source = source4;
                     }
                 }
-                if ((gameField[x + 1, y] == 0 || gameField[x + 1, y] == 6 - f) && (x + 1 < fieldHeight))
+                if ((field[x + 1, y].V == 0 || field[x + 1, y].V == 6 - f) && (x + 1 < fieldHeight))
                 {
-                    gameField[x + 1, y] = 5 + f; if (f == 0)
-                        imageField[x + 1, y].Source = source5;
+                    field[x + 1, y].V = 5 + f; if (f == 0)
+                        field[x + 1, y].Source = source5;
                     else
-                        imageField[x + 1, y].Source = source6;
+                        field[x + 1, y].Source = source6;
 
                 }
-                if ((gameField[x + 1, y] == 4 - f) && (x + 1 < fieldHeight))
+                if ((field[x + 1, y].V == 4 - f) && (x + 1 < fieldHeight))
                 {
-                    gameField[x + 1, y] = 3 + f;
+                    field[x + 1, y].V = 3 + f;
                     if (f == 0)
-                        imageField[x + 1, y].Source = source3;
+                        field[x + 1, y].Source = source3;
                     else
-                        imageField[x + 1, y].Source = source4;
+                        field[x + 1, y].Source = source4;
 
                 }
-                if ((gameField[x, y + 1] == 0 || gameField[x, y + 1] == 6 - f) && (y + 1 < fieldWidth))
+                if ((field[x, y + 1].V == 0 || field[x, y + 1].V == 6 - f) && (y + 1 < fieldWidth))
                 {
-                    gameField[x, y + 1] = 5 + f;
+                    field[x, y + 1].V = 5 + f;
                     if (f == 0)
-                        imageField[x, y + 1].Source = source5;
+                        field[x, y + 1].Source = source5;
                     else
-                        imageField[x, y + 1].Source = source6;
+                        field[x, y + 1].Source = source6;
                 }
-                if ((gameField[x, y + 1] == 4 - f) && (y + 1 < fieldWidth))
+                if ((field[x, y + 1].V == 4 - f) && (y + 1 < fieldWidth))
                 {
-                    gameField[x, y + 1] = 3 + f;
+                    field[x, y + 1].V = 3 + f;
                     if (f == 0)
-                        imageField[x, y + 1].Source = source3;
+                        field[x, y + 1].Source = source3;
                     else
-                        imageField[x, y + 1].Source = source4;
+                        field[x, y + 1].Source = source4;
                 }
             }
         }
@@ -374,55 +372,54 @@ namespace FortWar
                 imageWidth = imageHeight * 1.1547;
             else
                 imageHeight = imageWidth / 1.1547;
-            imageField = new Image[55, 55];
             Thickness imageMargin = new Thickness() { Top = 0, Left = 0 };
             for (int i = 0; i < fieldHeight; i++)
             {
                 for(int j = 0; j < fieldWidth; j++)
                 {
-                    imageField[i, j] = new Image() { Margin = imageMargin, Height = imageHeight, Width = imageWidth};
-                    switch(gameField [i, j])
+                    field[i, j] = new Hexagon() { Margin = imageMargin, Height = imageHeight, Width = imageWidth};
+                    switch(field [i, j].V)
                     {
                         case 0:
                             {
-                                imageField[i, j].Source = standartGeksSource;
-                                MainCanvas.Children.Add(imageField[i, j]);
+                                field[i, j].Source = standartGeksSource;
+                                MainCanvas.Children.Add(field[i, j]);
                             }
                             break;
                         case 1:
                             {
-                                imageField[i, j].Source = firstCastleSource;
-                                MainCanvas.Children.Add(imageField[i, j]);
+                                field[i, j].Source = firstCastleSource;
+                                MainCanvas.Children.Add(field[i, j]);
                             }
                             break;
                         case 2:
                             {
-                                imageField[i, j].Source = secondCastleSource;
-                                MainCanvas.Children.Add(imageField[i, j]);
+                                field[i, j].Source = secondCastleSource;
+                                MainCanvas.Children.Add(field[i, j]);
                             }
                             break;
                         case 5:
                             {
-                                imageField[i, j].Source = firstFieldSource;
-                                MainCanvas.Children.Add(imageField[i, j]);
+                                field[i, j].Source = firstFieldSource;
+                                MainCanvas.Children.Add(field[i, j]);
                             }
                             break;
                         case 6:
                             {
-                                imageField[i, j].Source = secondFieldSource;
-                                MainCanvas.Children.Add(imageField[i, j]);
+                                field[i, j].Source = secondFieldSource;
+                                MainCanvas.Children.Add(field[i, j]);
                             }
                             break;
                         case 3:
                             {
-                                imageField[i, j].Source = firstFortSource;
-                                MainCanvas.Children.Add(imageField[i, j]);
+                                field[i, j].Source = firstFortSource;
+                                MainCanvas.Children.Add(field[i, j]);
                             }
                             break;
                         case 4:
                             {
-                                imageField[i, j].Source = secondFortSource;
-                                MainCanvas.Children.Add(imageField[i, j]);
+                                field[i, j].Source = secondFortSource;
+                                MainCanvas.Children.Add(field[i, j]);
                             }
                             break;
                     }
@@ -449,12 +446,12 @@ namespace FortWar
                 {
                     if(isAnySteepAviable(0))
                     {
-                        pair botSteep = aI.FirstModeFirstBot(gameField, 0);
+                        pair botSteep = aI.FirstModeFirstBot(field, 0);
                         steep(botSteep.y, botSteep.x, 0);
                     }
                     if(isAnySteepAviable(1))
                     {
-                        pair botSteep = aI.FirstModeSecondBot(gameField, 1);
+                        pair botSteep = aI.FirstModeSecondBot(field, 1);
                         steep(botSteep.y, botSteep.x, 1);
                     }
                 }
@@ -463,41 +460,41 @@ namespace FortWar
             else
                 if(Properties.Settings.Default.botSteep == 0 && Properties.Settings.Default.gameBot == 1 && playerSteep == 0)
                 {
-                    pair botSteep = aI.FirstModeFirstBot(gameField, 0);
+                    pair botSteep = aI.FirstModeFirstBot(field, 0);
                     steep(botSteep.y, botSteep.x, 0);
                     steeps[0]--;
                     playerSteep = 1;
                 }
         }
         //проверяет возможность хода
-        public bool isSteepAviable(int i, int j, int f, int[, ] field)
+        public bool isSteepAviable(int i, int j, int f)
         {
             //i - строчка j - столбец f - номер игрока
             int maxi = fieldHeight, maxj = fieldWidth;
-            if (field[i, j] != 0 && field[i, j] < 5)
+            if (field[i, j].V != 0 && field[i, j].V < 5)
                 return false;
-            if (field[i, j] == 5 + f)
+            if (field[i, j].V == 5 + f)
                 return true;
-            if (j > 0 && field[i, j - 1] != 0 && (field[i, j - 1] % 2 == (f + 1) % 2))
+            if (j > 0 && field[i, j - 1].V != 0 && (field[i, j - 1].V % 2 == (f + 1) % 2))
                 return true;
-            if (j + 1 < maxj  && field[i, j + 1] != 0 && (field[i, j + 1] % 2 == (f + 1) % 2))
+            if (j + 1 < maxj  && field[i, j + 1].V != 0 && (field[i, j + 1].V % 2 == (f + 1) % 2))
                 return true;
-            if (i > 0 && field[i - 1, j] != 0 && (field[i - 1, j] % 2 == (f + 1) % 2))
+            if (i > 0 && field[i - 1, j].V != 0 && (field[i - 1, j].V % 2 == (f + 1) % 2))
                 return true;
-            if (i  + 1 < maxi && field[i + 1, j] != 0 && (field[i + 1, j] % 2 == (f + 1) % 2))
+            if (i  + 1 < maxi && field[i + 1, j].V != 0 && (field[i + 1, j].V % 2 == (f + 1) % 2))
                 return true;
             if(j % 2 == 0)
             {
-                if (i > 0 && j + 1 < maxj && field[i - 1, j + 1] != 0 && (field[i - 1, j + 1] % 2 == (f + 1) % 2))
+                if (i > 0 && j + 1 < maxj && field[i - 1, j + 1].V != 0 && (field[i - 1, j + 1].V % 2 == (f + 1) % 2))
                     return true;
-                if (i > 0 && j > 0 && field[i - 1, j - 1] != 0 && (field[i - 1, j - 1] % 2 == (f + 1) % 2))
+                if (i > 0 && j > 0 && field[i - 1, j - 1].V != 0 && (field[i - 1, j - 1].V % 2 == (f + 1) % 2))
                     return true;
             }
             else
             {
-                if (i + 1 < maxi && j + 1 < maxj && field[i + 1, j + 1] != 0 && (field[i + 1, j + 1] % 2 == (f + 1) % 2))
+                if (i + 1 < maxi && j + 1 < maxj && field[i + 1, j + 1].V != 0 && (field[i + 1, j + 1].V % 2 == (f + 1) % 2))
                     return true;
-                if (i + 1 < maxi && j > 0 && field[i + 1, j - 1] != 0 && (field[i + 1, j - 1] % 2 == (f + 1) % 2))
+                if (i + 1 < maxi && j > 0 && field[i + 1, j - 1].V != 0 && (field[i + 1, j - 1].V % 2 == (f + 1) % 2))
                     return true;
             }
 
@@ -509,7 +506,7 @@ namespace FortWar
             {
                 for(int j = 0; j < fieldWidth; j++)
                 {
-                    if (isSteepAviable(i, j, f, gameField))
+                    if (isSteepAviable(i, j, f))
                         return true;
                 }
             }
@@ -521,9 +518,9 @@ namespace FortWar
             {
                 for (int j = 0; j < fieldWidth; j++)
                 {
-                    if (imageField[i, j].IsMouseOver)
+                    if (field[i, j].isMouseOver(e))
                     {
-                        if(isSteepAviable(i, j, playerSteep, gameField))
+                        if(isSteepAviable(i, j, playerSteep))
                         {
 
                             if (isAnySteepAviable(playerSteep) && steeps[playerSteep] > 0)
@@ -545,14 +542,14 @@ namespace FortWar
                             }
                             if(playerSteep == Properties.Settings.Default.botSteep && Properties.Settings.Default.gameBot == 1)
                             {
-                                pair botSteep = aI.FirstModeFirstBot(gameField, playerSteep);                                
+                                pair botSteep = aI.FirstModeFirstBot(field, playerSteep);                                
                                 steep(botSteep.y, botSteep.x, playerSteep);
                                 steeps[playerSteep]--;
                                 if(!isAnySteepAviable(1 - playerSteep))
                                 {
                                     while((isAnySteepAviable(playerSteep)) && steeps[playerSteep] > 0)
                                     {
-                                        botSteep = aI.FirstModeFirstBot(gameField, playerSteep);
+                                        botSteep = aI.FirstModeFirstBot(field, playerSteep);
                                         steep(botSteep.y, botSteep.x, playerSteep);
                                         steeps[playerSteep]--;
                                     }
@@ -577,9 +574,9 @@ namespace FortWar
             {
                 for (int j = 0; j < fieldWidth; j++)
                 {
-                    if (gameField[i, j] != 0)
+                    if (field[i, j].V != 0)
                     {
-                        if ((gameField[i, j] - 1) % 2 == 0)
+                        if ((field[i, j].V - 1) % 2 == 0)
                             firstPlayerPoints++;
                         else
                             secondPlayerPoints++;
@@ -628,7 +625,7 @@ namespace FortWar
                     {
                         for(int j = 0; j < fieldWidth; j++)
                         {
-                            text += gameField[i, j].ToString();
+                            text += (field[i, j].V).ToString();
                         }
                     }
                     System.IO.File.WriteAllText("FirstModeSave.map",text);
