@@ -143,46 +143,6 @@ namespace FortWar
             Sources[2].BeginInit();
             Sources[2].UriSource = new Uri("Geks10.png", UriKind.Relative);
             Sources[2].EndInit();
-            
-            Sources[3] = new BitmapImage();
-            Sources[3].BeginInit();
-            Sources[3].UriSource = new Uri("Geks5.png", UriKind.Relative);
-            Sources[3].EndInit();
-            
-            Sources[4] = new BitmapImage();
-            Sources[4].BeginInit();
-            Sources[4].UriSource = new Uri("Geks6.png", UriKind.Relative);
-            Sources[4].EndInit();
-            
-            Sources[5] = new BitmapImage();
-            Sources[5].BeginInit();
-            Sources[5].UriSource = new Uri("Geks8.png", UriKind.Relative);
-            Sources[5].EndInit();
-            
-            Sources[6] = new BitmapImage();
-            Sources[6].BeginInit();
-            Sources[6].UriSource = new Uri("Geks9.png", UriKind.Relative);
-            Sources[6].EndInit();
-            
-            Sources[7] = new BitmapImage();
-            Sources[7].BeginInit();
-            Sources[7].UriSource = new Uri("Geks3.png", UriKind.Relative);
-            Sources[7].EndInit();
-            
-            Sources[8] = new BitmapImage();
-            Sources[8].BeginInit();
-            Sources[8].UriSource = new Uri("Geks4.png", UriKind.Relative);
-            Sources[8].EndInit();
-            
-            Sources[9] = new BitmapImage();
-            Sources[9].BeginInit();
-            Sources[9].UriSource = new Uri("Geks1.png", UriKind.Relative);
-            Sources[9].EndInit();
-            
-            Sources[10] = new BitmapImage();
-            Sources[10].BeginInit();
-            Sources[10].UriSource = new Uri("Geks2.png", UriKind.Relative);
-            Sources[10].EndInit();
         }
         //Метод события клика по полю
         private void MainCanvasClick(object sender, MouseEventArgs e)
