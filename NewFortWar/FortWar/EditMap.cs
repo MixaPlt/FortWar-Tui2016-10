@@ -20,7 +20,7 @@ namespace FortWar
         //Для удобства
         private int fieldHeight = Properties.Settings.Default.gameHeight;
         private int fieldWidth = Properties.Settings.Default.gameWidth;
-        //Ссылочки на онно и сетку
+        //Ссылочки на оkно и сетку
         Window MainWindow;
         Canvas MainCanvas;
         //Само поле
@@ -28,6 +28,7 @@ namespace FortWar
         private int[, ] field = new int[55, 55];
         //Массив картиночек
         private Image[,] imageField = new Image[51, 51];
+        private Hexagon[,] field1 = new Hexagon[51, 51];
         //Соурсы к картинкам поля. Номера аналогичные. Присваиваются в методе MakeSources
         private BitmapImage[] Sources = new BitmapImage[11];
         //Высота и ширина поля
