@@ -17,10 +17,10 @@ namespace FortWar
 {
     class Hexagon : Image
     {
-        //Просто 2 параметра для личного использования (в моём случае - координаты относительно поля)
-        public int X, Y;
+        //Просто 2 параметра для личного использования (в моём случае - координаты относительно поля) v - value 
+        public int X, Y, V;
         //Находиться ли клик мыши в гексе
-        public bool isMouseOver(object sender, MouseEventArgs e)
+        public bool isMouseOver(MouseEventArgs e)
         {
             //Координаты клика относительно картинки (this) - сам объект
             Point pt = e.GetPosition(this);

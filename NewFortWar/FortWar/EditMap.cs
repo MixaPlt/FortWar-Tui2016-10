@@ -25,10 +25,8 @@ namespace FortWar
         Canvas MainCanvas;
         //Само поле
         //0 - Пустя клеточка, 1 - горы, 2 - река, 3 - клетка первого, 4 - клеткаа второго, 5 - горы первого, 6 - горы второго, 7 - крепость первого, 8 - крепость второго, 9 - замок первого, 10 - замок второго
-        private int[, ] field = new int[55, 55];
         //Массив картиночек
-        private Image[,] imageField = new Image[51, 51];
-        private Hexagon[,] field1 = new Hexagon[51, 51];
+        private Hexagon[,] field = new Hexagon[51, 51];
         //Соурсы к картинкам поля. Номера аналогичные. Присваиваются в методе MakeSources
         private BitmapImage[] Sources = new BitmapImage[11];
         //Высота и ширина поля
@@ -69,7 +67,9 @@ namespace FortWar
             //Обнуление массива поля
             for (int i = 0; i < Properties.Settings.Default.gameHeight; i++)
                 for (int j = 0; j < Properties.Settings.Default.gameWidth; j++)
-                    field[i, j] = 0;
+                {
+                    field[i, j] = new Hexagon() {V = 0, X = j, Y = i};
+                }
             //Повторная проверка всех элементов файла и запись сохранения в массив field
             if(isLoad)
             {
@@ -77,15 +77,15 @@ namespace FortWar
                 for(int i = 0; i < loadedFieldHeight; i++)
                     for(int j = 0; j < loadedFieldWidth; j++)
                     {
-                        field[i, j] = (int)text[loadedFieldWidth * i + j + 4] - 48;
-                        if (field[i, j] < 0 || field[i, j] > 2)
+                        field[i, j].V = (int)text[loadedFieldWidth * i + j + 4] - 48;
+                        if (field[i, j].V < 0 || field[i, j].V > 2)
                             isZeroingRepeat = true;
                     }
                 if(isZeroingRepeat)
                 {
                     for (int i = 0; i < fieldHeight; i++)
                         for (int j = 0; j < fieldWidth; j++)
-                            field[i, j] = 0;
+                            field[i, j].V = 0;
                 }
             }
             //Поле загружено и полностью готово к использованию
@@ -113,8 +113,8 @@ namespace FortWar
                 {
                     for (int j = 0; j < fieldWidth; j++)
                     {
-                        imageField[i, j] = new Image() { Margin = imageMargin, Source = Sources[field[i, j]], Height = imageHeight, Width = imageWidth};
-                        MainCanvas.Children.Add(imageField[i, j]);
+                        field[i, j] = new Hexagon() { Margin = imageMargin, Source = Sources[field[i, j].V], Height = imageHeight, Width = imageWidth};
+                        MainCanvas.Children.Add(field[i, j]);
                         imageMargin.Left += (3 * imageWidth / 4) * 0.97;
                         if (j % 2 == 0)
                             imageMargin.Top += (imageHeight / 2) * 0.97;
@@ -189,10 +189,10 @@ namespace FortWar
         {
             for(int i = 0; i < fieldHeight; i++)  
                 for(int j = 0; j < fieldWidth; j++)
-                    if(imageField[i, j].IsMouseOver)
+                    if(field[i, j].isMouseOver(e))
                     {
-                        field[i, j] = (field[i, j] + 1) % 3;
-                        imageField[i, j].Source = Sources[field[i, j]];
+                        field[i, j].V = (field[i, j].V + 1) % 3;
+                        field[i, j].Source = Sources[field[i, j].V];
                         return;
                     }
         }
