@@ -20,7 +20,7 @@ namespace FortWar
         //сетка и окно
         public Canvas MainCanvas;
         public Window MainWindow;
-        //0 - Пустя клеточка, 1 - горы, 2 - река, 3 - клетка первого, 4 - клеткаа второго, 5 - крепость первого, 6 - крепость второго, 7 - горы первого, 8 - горы второго, 9 - море первого, 10 - море второго, 11 - замок первого, 12 - замок второго
+        //0 - Пустя клеточка, 1 - горы, 2 - река, 3 - клетка первого, 4 - клеткаа второго, 5 - крепость первого, 6 - крепость второго, 7 - море первого, 8 - море второго, 9 - горы первого, 10 - горы второго, 11 - замок первого, 12 - замок второго
         private Hexagon[,] field = new Hexagon[51, 51];
         //Соурсы
         private BitmapImage[] sources = new BitmapImage[13];
@@ -30,12 +30,13 @@ namespace FortWar
         //Первое измерение - остаток по модулю 2, 2 - шесть возможных клеток, 3 - 2 элемента - y и x координата хода относительно данного
         private int[,,] possibleSteps = new int[,,] { { { -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, -1 } }, { { -1, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 } } };
         //Продолжается ли игра
-        public bool isContinue;
+        public bool isContinue  = false;
         //ход
-        private int playerStep;
+        private int playerStep = 0;
         private double imageHeight, imageWidth;
         public void Build()
         {
+            Properties.Settings.Default.windowMode = 5;
             MainCanvas.MouseUp += MainCanvasClick;
             MainWindow.KeyUp += AnyKeyUp;
             MainCanvas.Children.Clear();
@@ -138,6 +139,12 @@ namespace FortWar
                                 field[i, j].V = 0;
                     }
                 }
+                field[Properties.Settings.Default.firstPlayerCityY - 1, Properties.Settings.Default.firstPlayerCityX - 1].V = 11;
+                field[Properties.Settings.Default.secondPlayerCityY - 1, Properties.Settings.Default.secondPlayerCityX - 1].V = 12;
+                field[Properties.Settings.Default.firstPlayerCityY - 1, Properties.Settings.Default.firstPlayerCityX - 1].Source = sources[11];
+                field[Properties.Settings.Default.secondPlayerCityY - 1, Properties.Settings.Default.secondPlayerCityX - 1].Source = sources[12];
+                Step(Properties.Settings.Default.firstPlayerCityY - 1, Properties.Settings.Default.firstPlayerCityX - 1, 0);
+                Step(Properties.Settings.Default.secondPlayerCityY - 1, Properties.Settings.Default.secondPlayerCityX - 1, 1);
             }
             //Поле загружено и полностью готово к использованию
             //Вычисление размеров шестиугольничков
@@ -155,7 +162,7 @@ namespace FortWar
                 {
                     for (int j = 0; j < fieldWidth; j++)
                     {
-                        field[i, j] = new Hexagon() { Margin = imageMargin, Source = sources[field[i, j].V], Height = imageHeight, Width = imageWidth };
+                        field[i, j].Margin = imageMargin; field[i, j].Source = sources[field[i, j].V]; field[i, j].Height = imageHeight; field[i, j].Width = imageWidth;
                         MainCanvas.Children.Add(field[i, j]);
                         imageMargin.Left += (3 * imageWidth / 4) * 0.97;
                         if (j % 2 == 0)
@@ -222,7 +229,7 @@ namespace FortWar
 
             sources[10] = new BitmapImage();
             sources[10].BeginInit();
-            sources[10].UriSource = new Uri("Geks8.png", UriKind.Relative);
+            sources[10].UriSource = new Uri("Geks9.png", UriKind.Relative);
             sources[10].EndInit();
 
             sources[11] = new BitmapImage();
@@ -249,31 +256,73 @@ namespace FortWar
         }
         private void MainCanvasClick(object sender, MouseEventArgs e)
         {
-            for(int i = 0; i < fieldWidth; i++)
+            for(int i = 0; i < fieldHeight; i++)
             {
-
+                for(int j = 0; j < fieldWidth; j++)
+                {
+                    if(field[i, j].isMouseOver(e))
+                    {
+                        if(isStepPossible(i, j, playerStep))
+                        {
+                            switch(Properties.Settings.Default.gameBot)
+                            {
+                                case 0:
+                                    {
+                                        Step(i, j, playerStep);
+                                        playerStep = 1 - playerStep;
+                                    }
+                                    break;
+                            }
+                            
+                        }
+                    }
+                }
             }
         }
         private bool isStepPossible(int x, int y, int ps)
         {
-            if (field[x, y].V != 0 || field[x, y].V != 3 || field[x, y].V != 4)
+            if (field[x, y].V != 0 && field[x, y].V != 3 && field[x, y].V != 4)
                 return false;
             for (int i = 0; i < 6; i++)
                 if (possibleSteps[y % 2, i, 0] + x < fieldHeight && possibleSteps[y % 2, i, 0] + x >= 0 && possibleSteps[y % 2, i, 1] + y < fieldWidth && possibleSteps[y % 2, i, 1] + y >= 0)
-                    if (field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V % 2 == 1 - ps & field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V > 2)
-                        return true;
-            return false;
+                {
+                    if (field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V % 2 == 1 - ps)
+                        return true;                  
+                }
+                    return false;
         }
         private void Step(int x, int y, int ps)
         {
             for (int i = 0; i < 6; i++)
                 if (possibleSteps[y % 2, i, 0] + x < fieldHeight && possibleSteps[y % 2, i, 0] + x >= 0 && possibleSteps[y % 2, i, 1] + y < fieldWidth && possibleSteps[y % 2, i, 1] + y >= 0)
                 {
-                    switch(field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V)
+                    if(field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V < 11 && field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V > 2 && field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V % 2 != 1 - ps)
                     {
-             
+                        if (field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V % 2 == 0)
+                            field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V--;
+                        else
+                            field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V++;
                     }
+                    else
+                       switch(field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V)
+                        {
+                            case 0:
+                                field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V = ps + 3;
+                                break;
+                            case 1:
+                                field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V = ps + 9;
+                                break;
+                            case 2:
+                                field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V = ps + 7;
+                                break;
+                        }
+                    field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].Source = sources[field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V];
                 }
+            if(field[x, y].V < 5)
+            {
+                field[x, y].V = ps + 5;
+                field[x, y].Source = sources[field[x, y].V];
+            }
         }
     }
 }
