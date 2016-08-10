@@ -74,8 +74,8 @@ namespace FortWar
             if(isLoad)
             {
                 bool isZeroingRepeat = false;
-                for(int i = 0; i < loadedFieldHeight; i++)
-                    for(int j = 0; j < loadedFieldWidth; j++)
+                for(int i = 0; i < Math.Min(loadedFieldHeight, Properties.Settings.Default.gameHeight); i++)
+                    for(int j = 0; j < Math.Min(loadedFieldWidth, Properties.Settings.Default.gameWidth); j++)
                     {
                         field[i, j].V = (int)text[loadedFieldWidth * i + j + 4] - 48;
                         if (field[i, j].V < 0 || field[i, j].V > 2)
@@ -83,8 +83,8 @@ namespace FortWar
                     }
                 if(isZeroingRepeat)
                 {
-                    for (int i = 0; i < fieldHeight; i++)
-                        for (int j = 0; j < fieldWidth; j++)
+                    for (int i = 0; i < Properties.Settings.Default.gameHeight; i++)
+                        for (int j = 0; j < Properties.Settings.Default.gameWidth; j++)
                             field[i, j].V = 0;
                 }
             }
@@ -113,7 +113,7 @@ namespace FortWar
                 {
                     for (int j = 0; j < fieldWidth; j++)
                     {
-                        field[i, j] = new Hexagon() { Margin = imageMargin, Source = Sources[field[i, j].V], Height = imageHeight, Width = imageWidth};
+                        field[i, j].Margin = imageMargin; field[i, j].Source = Sources[field[i, j].V]; field[i, j].Height = imageHeight; field[i, j].Width = imageWidth;
                         MainCanvas.Children.Add(field[i, j]);
                         imageMargin.Left += (3 * imageWidth / 4) * 0.97;
                         if (j % 2 == 0)
@@ -185,7 +185,7 @@ namespace FortWar
             {
                 for (int j = 0; j < fieldWidth; j++)
                 {
-                    text += field[i, j].ToString();
+                    text += field[i, j].V.ToString();
                 }
             }
             System.IO.File.WriteAllText("SecondModeCustomField.map", text);

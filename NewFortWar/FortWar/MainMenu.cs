@@ -65,6 +65,12 @@ namespace FortWar
                         firstMode.Build(MainCanvas, MainWindow, false);
                     }
                     break;
+                case 1:
+                    {
+                        SecondMode secondMode = new SecondMode() { MainCanvas = MainCanvas, MainWindow = MainWindow, isContinue = false};
+                        secondMode.Build();
+                    }
+                    break;
             }
         }
         //Продолжение игры

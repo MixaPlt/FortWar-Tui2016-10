@@ -18,9 +18,9 @@ namespace FortWar
     class SecondMode
     {
         //сетка и окно
-        private Canvas MainCanvas;
-        private Window MainWindow;
-        //Поле
+        public Canvas MainCanvas;
+        public Window MainWindow;
+        //0 - Пустя клеточка, 1 - горы, 2 - река, 3 - клетка первого, 4 - клеткаа второго, 5 - крепость первого, 6 - крепость второго, 7 - горы первого, 8 - горы второго, 9 - море первого, 10 - море второго, 11 - замок первого, 12 - замок второго
         private Hexagon[,] field = new Hexagon[51, 51];
         //Соурсы
         private BitmapImage[] sources = new BitmapImage[13];
@@ -30,7 +30,7 @@ namespace FortWar
         //Первое измерение - остаток по модулю 2, 2 - шесть возможных клеток, 3 - 2 элемента - y и x координата хода относительно данного
         private int[,,] possibleSteps = new int[,,] { { { -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, -1 } }, { { -1, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 } } };
         //Продолжается ли игра
-        private bool isContinue, isExit = false;
+        public bool isContinue;
         //ход
         private int playerStep;
         private double imageHeight, imageWidth;
@@ -124,8 +124,8 @@ namespace FortWar
                 if (isLoad)
                 {
                     bool isZeroingRepeat = false;
-                    for (int i = 0; i < loadedFieldHeight; i++)
-                        for (int j = 0; j < loadedFieldWidth; j++)
+                    for (int i = 0; i < Math.Min(loadedFieldHeight, Properties.Settings.Default.gameHeight); i++)
+                        for (int j = 0; j < Math.Min(loadedFieldWidth, Properties.Settings.Default.gameWidth); j++)
                         {
                             field[i, j].V = (int)text[loadedFieldWidth * i + j + 4] - 48;
                             if (field[i, j].V < 0 || field[i, j].V > 2)
@@ -133,8 +133,8 @@ namespace FortWar
                         }
                     if (isZeroingRepeat)
                     {
-                        for (int i = 0; i < fieldHeight; i++)
-                            for (int j = 0; j < fieldWidth; j++)
+                        for (int i = 0; i < Properties.Settings.Default.gameHeight; i++)
+                            for (int j = 0; j < Properties.Settings.Default.gameWidth; j++)
                                 field[i, j].V = 0;
                     }
                 }
@@ -237,6 +237,8 @@ namespace FortWar
         }
         private void Exit()
         {
+            MainCanvas.MouseUp -= MainCanvasClick;
+            MainWindow.KeyUp -= AnyKeyUp;
             MainMenu mainMenu = new MainMenu();
             mainMenu.Build(MainCanvas, MainWindow);
         }
@@ -247,7 +249,31 @@ namespace FortWar
         }
         private void MainCanvasClick(object sender, MouseEventArgs e)
         {
+            for(int i = 0; i < fieldWidth; i++)
+            {
 
+            }
+        }
+        private bool isStepPossible(int x, int y, int ps)
+        {
+            if (field[x, y].V != 0 || field[x, y].V != 3 || field[x, y].V != 4)
+                return false;
+            for (int i = 0; i < 6; i++)
+                if (possibleSteps[y % 2, i, 0] + x < fieldHeight && possibleSteps[y % 2, i, 0] + x >= 0 && possibleSteps[y % 2, i, 1] + y < fieldWidth && possibleSteps[y % 2, i, 1] + y >= 0)
+                    if (field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V % 2 == 1 - ps & field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V > 2)
+                        return true;
+            return false;
+        }
+        private void Step(int x, int y, int ps)
+        {
+            for (int i = 0; i < 6; i++)
+                if (possibleSteps[y % 2, i, 0] + x < fieldHeight && possibleSteps[y % 2, i, 0] + x >= 0 && possibleSteps[y % 2, i, 1] + y < fieldWidth && possibleSteps[y % 2, i, 1] + y >= 0)
+                {
+                    switch(field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V)
+                    {
+             
+                    }
+                }
         }
     }
 }

@@ -377,7 +377,7 @@ namespace FortWar
             {
                 for(int j = 0; j < fieldWidth; j++)
                 {
-                    field[i, j] = new Hexagon() { Margin = imageMargin, Height = imageHeight, Width = imageWidth};
+                    field[i, j].Margin = imageMargin; field[i, j].Height = imageHeight; field[i, j].Width = imageWidth;
                     switch(field [i, j].V)
                     {
                         case 0:
