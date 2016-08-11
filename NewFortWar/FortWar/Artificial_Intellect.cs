@@ -33,7 +33,6 @@ namespace FortWar
             pair ans;
             ans.x = 5;
             ans.y = 5;
-            FirstMode firstMode = new FirstMode();
             for(int i = 0; i < Properties.Settings.Default.gameHeight; i++)
             {
                 for(int j = 0; j < Properties.Settings.Default.gameWidth; j++)
@@ -55,7 +54,6 @@ namespace FortWar
             pair ans;
             ans.x = 5;
             ans.y = 5;
-            FirstMode firstMode = new FirstMode();
                         ans.x = 0;
                         ans.y = 0;
                         return ans;

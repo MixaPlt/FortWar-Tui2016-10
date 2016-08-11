@@ -39,70 +39,16 @@ namespace FortWar
         Label scoreLabel = new Label() {HorizontalContentAlignment = HorizontalAlignment.Center, Height = 24, Content = "kek"};
         public void Build()
         {
-            Thickness margin = new Thickness() { Top = 0, Left = 0, Right = 0 };
-            scoreLabel.Margin = margin;
-            MainCanvas.Children.Add(scoreLabel);
             Properties.Settings.Default.windowMode = 5;
             MainCanvas.MouseUp += MainCanvasClick;
             MainWindow.KeyUp += AnyKeyUp;
             MainCanvas.Children.Clear();
             SourceInit();
-            //Продолжение игры
-            if (isContinue)
-            {
-                String text = "";
-                bool isLoad = false;
-                int loadedFieldHeight = 0, loadedFieldWidth = 0;
-                //Загрузка
-                try
-                {
-                    text = System.IO.File.ReadAllText("SecondModeSavedField.map");
-                    if (text.Length >= 7)
-                    {
-                        loadedFieldHeight = (int)text[0] * 10 + (int)text[1] - 528;
-                        loadedFieldWidth = (int)text[2] * 10 + (int)text[3] - 528;
-                        playerStep = (int)text[4] - 48;
-                        if (text.Length == loadedFieldHeight * loadedFieldWidth + 5 && loadedFieldHeight > 0 && loadedFieldHeight < 51 && loadedFieldWidth > 0 && loadedFieldWidth < 51)
-                        {
-                            for(int i = 0; i < loadedFieldHeight; i++)
-                            {
-                                for(int j = 0; j < loadedFieldWidth; j++)
-                                {
-                                    field[i, j] = new Hexagon() { V = (int)text[i * loadedFieldWidth + j + 5] };
-                                    if(field[i, j].V < 0 || field[i, j].V > 12)
-                                    {
-                                        MessageBox.Show("Файл сохранения повреждён");
-                                        Properties.Settings.Default.isGameSaved = false;
-                                        Properties.Settings.Default.Save();
-                                        Exit();
-                                        return;
-                                    }
-                                }
-                            }                            
-                            isLoad = true;
-                        }
-                    }
-                    if(!isLoad)
-                    {
-                        MessageBox.Show("Файл сохранения повреждён");
-                        Properties.Settings.Default.isGameSaved = false;
-                        Properties.Settings.Default.Save();
-                        Exit();
-                        return;
-                    }
-                }
-                catch (System.IO.FileNotFoundException)
-                {
-                    MessageBox.Show("Файл сохранения отсутствует");
-                    Properties.Settings.Default.isGameSaved = false;
-                    Properties.Settings.Default.Save();
-                    Exit();
-                    return;
-                }
-                fieldHeight = loadedFieldHeight;
-                fieldWidth = loadedFieldWidth;
-            }
-            else
+            Thickness margin = new Thickness() { Top = 0, Left = 0};
+            scoreLabel.Width = MainWindow.Width;
+            scoreLabel.Margin = margin;
+            MainCanvas.Children.Add(scoreLabel);
+            //Загрузка карты
             {
                 int loadedFieldHeight = 0, loadedFieldWidth = 0;
                 bool isLoad = false;
@@ -353,11 +299,11 @@ namespace FortWar
         private void EndGame()
         {
             if (points[0] > points[1])
-                MessageBox.Show(String.Format("победил первый со счётом {0}:{1}", points[0], points[1]));
+                MessageBox.Show(String.Format("Победил первый со счётом {0}:{1}", points[0], points[1]));
             if (points[0] < points[1])
-                MessageBox.Show(String.Format("победил второй со счётом {0}:{1}", points[0], points[1]));
+                MessageBox.Show(String.Format("Победил второй со счётом {0}:{1}", points[0], points[1]));
             if (points[0] == points[1])
-                MessageBox.Show(String.Format("победила дружба со счётом {0}:{1}", points[0], points[1]));
+                MessageBox.Show(String.Format("Победила дружба со счётом {0}:{1}", points[0], points[1]));
             Exit();
         }
     }

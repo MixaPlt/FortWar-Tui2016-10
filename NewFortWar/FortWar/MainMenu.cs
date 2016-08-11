@@ -80,8 +80,6 @@ namespace FortWar
             {
                 case 0:
                     {
-                        FirstMode firstMode = new FirstMode();
-                        firstMode.Build(MainCanvas, MainWindow, true);
                     }
                     break;
             }

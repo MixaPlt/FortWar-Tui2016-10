@@ -67,7 +67,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Artificial_Intellect.cs" />
-    <Compile Include="FirstMode.cs" />
     <Compile Include="GlobalSettings.cs" />
     <Compile Include="MainMenu.cs" />
     <Compile Include="MainWindow.xaml.cs">
