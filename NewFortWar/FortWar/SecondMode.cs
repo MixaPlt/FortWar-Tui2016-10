@@ -34,6 +34,8 @@ namespace FortWar
         public bool isContinue  = false;
         //ход
         private int playerStep = 0, steps = Properties.Settings.Default.numberSteeps;
+        //Экземпляр аи
+        ArtificialIntellect AI;
         private double imageHeight, imageWidth;
         //Счёт
         Label scoreLabel = new Label() {HorizontalContentAlignment = HorizontalAlignment.Center, Height = 24, Content = "kek"};
@@ -130,6 +132,7 @@ namespace FortWar
                 scoreLabel.Content = String.Format("Ходит первый.  Счёт: {0}:{1}", points[0], points[1]);
             else
                 scoreLabel.Content = String.Format("Ходит второй.  Счёт: {0}:{1}", points[0], points[1]);
+            AI = new ArtificialIntellect() { fieldHeight = fieldHeight, fieldWidth = fieldWidth };
         }
         private void SourceInit()
         {
@@ -218,20 +221,23 @@ namespace FortWar
                 {
                     if(field[i, j].isMouseOver(e))
                     {
-                        if(isStepPossible(i, j, playerStep))
+                        if (isStepPossible(i, j, playerStep))
                         {
-                            switch(Properties.Settings.Default.gameBot)
+
+                            Step(i, j, playerStep);
+                            if (playerStep == 1)
+                                steps--;
+                            playerStep = 1 - playerStep;
+
+                            if(Properties.Settings.Default.gameBot == 1)
                             {
-                                case 0:
-                                    {
-                                        Step(i, j, playerStep);
-                                        if (playerStep == 1)
-                                            steps--;
-                                        playerStep = 1 - playerStep;
-                                    }
-                                    break;
+                                pair step = AI.SecondModeFirstBot(field, playerStep);
+                                Step(step.x, step.y, playerStep);
+                                if (playerStep == 1)
+                                    steps--;
+                                playerStep = 1 - playerStep;
                             }
-                            if(steps == 0)
+                            if (steps == 0)
                                 EndGame();
                             if (playerStep == 0)
                                 scoreLabel.Content = String.Format("Ходит первый.  Счёт: {0}:{1}", points[0], points[1]);
