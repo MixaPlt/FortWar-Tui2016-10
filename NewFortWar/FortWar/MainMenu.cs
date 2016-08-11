@@ -61,8 +61,8 @@ namespace FortWar
             {
                 case 0:
                     {
-                        FirstMode firstMode = new FirstMode();
-                        firstMode.Build(MainCanvas, MainWindow, false);
+                        SecondMode secondMode = new SecondMode() {MainCanvas = MainCanvas, MainWindow = MainWindow, isContinue = false};
+                        secondMode.Build();
                     }
                     break;
                 case 1:

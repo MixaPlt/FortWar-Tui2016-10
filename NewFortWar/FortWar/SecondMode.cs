@@ -17,6 +17,7 @@ namespace FortWar
 {
     class SecondMode
     {
+        private int[] points = new int[2] {1, 1};
         //сетка и окно
         public Canvas MainCanvas;
         public Window MainWindow;
@@ -28,14 +29,19 @@ namespace FortWar
         private int fieldHeight = Properties.Settings.Default.gameHeight, fieldWidth = Properties.Settings.Default.gameWidth;
         //клетки, в которые можно попасть относительно данной;
         //Первое измерение - остаток по модулю 2, 2 - шесть возможных клеток, 3 - 2 элемента - y и x координата хода относительно данного
-        private int[,,] possibleSteps = new int[,,] { { { -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, -1 } }, { { -1, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 } } };
+        private int[,,] possibleSteps = new int[2,6,2] { { { -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, -1 } }, { { -1, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 } } };
         //Продолжается ли игра
         public bool isContinue  = false;
         //ход
-        private int playerStep = 0;
+        private int playerStep = 0, steps = Properties.Settings.Default.numberSteeps;
         private double imageHeight, imageWidth;
+        //Счёт
+        Label scoreLabel = new Label() {HorizontalContentAlignment = HorizontalAlignment.Center, Height = 24, Content = "kek"};
         public void Build()
         {
+            Thickness margin = new Thickness() { Top = 0, Left = 0, Right = 0 };
+            scoreLabel.Margin = margin;
+            MainCanvas.Children.Add(scoreLabel);
             Properties.Settings.Default.windowMode = 5;
             MainCanvas.MouseUp += MainCanvasClick;
             MainWindow.KeyUp += AnyKeyUp;
@@ -132,7 +138,7 @@ namespace FortWar
                             if (field[i, j].V < 0 || field[i, j].V > 2)
                                 isZeroingRepeat = true;
                         }
-                    if (isZeroingRepeat)
+                    if (isZeroingRepeat || Properties.Settings.Default.GameMode == 0)
                     {
                         for (int i = 0; i < Properties.Settings.Default.gameHeight; i++)
                             for (int j = 0; j < Properties.Settings.Default.gameWidth; j++)
@@ -149,7 +155,7 @@ namespace FortWar
             //Поле загружено и полностью готово к использованию
             //Вычисление размеров шестиугольничков
             imageWidth = (MainWindow.Width) * 4 / (3 * fieldWidth + 1);
-            imageHeight = (MainWindow.Height - 26) / (fieldHeight + 0.5);
+            imageHeight = (MainWindow.Height - 50) / (fieldHeight + 0.5);
             if (imageWidth > imageHeight * 1.1547)
                 imageWidth = imageHeight * 1.1547;
             else
@@ -157,7 +163,7 @@ namespace FortWar
             //Заполение поля картиночек
             {
                 //Умножаем отступы на 0.97 для избежания белых полос между картинками
-                Thickness imageMargin = new Thickness { Top = 0, Left = 0 };
+                Thickness imageMargin = new Thickness { Top = 24, Left = 0 };
                 for (int i = 0; i < fieldHeight; i++)
                 {
                     for (int j = 0; j < fieldWidth; j++)
@@ -170,10 +176,14 @@ namespace FortWar
                         else
                             imageMargin.Top -= (imageHeight / 2) * 0.97;
                     }
-                    imageMargin.Top = imageHeight * (i + 1) * 0.97;
+                    imageMargin.Top = imageHeight * (i + 1) * 0.97 + 24;
                     imageMargin.Left = 0;
                 }
             }
+            if (playerStep == 0)
+                scoreLabel.Content = String.Format("Ходит первый.  Счёт: {0}:{1}", points[0], points[1]);
+            else
+                scoreLabel.Content = String.Format("Ходит второй.  Счёт: {0}:{1}", points[0], points[1]);
         }
         private void SourceInit()
         {
@@ -269,12 +279,20 @@ namespace FortWar
                                 case 0:
                                     {
                                         Step(i, j, playerStep);
+                                        if (playerStep == 1)
+                                            steps--;
                                         playerStep = 1 - playerStep;
                                     }
                                     break;
                             }
-                            
+                            if(steps == 0)
+                                EndGame();
+                            if (playerStep == 0)
+                                scoreLabel.Content = String.Format("Ходит первый.  Счёт: {0}:{1}", points[0], points[1]);
+                            else
+                                scoreLabel.Content = String.Format("Ходит второй.  Счёт: {0}:{1}", points[0], points[1]);
                         }
+                        return;
                     }
                 }
             }
@@ -286,7 +304,7 @@ namespace FortWar
             for (int i = 0; i < 6; i++)
                 if (possibleSteps[y % 2, i, 0] + x < fieldHeight && possibleSteps[y % 2, i, 0] + x >= 0 && possibleSteps[y % 2, i, 1] + y < fieldWidth && possibleSteps[y % 2, i, 1] + y >= 0)
                 {
-                    if (field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V % 2 == 1 - ps)
+                    if (field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V % 2 == 1 - ps && field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V > 2)
                         return true;                  
                 }
                     return false;
@@ -296,12 +314,16 @@ namespace FortWar
             for (int i = 0; i < 6; i++)
                 if (possibleSteps[y % 2, i, 0] + x < fieldHeight && possibleSteps[y % 2, i, 0] + x >= 0 && possibleSteps[y % 2, i, 1] + y < fieldWidth && possibleSteps[y % 2, i, 1] + y >= 0)
                 {
-                    if(field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V < 11 && field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V > 2 && field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V % 2 != 1 - ps)
+                    if (field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V < 3)
+                        points[ps]++;
+                    if (field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V < 11 && field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V > 2 && field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V % 2 == ps)
                     {
                         if (field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V % 2 == 0)
                             field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V--;
                         else
                             field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V++;
+                        points[ps]++;
+                        points[1 - ps]--;
                     }
                     else
                        switch(field[possibleSteps[y % 2, i, 0] + x, possibleSteps[y % 2, i, 1] + y].V)
@@ -320,9 +342,23 @@ namespace FortWar
                 }
             if(field[x, y].V < 5)
             {
+                if (field[x, y].V != ps + 3)
+                    points[ps]++;
+                if (field[x, y].V == 1 - ps + 3)
+                    points[1 - ps]--;
                 field[x, y].V = ps + 5;
                 field[x, y].Source = sources[field[x, y].V];
             }
+        }
+        private void EndGame()
+        {
+            if (points[0] > points[1])
+                MessageBox.Show(String.Format("победил первый со счётом {0}:{1}", points[0], points[1]));
+            if (points[0] < points[1])
+                MessageBox.Show(String.Format("победил второй со счётом {0}:{1}", points[0], points[1]));
+            if (points[0] == points[1])
+                MessageBox.Show(String.Format("победила дружба со счётом {0}:{1}", points[0], points[1]));
+            Exit();
         }
     }
 }
