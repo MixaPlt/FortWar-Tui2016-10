@@ -90,10 +90,10 @@ namespace FortWar
             }
             //Поле загружено и полностью готово к использованию
             //Вычисление размеров шестиугольничков
-            imageWidth = (MainWindow.Width) * 4 / (3 * fieldWidth + 1);
-            imageHeight = (MainWindow.Height - 50) / (fieldHeight + 0.5);
+            imageWidth = (MainWindow.Width - 20) * 4 / (3 * fieldWidth + 1) - 2.31;
+            imageHeight = (MainWindow.Height - 70) / (fieldHeight + 0.5) - 2;
             if (imageWidth > imageHeight * 1.1547)
-                imageWidth = imageHeight * 1.1547;
+                imageWidth = imageHeight * 1.1547 - 1;
             else
                 imageHeight = imageWidth / 1.1547;
             //Кнопки сохранения и выхода
@@ -107,7 +107,6 @@ namespace FortWar
             MainCanvas.Children.Add(saveButton);
             //Заполение поля картиночек
             {
-                //Умножаем отступы на 0.97 для избежания белых полос между картинками
                 Thickness imageMargin = new Thickness { Top = 0, Left = 0 };
                 for (int i = 0; i < fieldHeight; i++)
                 {
@@ -115,13 +114,13 @@ namespace FortWar
                     {
                         field[i, j].Margin = imageMargin; field[i, j].Source = Sources[field[i, j].V]; field[i, j].Height = imageHeight; field[i, j].Width = imageWidth;
                         MainCanvas.Children.Add(field[i, j]);
-                        imageMargin.Left += (3 * imageWidth / 4) * 0.97;
+                        imageMargin.Left += (3 * (imageWidth + 2.5) / 4) ;
                         if (j % 2 == 0)
-                            imageMargin.Top += (imageHeight / 2) * 0.97;
+                            imageMargin.Top += (imageHeight / 2 + 0.5);
                         else
-                            imageMargin.Top -= (imageHeight / 2) * 0.97;
+                            imageMargin.Top -= (imageHeight / 2 + 0.5);
                     }
-                    imageMargin.Top = imageHeight * (i + 1) * 0.97;
+                    imageMargin.Top = (imageHeight + 2) * (i + 1);
                     imageMargin.Left = 0;
                 }
             }     
