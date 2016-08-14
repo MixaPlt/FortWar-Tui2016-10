@@ -102,10 +102,10 @@ namespace FortWar
             }
             //Поле загружено и полностью готово к использованию
             //Вычисление размеров шестиугольничков
-            imageWidth = (MainWindow.Width) * 4 / (3 * fieldWidth + 1);
-            imageHeight = (MainWindow.Height - 50) / (fieldHeight + 0.5);
+            imageWidth = (MainWindow.Width - 20) * 4 / (3 * fieldWidth + 1) - 2.31;
+            imageHeight = (MainWindow.Height - 70) / (fieldHeight + 0.5) - 2;
             if (imageWidth > imageHeight * 1.1547)
-                imageWidth = imageHeight * 1.1547;
+                imageWidth = imageHeight * 1.1547 - 1;
             else
                 imageHeight = imageWidth / 1.1547;
             //Заполение поля картиночек
@@ -118,13 +118,13 @@ namespace FortWar
                     {
                         field[i, j].Margin = imageMargin; field[i, j].Source = sources[field[i, j].V]; field[i, j].Height = imageHeight; field[i, j].Width = imageWidth;
                         MainCanvas.Children.Add(field[i, j]);
-                        imageMargin.Left += (3 * imageWidth / 4) * 0.97;
+                        imageMargin.Left += (3 * (imageWidth + 2.5) / 4);
                         if (j % 2 == 0)
-                            imageMargin.Top += (imageHeight / 2) * 0.97;
+                            imageMargin.Top += (imageHeight / 2 + 0.5);
                         else
-                            imageMargin.Top -= (imageHeight / 2) * 0.97;
+                            imageMargin.Top -= (imageHeight / 2 + 0.5);
                     }
-                    imageMargin.Top = imageHeight * (i + 1) * 0.97 + 24;
+                    imageMargin.Top = (imageHeight + 2) * (i + 1) + 24;
                     imageMargin.Left = 0;
                 }
             }
@@ -253,6 +253,8 @@ namespace FortWar
         {
             if (field[x, y].V != 0 && field[x, y].V != 3 && field[x, y].V != 4)
                 return false;
+            if (field[x, y].V == ps + 3)
+                return true;
             for (int i = 0; i < 6; i++)
                 if (possibleSteps[y % 2, i, 0] + x < fieldHeight && possibleSteps[y % 2, i, 0] + x >= 0 && possibleSteps[y % 2, i, 1] + y < fieldWidth && possibleSteps[y % 2, i, 1] + y >= 0)
                 {

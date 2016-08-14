@@ -40,7 +40,7 @@ namespace FortWar
             pair ans;
             ans.x = 5;
             ans.y = 5;
-            int maxPoints = 0;
+            int maxPoints = -999999;
             for(int i = 0; i < fieldHeight; i++)
             {
                 for(int j = 0; j < fieldWidth; j++)
@@ -49,6 +49,38 @@ namespace FortWar
                     {
                         int p = 0;
                         if(ps == 0)
+                            p = Points(i, j, ps, firstPlayerPriorities, field);
+                        else
+                            p = Points(i, j, ps, secondPlayerPriorities, field);
+                        if (p > maxPoints || maxPoints == 0)
+                        {
+                            maxPoints = p;
+                            ans.x = i;
+                            ans.y = j;
+                        }
+                    }
+                }
+            }
+            return ans;
+        }
+        public pair SecondModeSecondBot(Hexagon[,] field, int ps)
+        {
+            //f - номер хода игрока
+            //field.V - игровое поле
+            //0 - Пустя клеточка, 1 - горы, 2 - река, 3 - клетка первого, 4 - клеткаа второго, 5 - крепость первого,
+            //6 - крепость второго, 7 - море первого, 8 - море второго, 9 - горы первого, 10 - горы второго, 11 - замок первого, 12 - замок второго
+            pair ans;
+            ans.x = 5;
+            ans.y = 5;
+            int maxPoints = -999999;
+            for (int i = 0; i < fieldHeight; i++)
+            {
+                for (int j = 0; j < fieldWidth; j++)
+                {
+                    if (isStepPossible(i, j, ps, field))
+                    {
+                        int p = 0;
+                        if (ps == 0)
                             p = Points(i, j, ps, firstPlayerPriorities, field);
                         else
                             p = Points(i, j, ps, secondPlayerPriorities, field);
@@ -68,6 +100,8 @@ namespace FortWar
         {
             if (field[x, y].V != 0 && field[x, y].V != 3 && field[x, y].V != 4)
                 return false;
+            if (field[x, y].V == ps + 3)
+                return true;
             for (int i = 0; i < 6; i++)
                 if (possibleSteps[y % 2, i, 0] + x < fieldHeight && possibleSteps[y % 2, i, 0] + x >= 0 && possibleSteps[y % 2, i, 1] + y < fieldWidth && possibleSteps[y % 2, i, 1] + y >= 0)
                 {
