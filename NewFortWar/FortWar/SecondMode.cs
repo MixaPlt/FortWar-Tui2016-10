@@ -211,7 +211,13 @@ namespace FortWar
         //Метод события нажатия кнопки
         private void AnyKeyUp(object sender, KeyEventArgs e)
         {
-
+            if(e.Key == Key.Escape)
+            {
+                if (MessageBox.Show("Действительно ли вы хотите выйти?", "Подтверждение выхода", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    Exit();
+                }
+            }
         }
         private void MainCanvasClick(object sender, MouseEventArgs e)
         {
