@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.IO;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -22,10 +23,24 @@ namespace NFW
         static private bool isStarted = false;
         public void Build()
         {
-            mainCanvas.Children.Clear();
-            if(isStarted)
-                WindowSizeChanged(null, null);
+            if (File.Exists("screenresolution.txt") == true)
+            {
+                StreamReader file = new StreamReader("screenresolution.txt");
+                mainWindow.Height = double.Parse(file.ReadLine());
+                mainWindow.Width = double.Parse(file.ReadLine());
+                file.Close();
+            }
+            else
+            {
+                    string[] arr = {mainWindow.ActualHeight.ToString(), mainWindow.ActualWidth.ToString()};
+                    File.WriteAllLines("screenresolution.txt", arr);
+            }
             mainWindow.SizeChanged += WindowSizeChanged;
+            mainCanvas.HorizontalAlignment = HorizontalAlignment.Center;
+            mainCanvas.VerticalAlignment = VerticalAlignment.Center;
+            mainCanvas.Children.Clear();
+            if (isStarted)
+                WindowSizeChanged(null, null);
         }
         private void WindowSizeChanged (object sender, SizeChangedEventArgs e)
         {
@@ -68,7 +83,26 @@ namespace NFW
         private void ExitGame(object sender, RoutedEventArgs e)
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
-            Environment.Exit(0);
+            StreamReader file = new StreamReader("screenresolution.txt");
+            if (mainWindow.Height != double.Parse(file.ReadLine()) || mainWindow.Width != double.Parse(file.ReadLine()))
+            {
+                if(MessageBox.Show("Вы хотите сохранить изменения в разрешении экрана?", "FortWar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    file.Close();
+                    string[] arr = {mainWindow.Height.ToString(), mainWindow.Width.ToString()};
+                    File.WriteAllLines("screenresolution.txt", arr);
+                    Environment.Exit(0);
+                }
+                else 
+                {
+                    file.Close();
+                    Environment.Exit(0);
+                }
+            }
+            else
+            {
+                Environment.Exit(0);
+            }
         }
 
     }
