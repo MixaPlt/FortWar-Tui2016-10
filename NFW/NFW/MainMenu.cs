@@ -22,10 +22,18 @@ namespace NFW
         public Canvas mainCanvas;
         public void Build()
         {
-            StreamReader file = new System.IO.StreamReader("screenresolution.txt");
-            mainWindow.Height = double.Parse(file.ReadLine());
-            mainWindow.Width = double.Parse(file.ReadLine());
-            file.Close();
+            if (File.Exists("screenresolution.txt") == true)
+            {
+                StreamReader file = new StreamReader("screenresolution.txt");
+                mainWindow.Height = double.Parse(file.ReadLine());
+                mainWindow.Width = double.Parse(file.ReadLine());
+                file.Close();
+            }
+            else
+            {
+                    string[] arr = {mainWindow.ActualHeight.ToString(), mainWindow.ActualWidth.ToString()};
+                    File.WriteAllLines("screenresolution.txt", arr);
+            }
             mainWindow.SizeChanged += WindowSizeChanged;
             mainCanvas.HorizontalAlignment = HorizontalAlignment.Center;
             mainCanvas.VerticalAlignment = VerticalAlignment.Center;
