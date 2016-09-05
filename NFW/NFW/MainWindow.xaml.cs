@@ -20,6 +20,8 @@ namespace NFW
         public MainWindow()
         {
             InitializeComponent();
+            mainCanvas.HorizontalAlignment = HorizontalAlignment.Center;
+            mainCanvas.VerticalAlignment = VerticalAlignment.Center;
             MainMenu mainMenu = new MainMenu { mainCanvas = mainCanvas, mainWindow = mainWindow};
             mainMenu.Build();
         }

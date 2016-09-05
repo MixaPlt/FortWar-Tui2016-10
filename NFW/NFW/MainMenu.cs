@@ -19,39 +19,43 @@ namespace NFW
     {
         public Window mainWindow;
         public Canvas mainCanvas;
+        static private bool isStarted = false;
         public void Build()
         {
+            mainCanvas.Children.Clear();
+            if(isStarted)
+                WindowSizeChanged(null, null);
             mainWindow.SizeChanged += WindowSizeChanged;
-            mainCanvas.HorizontalAlignment = HorizontalAlignment.Center;
-            mainCanvas.VerticalAlignment = VerticalAlignment.Center;
         }
         private void WindowSizeChanged (object sender, SizeChangedEventArgs e)
         {
+            isStarted = true;
             mainCanvas.Children.Clear();
-            int buttonHeight = (Math.Min((int)(mainWindow.ActualHeight * 4 / 5), (int)((mainWindow.ActualWidth - 2) * 4 / 3)) / 4);
-            int buttonWidth = (int)(buttonHeight * 3);
-            mainCanvas.Width = buttonWidth;
-            mainCanvas.Height = buttonHeight * 4;
-            Thickness buttonMargin = new Thickness { Left = 0, Top = mainWindow.ActualHeight / 60 };
-            Button startGameButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Начать новую игру", FontSize = buttonHeight / 4};
+            mainCanvas.Width = mainWindow.ActualWidth - 10;
+            mainCanvas.Height = mainWindow.ActualHeight - 30;
+            int buttonHeight = (Math.Min((int)(mainCanvas.Height * 3 / 16), (int)(mainCanvas.Width - 4) / 3));
+            int buttonWidth = buttonHeight * 3;
+            Thickness buttonMargin = new Thickness { Left = (mainCanvas.Width - buttonWidth) / 2, Top = mainCanvas.Height / 8 };
+            Button startGameButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Начать новую игру", FontSize = buttonHeight / 5 };
             startGameButton.Click += StartNewGame;
             mainCanvas.Children.Add(startGameButton);
             buttonMargin.Top += buttonHeight;
-            Button continueGameButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Продолжить сохранeние", FontSize = buttonHeight / 4 };
+            Button continueGameButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Продолжить сохранeние", FontSize = buttonHeight / 5 };
             continueGameButton.Click += ContinueGame;
             mainCanvas.Children.Add(continueGameButton);
             buttonMargin.Top += buttonHeight;
-            Button settingsButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Глобальные настройки", FontSize = buttonHeight / 4 };
+            Button settingsButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Глобальные настройки", FontSize = buttonHeight / 5 };
             settingsButton.Click += StartSettings;
             mainCanvas.Children.Add(settingsButton);
             buttonMargin.Top += buttonHeight;
-            Button exitButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Выйти", FontSize = buttonHeight / 4 };
+            Button exitButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Выйти", FontSize = buttonHeight / 5 };
             exitButton.Click += ExitGame;
             mainCanvas.Children.Add(exitButton);
         }
         private void StartNewGame (object sender, RoutedEventArgs e)
         {
-
+            StartGameMenu startGameMenu = new StartGameMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            startGameMenu.Build();
         }
         private void ContinueGame(object sender, RoutedEventArgs e)
         {
@@ -63,7 +67,7 @@ namespace NFW
         }
         private void ExitGame(object sender, RoutedEventArgs e)
         {
-
+            mainWindow.SizeChanged -= WindowSizeChanged;
             Environment.Exit(0);
         }
 

@@ -26,7 +26,7 @@ namespace NFW
         private BitmapImage[] imageSources = new BitmapImage[16];
         public void Build()
         {
-
+           
         }
     }
 }
