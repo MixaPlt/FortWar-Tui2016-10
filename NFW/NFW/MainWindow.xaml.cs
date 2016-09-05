@@ -15,14 +15,13 @@ using System.Windows.Shapes;
 
 namespace NFW
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+            MainMenu mainMenu = new MainMenu { mainCanvas = mainCanvas, mainWindow = mainWindow};
+            mainMenu.Build();
         }
     }
 }

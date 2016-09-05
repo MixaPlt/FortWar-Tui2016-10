@@ -30,7 +30,7 @@ namespace FortWar
             mainCanvas.Children.Clear();
             //Создание кнопок главного меню
             //Начать игру
-            Thickness buttonMargin = new Thickness() { Top = mainWindow.Height / 2 - 160, Left = mainWindow.Width / 2 - 128 };
+            Thickness buttonMargin = new Thickness() { Top = mainWindow.ActualHeight / 2 - 160, Left = mainWindow.ActualWidth / 2 - 128 };
             Button StartGameButton = new Button() { Height = 64, Width = 256, Content = "Начать игру", Margin = buttonMargin};
             mainCanvas.Children.Add(StartGameButton);
             StartGameButton.Click += StartGame;
