@@ -86,22 +86,31 @@ namespace NFW
             StreamReader file = new StreamReader("screenresolution.txt");
             if (mainWindow.Height != double.Parse(file.ReadLine()) || mainWindow.Width != double.Parse(file.ReadLine()))
             {
-                if(MessageBox.Show("Вы хотите сохранить изменения в разрешении экрана?", "FortWar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                MessageBoxResult rez = MessageBox.Show("Вы хотите сохранить изменения в разрешении экрана?", "FortWar", MessageBoxButton.YesNoCancel);
+                if (rez == MessageBoxResult.Yes)
                 {
                     file.Close();
                     string[] arr = {mainWindow.Height.ToString(), mainWindow.Width.ToString()};
                     File.WriteAllLines("screenresolution.txt", arr);
                     Environment.Exit(0);
                 }
-                else 
+                else if(rez == MessageBoxResult.No)
                 {
                     file.Close();
                     Environment.Exit(0);
                 }
+                else if(rez == MessageBoxResult.Cancel)
+                {
+                    file.Close();
+                }
             }
             else
             {
-                Environment.Exit(0);
+                MessageBoxResult rez = MessageBox.Show("Вы действительно хотите выйти?", "FortWar", MessageBoxButton.YesNo);
+                if(rez == MessageBoxResult.Yes)
+                {
+                    Environment.Exit(0);
+                }
             }
         }
 
