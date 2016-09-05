@@ -93,6 +93,7 @@ namespace FortWar
         //Выход из игры
         private void ExitGame(object sender, RoutedEventArgs e)
         {
+
             Environment.Exit(0);
         }
     }

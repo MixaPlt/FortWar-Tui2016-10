@@ -28,16 +28,16 @@ namespace NFW
         private void WindowSizeChanged (object sender, SizeChangedEventArgs e)
         {
             mainCanvas.Children.Clear();
-            int buttonHeight = (Math.Min((int)(mainWindow.ActualHeight - 30), (int)((mainWindow.ActualWidth - 2) * 4 / 3)) / 4);
+            int buttonHeight = (Math.Min((int)(mainWindow.ActualHeight / 5 * 4), (int)((mainWindow.ActualWidth - 2) * 4 / 3)) / 4);
             int buttonWidth = (int)(buttonHeight * 3);
             mainCanvas.Width = buttonWidth;
             mainCanvas.Height = buttonHeight * 4;
-            Thickness buttonMargin = new Thickness { Left = 0, Top = 3 };
+            Thickness buttonMargin = new Thickness { Left = 0, Top = mainWindow.ActualHeight / 30 };
             Button startGameButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Начать новую игру", FontSize = buttonHeight / 4};
             startGameButton.Click += StartNewGame;
             mainCanvas.Children.Add(startGameButton);
             buttonMargin.Top += buttonHeight;
-            Button continueGameButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Продолжить сохранёние", FontSize = buttonHeight / 4 };
+            Button continueGameButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Продолжить сохранeние", FontSize = buttonHeight / 4 };
             continueGameButton.Click += ContinueGame;
             mainCanvas.Children.Add(continueGameButton);
             buttonMargin.Top += buttonHeight;
@@ -63,6 +63,7 @@ namespace NFW
         }
         private void ExitGame(object sender, RoutedEventArgs e)
         {
+
             Environment.Exit(0);
         }
 
