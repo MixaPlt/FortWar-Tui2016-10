@@ -28,11 +28,11 @@ namespace NFW
         private void WindowSizeChanged (object sender, SizeChangedEventArgs e)
         {
             mainCanvas.Children.Clear();
-            int buttonHeight = (Math.Min((int)(mainWindow.ActualHeight / 5 * 4), (int)((mainWindow.ActualWidth - 2) * 4 / 3)) / 4);
+            int buttonHeight = (Math.Min((int)(mainWindow.ActualHeight * 4 / 5), (int)((mainWindow.ActualWidth - 2) * 4 / 3)) / 4);
             int buttonWidth = (int)(buttonHeight * 3);
             mainCanvas.Width = buttonWidth;
             mainCanvas.Height = buttonHeight * 4;
-            Thickness buttonMargin = new Thickness { Left = 0, Top = mainWindow.ActualHeight / 30 };
+            Thickness buttonMargin = new Thickness { Left = 0, Top = mainWindow.ActualHeight / 60 };
             Button startGameButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Начать новую игру", FontSize = buttonHeight / 4};
             startGameButton.Click += StartNewGame;
             mainCanvas.Children.Add(startGameButton);
