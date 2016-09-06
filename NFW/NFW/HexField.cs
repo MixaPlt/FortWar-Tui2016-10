@@ -104,13 +104,14 @@ namespace NFW
                 for(int j = 0; j < fieldWidth; j++)
                 {
                     field[i, j] = new Hexagon() {Source = imageSources[0] };
-                    mainCanvas.Children.Add(field[i, j]);
+   //                 mainCanvas.Children.Add(field[i, j]);
                 }
             }
             WindowSizeChanged(null, null);
         }
         private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
+            mainCanvas.Children.Clear();
             int imageHeight, imageWidth;
             imageHeight = Math.Min((int)(Height / (fieldHeight + 0.5)), (int)((Width / ((fieldWidth - 1) * 3 / 4 + 1)) / 1.1547)) - 2;
             imageWidth = (int)(imageHeight * 1.1547);
@@ -127,6 +128,7 @@ namespace NFW
                         margin.Top += imageHeight / 2;
                     else
                         margin.Top -= imageHeight / 2;
+                    mainCanvas.Children.Add(field[i, j]);
                 }
                 Margin.Left = 0;
                 Margin.Top = (imageWidth + 2) * i;
