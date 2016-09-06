@@ -19,7 +19,7 @@ namespace NFW
             mainCanvas.Width = mainWindow.ActualWidth - 10;
             mainCanvas.Height = mainWindow.ActualHeight - 30;
             Thickness margin = new Thickness() {Top = 0 };
-            Label chooseModeInfoLabel = new Label() { Margin = margin, Width = mainCanvas.Width, Height = mainCanvas.Height / 8, FontSize = mainCanvas.Height / 30, HorizontalContentAlignment = HorizontalAlignment.Center, Content = "Выберите режим игры" };
+            Label chooseModeInfoLabel = new Label() { Margin = margin, Width = mainCanvas.Width, Height = mainCanvas.Height / 8, FontSize = mainCanvas.Height / 30, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Выберите режим игры" };
             mainCanvas.Children.Add(chooseModeInfoLabel);
             margin.Top = mainCanvas.Height / 8;
             int buttonHeight = Math.Min((int)(mainCanvas.Width) / 3, (int) (mainCanvas.Height) * 3 / 16);
