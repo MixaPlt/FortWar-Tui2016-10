@@ -78,7 +78,8 @@ namespace NFW
         }
         private void StartSettings(object sender, RoutedEventArgs e)
         {
-
+            GlobalSettings globalSettings = new GlobalSettings() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            globalSettings.Build();
         }
         private void ExitGame(object sender, RoutedEventArgs e)
         {
