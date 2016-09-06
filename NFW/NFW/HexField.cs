@@ -29,6 +29,9 @@ namespace NFW
         private BitmapImage[] imageSources = new BitmapImage[16];
         public void Build()
         {
+            mainCanvas.Children.Clear();
+            mainCanvas.Height = mainWindow.Height - 30;
+            mainCanvas.Width = mainWindow.Width - 4;
             mainWindow.SizeChanged += WindowSizeChanged;
             {
                 imageSources[0] = new BitmapImage();
@@ -104,6 +107,7 @@ namespace NFW
                     mainCanvas.Children.Add(field[i, j]);
                 }
             }
+            WindowSizeChanged(null, null);
         }
         private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
         {

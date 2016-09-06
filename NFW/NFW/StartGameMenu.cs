@@ -50,7 +50,9 @@ namespace NFW
         }
         private void ThirdMode(object sender, RoutedEventArgs e)
         {
-
+            Thickness margin = new Thickness() { Top = 0, Left = 0 };
+            HexField hexField = new HexField() { fieldHeight = 10, fieldWidth = 10, mainCanvas = mainCanvas, Height = (int)mainCanvas.Height, Width = (int)mainCanvas.Width, mainWindow = mainWindow, Margin = margin};
+            hexField.Build();
         }
         private void Back(object sender, RoutedEventArgs e)
         {
