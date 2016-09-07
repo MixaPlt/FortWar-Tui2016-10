@@ -69,15 +69,17 @@ namespace NFW
         }
         private void StartNewGame (object sender, RoutedEventArgs e)
         {
+            mainWindow.SizeChanged -= WindowSizeChanged;
             StartGameMenu startGameMenu = new StartGameMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
             startGameMenu.Build();
         }
         private void ContinueGame(object sender, RoutedEventArgs e)
         {
-
+            mainWindow.SizeChanged -= WindowSizeChanged;
         }
         private void StartSettings(object sender, RoutedEventArgs e)
         {
+            mainWindow.SizeChanged -= WindowSizeChanged;
             GlobalSettings globalSettings = new GlobalSettings() { mainCanvas = mainCanvas, mainWindow = mainWindow };
             globalSettings.Build();
         }

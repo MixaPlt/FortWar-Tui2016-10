@@ -100,6 +100,23 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Geks0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Geks1.png" />
+    <Resource Include="Images\Geks10.png" />
+    <Resource Include="Images\Geks11.png" />
+    <Resource Include="Images\Geks12.png" />
+    <Resource Include="Images\Geks2.png" />
+    <Resource Include="Images\Geks3.png" />
+    <Resource Include="Images\Geks4.png" />
+    <Resource Include="Images\Geks5.png" />
+    <Resource Include="Images\Geks6.png" />
+    <Resource Include="Images\Geks7.png" />
+    <Resource Include="Images\Geks8.png" />
+    <Resource Include="Images\Geks9.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

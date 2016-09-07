@@ -42,21 +42,22 @@ namespace NFW
         }
         private void FirstMode(object sender, RoutedEventArgs e)
         {
-
+            mainWindow.SizeChanged -= WindowSizeChanged;
         }
         private void SecondMode(object sender, RoutedEventArgs e)
         {
-
+            mainWindow.SizeChanged -= WindowSizeChanged;
         }
         private void ThirdMode(object sender, RoutedEventArgs e)
         {
-            Thickness margin = new Thickness() { Top = 0, Left = 0 };
+            mainWindow.SizeChanged -= WindowSizeChanged;
+            Thickness margin = new Thickness() { Top = 20, Left = 20 };
             HexField hexField = new HexField() { fieldHeight = 10, fieldWidth = 10, mainCanvas = mainCanvas, Height = (int)mainCanvas.Height, Width = (int)mainCanvas.Width, mainWindow = mainWindow, Margin = margin};
             hexField.Build();
         }
         private void Back(object sender, RoutedEventArgs e)
         {
-            mainWindow.SizeChanged -= WindowSizeChanged;
+    //        mainWindow.SizeChanged -= WindowSizeChanged;
             MainMenu mainMenu = new MainMenu { mainCanvas = mainCanvas, mainWindow = mainWindow };
             mainMenu.Build();
         }
