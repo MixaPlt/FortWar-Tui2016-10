@@ -24,14 +24,78 @@ namespace NFW
         //Само поле. Дополнительная информация в классе Hexagon. !!!Менять значение только через метод SetHexValue!!!
         public Hexagon[,] field = new Hexagon[51, 51];
         //Количество строчек и столбцов поля
-        public int fieldHeight;
-        public int fieldWidth;
+        public int FieldHeight
+        {
+            get { return fieldHeight; }
+            set
+            {
+                if (isBuilded)
+                {
+                    if (value > fieldHeight)
+                    {
+                        for (int i = fieldHeight; i < value; i++)
+                        {
+                            for (int j = 0; j < fieldWidth; j++)
+                            {
+                                thisCanvas.Children.Add(field[i, j]);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = fieldHeight; i < value; i++)
+                        {
+                            for (int j = 0; j < fieldWidth; j++)
+                            {
+                                thisCanvas.Children.Remove(field[i, j]);
+                            }
+                        }
+                    }
+                }
+                fieldHeight = value;
+                if(isBuilded)
+                 Rebuild();
+            }
+        }
+        public int FieldWidth
+        {
+            get { return fieldWidth; }
+            set
+            {
+                if (isBuilded)
+                {
+                    for (int i = 0; i < fieldHeight; i++)
+                    {
+                        for (int j = fieldWidth; j < value; j++)
+                            thisCanvas.Children.Add(field[i, j]);
+                        for (int j = value; j < fieldHeight; j++)
+                            thisCanvas.Children.Remove(field[i, j]);
+                    }
+                }
+                fieldWidth = value;
+                if(isBuilded)
+                    Rebuild();
+            }
+        }
+        private double height;
+        private double width;
+        private int fieldHeight;
+        private int fieldWidth;
         //Сыылки на главное окно и координатную сетку
         public Canvas mainCanvas;
         public Window mainWindow;
         //высота и ширина поля
-        public double Height;
-        public double Width;
+        public double Height
+        {
+            get { return height; }
+            set { height = value; Rebuild(); }
+        }
+        public double Width
+        {
+            get { return width; }
+            set { width = value; Rebuild(); }
+        }
+        private bool isBuilded = false;
         //отсуп относительнородительского элемента(mainCanvas)
         public Thickness Margin;
         private Canvas thisCanvas = new Canvas() { Background = Brushes.Black};
@@ -44,6 +108,7 @@ namespace NFW
         public void Build()
         {
             {
+                isBuilded = true;
                 thisCanvas.Margin = Margin;
                 mainCanvas.Children.Add(thisCanvas);
                 imageSources[0] = new BitmapImage();
@@ -111,6 +176,7 @@ namespace NFW
                 imageSources[12].UriSource = new Uri("Images/Geks2.png", UriKind.Relative);
                 imageSources[12].EndInit();
             }
+            fieldWidth = FieldWidth;
             for (int i = 0; i < 50; i++)
             {
                 for(int j = 0; j < 50; j++)
@@ -129,30 +195,26 @@ namespace NFW
         }
         private void Rebuild()
         {
-            thisCanvas.Height = Math.Min(Height, Width / ((fieldWidth - 1) * 3 / 4 + 1) * (fieldHeight + 0.5) * 0.86602540378);
-            thisCanvas.Width = Math.Min(Width, Height * ((fieldWidth - 1) * 3 / 4 + 1) / (fieldHeight + 0.5) * 1.1547);
-    //        MessageBox.Show(String.Format("{0}/{1}  {2}/{3}", thisCanvas.Height, mainCanvas.Height, thisCanvas.Width, mainCanvas.Width));
-            int imageHeight, imageWidth, dist;
-            dist = (int)(Math.Max(thisCanvas.Height / fieldHeight / 30, 1));
-            imageHeight = (int)(thisCanvas.Height / (fieldHeight + 0.5) - dist);
-            imageWidth = (int)(thisCanvas.Width / fieldWidth - dist);
-            MessageBox.Show(String.Format("{0},  {1}", imageHeight, thisCanvas.Height));
-            Thickness margin = new Thickness() { Top = 0, Left = 0 };
+            if (!isBuilded)
+                return;
+            Thickness margin = new Thickness() { Top = 0, Left = 0};
+            int imageHeight = (int)Math.Min(height / (fieldHeight + 1), width / 1.1547 / ((fieldWidth - 1) * 3/ 4 + 2));
+            int dist = Math.Max(imageHeight / 30, 1);
+            imageHeight -= dist;
             for(int i = 0; i < fieldHeight; i++)
             {
                 for(int j = 0; j < fieldWidth; j++)
                 {
-                    field[i, j].Margin = margin;
                     field[i, j].Height = imageHeight;
-                    field[i, j].Width = imageWidth;
-                    margin.Left += imageWidth * 3 / 4 + 1;
+                    field[i, j].Margin = margin;
                     if (j % 2 == 0)
-                        margin.Top += imageHeight / 2 + (dist);
+                        margin.Top += imageHeight / 2;
                     else
-                        margin.Top -= imageHeight / 2 + (dist);
+                        margin.Top -= imageHeight / 2;
+                    margin.Left += imageHeight * 1.1547 / 4 * 3 + dist;
                 }
+                margin.Top = (i + 1) * imageHeight;
                 margin.Left = 0;
-                margin.Top = (imageHeight + dist) * (i + 1);
             }
         }
     }

@@ -1,7 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System;
-using System.IO;
 
 namespace NFW
 {
@@ -23,29 +22,31 @@ namespace NFW
             Label chooseModeInfoLabel = new Label() { Margin = margin, Width = mainCanvas.Width, Height = mainCanvas.Height / 8, FontSize = mainCanvas.Height / 30, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Выберите режим игры" };
             mainCanvas.Children.Add(chooseModeInfoLabel);
             margin.Top = mainCanvas.Height / 8;
-            int buttonHeight = Math.Min((int)(mainCanvas.Width) / 3, (int) (mainCanvas.Height) * 3 / 16);
-            margin.Left = (mainCanvas.Width - buttonHeight * 3) / 2;
-            Button firstModeButton = new Button() { Height = buttonHeight, Width = buttonHeight * 3, FontSize = buttonHeight / 5, Margin = margin, Content = "I'm too young to die", IsDefault = true};
+            int buttonHeight = Math.Min((int)(mainCanvas.Width / 3.75), (int) (mainCanvas.Height) * 3 / 20);
+            margin.Left = (mainCanvas.Width - buttonHeight * 3.75) / 2;
+            Button firstModeButton = new Button() { Height = buttonHeight, Width = buttonHeight * 3.75, FontSize = buttonHeight / 5, Margin = margin, Content = "I'm too young to die", IsDefault = true};
             firstModeButton.Click += FirstMode;
             mainCanvas.Children.Add(firstModeButton);
             margin.Top += buttonHeight;
-            Button secondModeButton = new Button() { Margin = margin, Height = buttonHeight, Width = buttonHeight * 3, FontSize = buttonHeight / 5, Content = "Hey, not too rough" };
+            Button secondModeButton = new Button() { Margin = margin, Height = buttonHeight, Width = buttonHeight * 3.75, FontSize = buttonHeight / 5, Content = "Hey, not too rough" };
             secondModeButton.Click += SecondMode;
             mainCanvas.Children.Add(secondModeButton);
             margin.Top += buttonHeight;
-            Button thirdModeButton = new Button() { Margin = margin, Height = buttonHeight, Width = buttonHeight * 3, FontSize = buttonHeight / 5, Content = "Hurt me plenty" };
+            Button thirdModeButton = new Button() { Margin = margin, Height = buttonHeight, Width = buttonHeight * 3.75, FontSize = buttonHeight / 5, Content = "Hurt me plenty" };
             thirdModeButton.Click += ThirdMode;
             mainCanvas.Children.Add(thirdModeButton);
             margin.Top += buttonHeight;
-            Button backButton = new Button() { Margin = margin, Height = buttonHeight, Width = buttonHeight * 3, FontSize = buttonHeight / 5, Content = "Назад" };
+            Button readModeButton = new Button() { Margin = margin, Height = buttonHeight, Width = buttonHeight * 3.75, FontSize = buttonHeight / 5, Content = "Чтение из файла" };
+            readModeButton.Click += ReadMode;
+            mainCanvas.Children.Add(readModeButton);
+            margin.Top += buttonHeight;
+            Button backButton = new Button() { Margin = margin, Height = buttonHeight, Width = buttonHeight * 3.75, FontSize = buttonHeight / 5, Content = "Назад" };
             backButton.Click += Back;
             mainCanvas.Children.Add(backButton);
         }
         private void FirstMode(object sender, RoutedEventArgs e)
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
-            ModeSettings firstmodeoptions = new ModeSettings() { mainCanvas = mainCanvas, mainWindow = mainWindow };
-            firstmodeoptions.Build();
         }
         private void SecondMode(object sender, RoutedEventArgs e)
         {
@@ -55,14 +56,16 @@ namespace NFW
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
             mainCanvas.Children.Clear();
-            Thickness margin = new Thickness() { Top = 4, Left = 3};
-            HexField hexField = new HexField() { fieldHeight = 50, fieldWidth = 50, mainCanvas = mainCanvas, Height = (int)mainCanvas.Height - 4, Width = (int)mainCanvas.Width - 4, mainWindow = mainWindow, Margin = margin};
-            hexField.Build();
-            hexField.SetHexValue(0, 0, 6);
+            ThirdModeSettings thirdModeSettings = new ThirdModeSettings() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            thirdModeSettings.Build();
+        }
+        private void ReadMode(object sender, RoutedEventArgs e)
+        {
+            mainWindow.SizeChanged -= WindowSizeChanged;
         }
         private void Back(object sender, RoutedEventArgs e)
         {
-            //mainWindow.SizeChanged -= WindowSizeChanged;
+            mainWindow.SizeChanged -= WindowSizeChanged;
             MainMenu mainMenu = new MainMenu { mainCanvas = mainCanvas, mainWindow = mainWindow };
             mainMenu.Build();
         }
