@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System;
+using System.IO;
 
 namespace NFW
 {
@@ -43,6 +44,8 @@ namespace NFW
         private void FirstMode(object sender, RoutedEventArgs e)
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
+            ModeSettings firstmodeoptions = new ModeSettings() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            firstmodeoptions.Build();
         }
         private void SecondMode(object sender, RoutedEventArgs e)
         {
@@ -59,7 +62,7 @@ namespace NFW
         }
         private void Back(object sender, RoutedEventArgs e)
         {
-    //        mainWindow.SizeChanged -= WindowSizeChanged;
+            //mainWindow.SizeChanged -= WindowSizeChanged;
             MainMenu mainMenu = new MainMenu { mainCanvas = mainCanvas, mainWindow = mainWindow };
             mainMenu.Build();
         }
