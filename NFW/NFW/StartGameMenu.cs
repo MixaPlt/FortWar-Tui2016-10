@@ -56,12 +56,8 @@ namespace NFW
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
             mainCanvas.Children.Clear();
-            Thickness margin = new Thickness() { Top = 7, Left = 2};
-            HexField hexField = new HexField() { FieldHeight = 15, FieldWidth = 50, mainCanvas = mainCanvas, Height = (int)mainCanvas.Height - 4, Width = (int)mainCanvas.Width - 4, mainWindow = mainWindow, Margin = margin};
-            hexField.Build();
-            hexField.SetHexValue(0, 0, 6);
-            hexField.FieldHeight = 50;
-            hexField.Width = 250;
+            ThirdModeSettings thirdModeSettings = new ThirdModeSettings() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            thirdModeSettings.Build();
         }
         private void ReadMode(object sender, RoutedEventArgs e)
         {
