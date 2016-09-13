@@ -77,14 +77,24 @@ namespace NFW
                     Rebuild();
             }
         }
+        private double height;
+        private double width;
         private int fieldHeight;
         private int fieldWidth;
         //Сыылки на главное окно и координатную сетку
         public Canvas mainCanvas;
         public Window mainWindow;
         //высота и ширина поля
-        public double Height;
-        public double Width;
+        public double Height
+        {
+            get { return height; }
+            set { height = value; Rebuild(); }
+        }
+        public double Width
+        {
+            get { return width; }
+            set { width = value; Rebuild(); }
+        }
         private bool isBuilded = false;
         //отсуп относительнородительского элемента(mainCanvas)
         public Thickness Margin;
@@ -185,8 +195,10 @@ namespace NFW
         }
         private void Rebuild()
         {
+            if (!isBuilded)
+                return;
             Thickness margin = new Thickness() { Top = 0, Left = 0};
-            int imageHeight = (int)Math.Min(Height / (fieldHeight + 1), Width / 1.1547 / ((fieldWidth - 1) * 3/ 4 + 2));
+            int imageHeight = (int)Math.Min(height / (fieldHeight + 1), width / 1.1547 / ((fieldWidth - 1) * 3/ 4 + 2));
             int dist = Math.Max(imageHeight / 30, 1);
             imageHeight -= dist;
             for(int i = 0; i < fieldHeight; i++)
@@ -196,9 +208,9 @@ namespace NFW
                     field[i, j].Height = imageHeight;
                     field[i, j].Margin = margin;
                     if (j % 2 == 0)
-                        margin.Top -= imageHeight / 2;
-                    else
                         margin.Top += imageHeight / 2;
+                    else
+                        margin.Top -= imageHeight / 2;
                     margin.Left += imageHeight * 1.1547 / 4 * 3 + dist;
                 }
                 margin.Top = (i + 1) * imageHeight;
