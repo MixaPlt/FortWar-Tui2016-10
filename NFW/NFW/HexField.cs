@@ -88,21 +88,16 @@ namespace NFW
         public double Height
         {
             get { return height; }
-            set { height = value - 5; Rebuild(); }
+            set { height = value; Rebuild(); }
         }
         public double Width
         {
             get { return width; }
-            set { width = value - 5; Rebuild(); }
+            set { width = value; Rebuild(); }
         }
         private bool isBuilded = false;
         //отсуп относительнородительского элемента(mainCanvas)
-        public Thickness Margin
-        {
-            get { return Mmargin; }
-            set { Mmargin.Top = value.Top + 10; Mmargin.Left = value.Left + 10; thisCanvas.Margin = Mmargin; }
-        }
-        private Thickness Mmargin;
+        public Thickness Margin;
         private Canvas thisCanvas = new Canvas() { Background = Brushes.Black};
         public void SetHexValue(int i, int j, int value)
         {
@@ -114,7 +109,7 @@ namespace NFW
         {
             {
                 isBuilded = true;
-                thisCanvas.Margin = Mmargin;
+                thisCanvas.Margin = Margin;
                 mainCanvas.Children.Add(thisCanvas);
                 imageSources[0] = new BitmapImage();
                 imageSources[0].BeginInit();
@@ -203,7 +198,7 @@ namespace NFW
             if (!isBuilded)
                 return;
             Thickness margin = new Thickness() { Top = 0, Left = 0};
-            int imageHeight = (int)Math.Min(height / (fieldHeight + 1), width / 1.1547 / ((fieldWidth - 1) * 3/ 4 + 1));
+            int imageHeight = (int)Math.Min(height / (fieldHeight + 1), width / 1.1547 / ((fieldWidth - 1) * 3/ 4 + 2));
             int dist = Math.Max(imageHeight / 30, 1);
             imageHeight -= dist;
             for(int i = 0; i < fieldHeight; i++)
