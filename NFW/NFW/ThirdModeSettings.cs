@@ -37,6 +37,7 @@ namespace NFW
         private TextBox secondColumnBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium };
         private Button applySettings = new Button() { Content = "Применить настройки" };
         private Button startButton = new Button() { Content = "Начать игру" };
+        private Button backButton = new Button() { Content = "Назад" };
         private HexField hexField;
         public void Build()
         {
@@ -60,7 +61,10 @@ namespace NFW
             mainCanvas.Children.Add(secondColumnBox);
             mainCanvas.Children.Add(applySettings);
             mainCanvas.Children.Add(startButton);
+            mainCanvas.Children.Add(backButton);
 
+            backButton.Click += Back;
+             
             hexField = new HexField() { FieldHeight = 20, FieldWidth = 20, mainCanvas = mainCanvas, mainWindow = mainWindow, Height = mainCanvas.Height * 14 / 15, Width = mainCanvas.Width * 3 / 4 };
             hexField.Build();
             WindowSizeChanged(null, null);
@@ -174,6 +178,18 @@ namespace NFW
             hexField.Margin = margin;
             hexField.Height = mainCanvas.Height * 14 / 15;
             hexField.Width = mainCanvas.Width * 95 / 128;
+            margin.Top = mainCanvas.Height * 31 / 42;
+            margin.Left = mainCanvas.Width / 50;
+            backButton.Margin = margin;
+            backButton.Height = mainCanvas.Height / 14;
+            backButton.Width = mainCanvas.Width * 6 / 25;
+            backButton.FontSize = fontSize;
+        }
+        private void Back(object sender, RoutedEventArgs e)
+        {
+            mainWindow.SizeChanged -= WindowSizeChanged;
+            StartGameMenu startGameMenu = new StartGameMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            startGameMenu.Build();
         }
     }
 }
