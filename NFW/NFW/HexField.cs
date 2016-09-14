@@ -53,8 +53,8 @@ namespace NFW
                     }
                 }
                 fieldHeight = value;
-                if(isBuilded)
-                 Rebuild();
+                if (isBuilded)
+                    Rebuild();
             }
         }
         public int FieldWidth
@@ -73,7 +73,7 @@ namespace NFW
                     }
                 }
                 fieldWidth = value;
-                if(isBuilded)
+                if (isBuilded)
                     Rebuild();
             }
         }
@@ -88,17 +88,22 @@ namespace NFW
         public double Height
         {
             get { return height; }
-            set { height = value; Rebuild(); }
+            set { height = value - 5; Rebuild(); }
         }
         public double Width
         {
             get { return width; }
-            set { width = value; Rebuild(); }
+            set { width = value - 5; Rebuild(); }
         }
         private bool isBuilded = false;
         //отсуп относительнородительского элемента(mainCanvas)
-        public Thickness Margin;
-        private Canvas thisCanvas = new Canvas() { Background = Brushes.Black};
+        public Thickness Margin
+        {
+            get { return Mmargin; }
+            set { Mmargin.Top = value.Top + 10; Mmargin.Left = value.Left + 10; thisCanvas.Margin = Mmargin; }
+        }
+        private Thickness Mmargin;
+        private Canvas thisCanvas = new Canvas() { Background = Brushes.Black };
         public void SetHexValue(int i, int j, int value)
         {
             field[i, j].Value = value;
@@ -109,7 +114,7 @@ namespace NFW
         {
             {
                 isBuilded = true;
-                thisCanvas.Margin = Margin;
+                thisCanvas.Margin = Mmargin;
                 mainCanvas.Children.Add(thisCanvas);
                 imageSources[0] = new BitmapImage();
                 imageSources[0].BeginInit();
@@ -179,9 +184,9 @@ namespace NFW
             fieldWidth = FieldWidth;
             for (int i = 0; i < 50; i++)
             {
-                for(int j = 0; j < 50; j++)
+                for (int j = 0; j < 50; j++)
                 {
-                    field[i, j] = new Hexagon() {Source = imageSources[0] };
+                    field[i, j] = new Hexagon() { Source = imageSources[0] };
                 }
             }
             for (int i = 0; i < fieldHeight; i++)
@@ -197,13 +202,13 @@ namespace NFW
         {
             if (!isBuilded)
                 return;
-            Thickness margin = new Thickness() { Top = 0, Left = 0};
-            int imageHeight = (int)Math.Min(height / (fieldHeight + 1), width / 1.1547 / ((fieldWidth - 1) * 3/ 4 + 2));
+            Thickness margin = new Thickness() { Top = 0, Left = 0 };
+            int imageHeight = (int)Math.Min(height / (fieldHeight + 1), width / 1.1547 / ((fieldWidth - 1) * 3 / 4 + 1));
             int dist = Math.Max(imageHeight / 30, 1);
             imageHeight -= dist;
-            for(int i = 0; i < fieldHeight; i++)
+            for (int i = 0; i < fieldHeight; i++)
             {
-                for(int j = 0; j < fieldWidth; j++)
+                for (int j = 0; j < fieldWidth; j++)
                 {
                     field[i, j].Height = imageHeight;
                     field[i, j].Margin = margin;

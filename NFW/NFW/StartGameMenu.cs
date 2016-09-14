@@ -18,13 +18,13 @@ namespace NFW
             mainCanvas.Children.Clear();
             mainCanvas.Width = mainWindow.ActualWidth - 10;
             mainCanvas.Height = mainWindow.ActualHeight - 30;
-            Thickness margin = new Thickness() {Top = 0 };
+            Thickness margin = new Thickness() { Top = 0 };
             Label chooseModeInfoLabel = new Label() { Margin = margin, Width = mainCanvas.Width, Height = mainCanvas.Height / 8, FontSize = mainCanvas.Height / 30, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Выберите режим игры" };
             mainCanvas.Children.Add(chooseModeInfoLabel);
             margin.Top = mainCanvas.Height / 8;
-            int buttonHeight = Math.Min((int)(mainCanvas.Width / 3.75), (int) (mainCanvas.Height) * 3 / 20);
+            int buttonHeight = Math.Min((int)(mainCanvas.Width / 3.75), (int)(mainCanvas.Height) * 3 / 20);
             margin.Left = (mainCanvas.Width - buttonHeight * 3.75) / 2;
-            Button firstModeButton = new Button() { Height = buttonHeight, Width = buttonHeight * 3.75, FontSize = buttonHeight / 5, Margin = margin, Content = "I'm too young to die", IsDefault = true};
+            Button firstModeButton = new Button() { Height = buttonHeight, Width = buttonHeight * 3.75, FontSize = buttonHeight / 5, Margin = margin, Content = "I'm too young to die", IsDefault = true };
             firstModeButton.Click += FirstMode;
             mainCanvas.Children.Add(firstModeButton);
             margin.Top += buttonHeight;
@@ -46,7 +46,9 @@ namespace NFW
         }
         private void FirstMode(object sender, RoutedEventArgs e)
         {
+            ModeSettings modeSettings = new ModeSettings() { mainCanvas = mainCanvas, mainWindow = mainWindow };
             mainWindow.SizeChanged -= WindowSizeChanged;
+            modeSettings.Build();
         }
         private void SecondMode(object sender, RoutedEventArgs e)
         {
