@@ -37,8 +37,9 @@ namespace NFW
         private TextBox secondColumnBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium };
         private Button applySettings = new Button() { Content = "Применить настройки" };
         private Button startButton = new Button() { Content = "Начать игру" };
+        private Button backButton = new Button() { Content = "Назад" };
         private HexField hexField;
-        public void Build()
+        public void Build() 
         {
             mainCanvas.Height = mainWindow.ActualHeight - 30;
             mainCanvas.Width = mainWindow.ActualWidth - 4;
@@ -60,9 +61,16 @@ namespace NFW
             mainCanvas.Children.Add(secondColumnBox);
             mainCanvas.Children.Add(applySettings);
             mainCanvas.Children.Add(startButton);
+            mainCanvas.Children.Add(backButton);
 
-            hexField = new HexField() { FieldHeight = 20, FieldWidth = 20, mainCanvas = mainCanvas, mainWindow = mainWindow, Height = mainCanvas.Height * 14 / 15, Width = mainCanvas.Width * 3 / 4 };
+            applySettings.Click += ApplySetting;
+            backButton.Click += Back;
+            enterFieldHeightBox.TextChanged += AnyBoxChanged;
+             
+            hexField = new HexField() { FieldHeight = 10, FieldWidth = 10, mainCanvas = mainCanvas, mainWindow = mainWindow, Height = mainCanvas.Height * 14 / 15, Width = mainCanvas.Width * 3 / 4 };
             hexField.Build();
+            hexField.SetHexValue(0, 0, 11);
+            hexField.HexClick += HexClick;
             WindowSizeChanged(null, null);
 
         }
@@ -174,6 +182,49 @@ namespace NFW
             hexField.Margin = margin;
             hexField.Height = mainCanvas.Height * 14 / 15;
             hexField.Width = mainCanvas.Width * 95 / 128;
+            margin.Top = mainCanvas.Height * 31 / 42;
+            margin.Left = mainCanvas.Width / 50;
+            backButton.Margin = margin;
+            backButton.Height = mainCanvas.Height / 14;
+            backButton.Width = mainCanvas.Width * 6 / 25;
+            backButton.FontSize = fontSize;
+        }
+        private void Back(object sender, RoutedEventArgs e)
+        {
+            mainWindow.SizeChanged -= WindowSizeChanged;
+            StartGameMenu startGameMenu = new StartGameMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            startGameMenu.Build();  
+        }
+        private void ApplySetting ( object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                hexField.FieldHeight = Int32.Parse(enterFieldHeightBox.Text);
+                hexField.FieldWidth = Int32.Parse(enterFieldWidthBox.Text);
+            }
+            catch(System.FormatException)
+            {
+                MessageBox.Show ("Введены некорректные данные\nВысота и ширина поля - натуральные числа до 50", "FortWar");
+            }
+        }
+        private void AnyBoxChanged(object sender, TextChangedEventArgs e)
+        {
+            string ans = "", t = enterFieldHeightBox.Text;
+            for (int i = 0; i < t.Length; i++)
+                if (((int)(t[i]) <= (int)'9') && ((int)t[i] >= (int)'0'))
+                    ans += t[i];
+            enterFieldHeightBox.Text = ans;
+
+            ans = "";
+            t = enterFieldWidthBox.Text;
+            for (int i = 0; i < t.Length; i++)
+                if (((int)(t[i]) <= (int)'9') && ((int)t[i] >= (int)'0'))
+                    ans += t[i];
+            enterFieldWidthBox.Text = ans;
+        }
+        private void HexClick(int i, int j)
+        {
+            hexField.SetHexValue(i, j, 2);
         }
     }
 }
