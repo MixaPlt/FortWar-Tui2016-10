@@ -39,7 +39,7 @@ namespace NFW
         private Button startButton = new Button() { Content = "Начать игру" };
         private Button backButton = new Button() { Content = "Назад" };
         private HexField hexField;
-        public void Build()
+        public void Build() 
         {
             mainCanvas.Height = mainWindow.ActualHeight - 30;
             mainCanvas.Width = mainWindow.ActualWidth - 4;
@@ -63,10 +63,14 @@ namespace NFW
             mainCanvas.Children.Add(startButton);
             mainCanvas.Children.Add(backButton);
 
+            applySettings.Click += ApplySetting;
             backButton.Click += Back;
+            enterFieldHeightBox.TextChanged += AnyBoxChanged;
              
-            hexField = new HexField() { FieldHeight = 20, FieldWidth = 20, mainCanvas = mainCanvas, mainWindow = mainWindow, Height = mainCanvas.Height * 14 / 15, Width = mainCanvas.Width * 3 / 4 };
+            hexField = new HexField() { FieldHeight = 10, FieldWidth = 10, mainCanvas = mainCanvas, mainWindow = mainWindow, Height = mainCanvas.Height * 14 / 15, Width = mainCanvas.Width * 3 / 4 };
             hexField.Build();
+            hexField.SetHexValue(0, 0, 11);
+            hexField.HexClick += HexClick;
             WindowSizeChanged(null, null);
 
         }
@@ -189,7 +193,38 @@ namespace NFW
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
             StartGameMenu startGameMenu = new StartGameMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
-            startGameMenu.Build();
+            startGameMenu.Build();  
+        }
+        private void ApplySetting ( object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                hexField.FieldHeight = Int32.Parse(enterFieldHeightBox.Text);
+                hexField.FieldWidth = Int32.Parse(enterFieldWidthBox.Text);
+            }
+            catch(System.FormatException)
+            {
+                MessageBox.Show ("Введены некорректные данные\nВысота и ширина поля - натуральные числа до 50", "FortWar");
+            }
+        }
+        private void AnyBoxChanged(object sender, TextChangedEventArgs e)
+        {
+            string ans = "", t = enterFieldHeightBox.Text;
+            for (int i = 0; i < t.Length; i++)
+                if (((int)(t[i]) <= (int)'9') && ((int)t[i] >= (int)'0'))
+                    ans += t[i];
+            enterFieldHeightBox.Text = ans;
+
+            ans = "";
+            t = enterFieldWidthBox.Text;
+            for (int i = 0; i < t.Length; i++)
+                if (((int)(t[i]) <= (int)'9') && ((int)t[i] >= (int)'0'))
+                    ans += t[i];
+            enterFieldWidthBox.Text = ans;
+        }
+        private void HexClick(int i, int j)
+        {
+            hexField.SetHexValue(i, j, 2);
         }
     }
 }

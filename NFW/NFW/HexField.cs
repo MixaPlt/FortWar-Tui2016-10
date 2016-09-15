@@ -23,6 +23,8 @@ namespace NFW
         //0 - Пустя клеточка, 1 - горы, 2 - река, 3 - клетка первого, 4 - клеткаа второго, 5 - крепость первого, 6 - крепость второго, 7 - море первого, 8 - море второго, 9 - горы первого, 10 - горы второго, 11 - замок первого, 12 - замок второго
         //Само поле. Дополнительная информация в классе Hexagon. !!!Менять значение только через метод SetHexValue!!!
         public Hexagon[,] field = new Hexagon[51, 51];
+        public delegate void HexClickHandler(int i, int j);
+        public event HexClickHandler HexClick;
         //Количество строчек и столбцов поля
         public int FieldHeight
         {
@@ -43,7 +45,7 @@ namespace NFW
                     }
                     else
                     {
-                        for (int i = fieldHeight; i < value; i++)
+                        for (int i = value; i < fieldHeight; i++)
                         {
                             for (int j = 0; j < fieldWidth; j++)
                             {
@@ -88,12 +90,12 @@ namespace NFW
         public double Height
         {
             get { return height; }
-            set { height = value - 5; Rebuild(); }
+            set { height = value - 10; Rebuild(); }
         }
         public double Width
         {
             get { return width; }
-            set { width = value - 5; Rebuild(); }
+            set { width = value - 10; Rebuild(); }
         }
         private bool isBuilded = false;
         //отсуп относительнородительского элемента(mainCanvas)
@@ -182,6 +184,7 @@ namespace NFW
                 imageSources[12].EndInit();
             }
             fieldWidth = FieldWidth;
+            thisCanvas.MouseDown += AnyHexClick;
             for (int i = 0; i < 50; i++)
             {
                 for (int j = 0; j < 50; j++)
@@ -203,9 +206,9 @@ namespace NFW
             if (!isBuilded)
                 return;
             Thickness margin = new Thickness() { Top = 0, Left = 0 };
-            int imageHeight = (int)Math.Min(height / (fieldHeight + 1), width / 1.1547 / ((fieldWidth - 1) * 3 / 4 + 1));
-            int dist = Math.Max(imageHeight / 30, 1);
-            imageHeight -= dist;
+            int imageHeight = (int)Math.Min(height / (fieldHeight + 1), width / 1.1547 / ((fieldWidth - 1) * 3 / 4 + 2));
+            double dist = Math.Max(imageHeight / 30, 1);
+            imageHeight = (int)(imageHeight - dist);
             for (int i = 0; i < fieldHeight; i++)
             {
                 for (int j = 0; j < fieldWidth; j++)
@@ -213,14 +216,25 @@ namespace NFW
                     field[i, j].Height = imageHeight;
                     field[i, j].Margin = margin;
                     if (j % 2 == 0)
-                        margin.Top += imageHeight / 2;
+                        margin.Top += imageHeight / 2 + dist / 2;
                     else
-                        margin.Top -= imageHeight / 2;
+                        margin.Top -= imageHeight / 2 + dist / 2;
                     margin.Left += imageHeight * 1.1547 / 4 * 3 + dist;
                 }
-                margin.Top = (i + 1) * imageHeight;
+                margin.Top = (i + 1) * (imageHeight + dist);
                 margin.Left = 0;
             }
+        }
+        private void AnyHexClick(object sender, MouseEventArgs e)
+        {
+            for (int i = 0; i < fieldHeight; i++)
+                for (int j = 0; j < fieldWidth; j++)
+                    if (field[i, j].isMouseOver(e))
+                    {
+                        HexClick(i, j);
+                        return;
+                    }
+            return;
         }
     }
 }

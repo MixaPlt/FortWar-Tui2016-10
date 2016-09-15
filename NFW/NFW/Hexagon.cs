@@ -25,15 +25,17 @@ namespace NFW
         {
             //Координаты клика относительно картинки (this) - сам объект
             Point pt = e.GetPosition(this);
+    
             //Проверили вертикальные прямые
-            if (pt.X < 0 || pt.Y < 0 || pt.X > Width || pt.Y > Height)
+            if (pt.X < 0 || pt.Y < 0 || pt.X > Height * 1.1547 || pt.Y > Height)
                 return false;
             //две верхние прямые y = xtg60 - w/2sin60 и правее 
-            if (pt.Y > 1.732 * pt.X + Height / 2 || pt.Y > -1.732 * pt.X + 2.165 * Width)
+            if (pt.Y > 1.732 * pt.X + Height / 2 || pt.Y > -1.732 * pt.X + 2.165 * Height * 1.1547)
                 return false;
             //Две нижние
-            if (pt.Y < -1.732 * pt.X + Width / 2 || pt.Y < 1.732 * pt.X - 1.299 * Width)
+            if (pt.Y < -1.732 * pt.X + Height * 1.1547 / 2 || pt.Y < 1.732 * pt.X - 1.299 * Height * 1.1547)
                 return false;
+
             return true;
 
         }
