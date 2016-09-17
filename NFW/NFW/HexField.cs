@@ -70,7 +70,7 @@ namespace NFW
                     {
                         for (int j = fieldWidth; j < value; j++)
                             thisCanvas.Children.Add(field[i, j]);
-                        for (int j = value; j < fieldHeight; j++)
+                        for (int j = value; j < fieldWidth; j++)
                             thisCanvas.Children.Remove(field[i, j]);
                     }
                 }
