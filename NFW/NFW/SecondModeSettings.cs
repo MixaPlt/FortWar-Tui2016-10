@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 
 namespace NFW
 {
-    class ThirdModeSettings
+    class SecondModeSettings
     {
         public Canvas mainCanvas;
         public Window mainWindow;
@@ -42,7 +42,7 @@ namespace NFW
         private ComboBox selectAIStatus = new ComboBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
         private HexField hexField;
         private int firstCityLine = 0, firstCityColumn = 0, secondCityLine = 0, secondCityColumn = 1, AIStatus = 0;
-        public void Build() 
+        public void Build()
         {
             mainCanvas.Children.Clear();
 
@@ -80,7 +80,7 @@ namespace NFW
             secondLineBox.TextChanged += BoxChanged;
 
             {
-                string[] menu = new string[3]  { "ИИ выключен", "ИИ ходит первым", "ИИ ходит вторым"};                
+                string[] menu = new string[3] { "ИИ выключен", "ИИ ходит первым", "ИИ ходит вторым" };
                 selectAIStatus.ItemsSource = menu;
             }
 
@@ -89,7 +89,7 @@ namespace NFW
             hexField.HexClick += HexClick;
             Load();
             WindowSizeChanged(null, null);
-            
+
         }
         private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -222,9 +222,9 @@ namespace NFW
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
             StartGameMenu startGameMenu = new StartGameMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
-            startGameMenu.Build();  
+            startGameMenu.Build();
         }
-        private void ApplySettings ( object sender, RoutedEventArgs e)
+        private void ApplySettings(object sender, RoutedEventArgs e)
         {
             bool isError = false;
             string errors = "Обнаружены следующие ошибки:\n";
@@ -232,10 +232,10 @@ namespace NFW
             try
             {
                 h = Int32.Parse(enterFieldHeightBox.Text);
-                if(h > 50 || h <= 0)
+                if (h > 50 || h <= 0)
                 { errors += "Высота задана неправильно\n"; isError = true; }
             }
-            catch(System.FormatException){ errors += "Высота не задана\n"; isError = true; };
+            catch (System.FormatException) { errors += "Высота не задана\n"; isError = true; };
             try
             {
                 w = Int32.Parse(enterFieldWidthBox.Text);
@@ -245,17 +245,17 @@ namespace NFW
             catch (System.FormatException) { errors += "Ширина не задана\n"; isError = true; }
             try
             {
-                x1 = Int32.Parse(firstLineBox.Text);  y1 = Int32.Parse(firstColumnBox.Text); x2 = Int32.Parse(secondLineBox.Text); y2 = Int32.Parse(secondColumnBox.Text);
+                x1 = Int32.Parse(firstLineBox.Text); y1 = Int32.Parse(firstColumnBox.Text); x2 = Int32.Parse(secondLineBox.Text); y2 = Int32.Parse(secondColumnBox.Text);
                 if (x1 == x2 && y1 == y2)
                 { errors += "Координаты городов совпадают\n"; isError = true; }
             }
             catch (System.FormatException) { isError = true; errors += "Не заданы координаты городов\n"; };
-            if(!isError)
+            if (!isError)
             {
-                if(x1 > h || x2 > h || y1 > w || y2 > w || x1 <=0 || x2 <=0 || y1 <=0 || y2 <=0)
+                if (x1 > h || x2 > h || y1 > w || y2 > w || x1 <= 0 || x2 <= 0 || y1 <= 0 || y2 <= 0)
                 { errors += "Координаты городов превосходят размеры поля\n"; isError = true; }
             }
-            if(!isError)
+            if (!isError)
             {
                 hexField.SetHexValue(firstCityLine, firstCityColumn, 0);
                 hexField.SetHexValue(secondCityLine, secondCityColumn, 0);
@@ -267,7 +267,7 @@ namespace NFW
                 secondCityColumn = y2 - 1;
                 secondCityLine = x2 - 1;
                 hexField.SetHexValue(firstCityLine, firstCityColumn, 11);
-                hexField.SetHexValue(secondCityLine, secondCityColumn, 12);           
+                hexField.SetHexValue(secondCityLine, secondCityColumn, 12);
                 Save();
             }
             else
@@ -299,7 +299,7 @@ namespace NFW
 
         private void HexClick(int i, int j)
         {
-            if(hexField.field[i, j].Value < 3)
+            if (hexField.field[i, j].Value < 3)
                 hexField.SetHexValue(i, j, (hexField.field[i, j].Value + 1) % 3);
         }
         private void Load()
@@ -307,7 +307,7 @@ namespace NFW
             string t;
             try
             {
-                t = System.IO.File.ReadAllText("ThirdMode.map");
+                t = System.IO.File.ReadAllText("SecondMode.map");
                 AIStatus = (int)t[0] - 48;
                 hexField.FieldHeight = (int)t[1] * 10 + (int)t[2] - 528; ;
                 hexField.FieldWidth = (int)t[3] * 10 + (int)t[4] - 528;
@@ -316,10 +316,10 @@ namespace NFW
                 secondCityLine = (int)t[9] * 10 + (int)t[10] - 528;
                 secondCityColumn = (int)t[11] * 10 + (int)t[12] - 528;
                 selectAIStatus.SelectedIndex = AIStatus;
-                for(int i = 0; i < 50; i++)
-                    for(int j = 0; j < 50; j++)
+                for (int i = 0; i < 50; i++)
+                    for (int j = 0; j < 50; j++)
                     {
-                        hexField.SetHexValue(i, j,  (int)t[i * 100 + j * 2 + 13] * 10 + (int)t[i * 100 + j * 2 + 14] - 528);
+                        hexField.SetHexValue(i, j, (int)t[i * 100 + j * 2 + 13] * 10 + (int)t[i * 100 + j * 2 + 14] - 528);
                     }
             }
             catch { };
@@ -352,16 +352,16 @@ namespace NFW
             if (secondCityColumn <= 9)
                 t += "0";
             t += secondCityColumn.ToString();
-            for(int i = 0; i < 50; i++)
+            for (int i = 0; i < 50; i++)
             {
-                for(int j = 0; j < 50; j++)
+                for (int j = 0; j < 50; j++)
                 {
                     if (hexField.field[i, j].Value <= 9)
                         t += "0";
                     t += hexField.field[i, j].Value.ToString();
                 }
             }
-            System.IO.File.WriteAllText("ThirdMode.map", t);
+            System.IO.File.WriteAllText("SecondMode.map", t);
         }
         private void Reset(object sender, RoutedEventArgs e)
         {

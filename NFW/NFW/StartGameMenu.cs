@@ -53,11 +53,12 @@ namespace NFW
         private void SecondMode(object sender, RoutedEventArgs e)
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
+            SecondModeSettings secondModeSettings = new SecondModeSettings() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            secondModeSettings.Build();
         }
         private void ThirdMode(object sender, RoutedEventArgs e)
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
-            mainCanvas.Children.Clear();
             ThirdModeSettings thirdModeSettings = new ThirdModeSettings() { mainCanvas = mainCanvas, mainWindow = mainWindow };
             thirdModeSettings.Build();
         }
