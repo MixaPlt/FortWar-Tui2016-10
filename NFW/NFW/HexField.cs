@@ -79,8 +79,8 @@ namespace NFW
                     Rebuild();
             }
         }
-        private double height;
-        private double width;
+        private double height = 200;
+        private double width = 200;
         private int fieldHeight;
         private int fieldWidth;
         //Сыылки на главное окно и координатную сетку

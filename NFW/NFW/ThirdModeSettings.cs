@@ -69,6 +69,7 @@ namespace NFW
             mainCanvas.Children.Add(backButton);
             mainCanvas.Children.Add(selectAIStatus);
             mainCanvas.Children.Add(resetButton);
+            startButton.Click += StartGame;
             resetButton.Click += Reset;
             applySettings.Click += ApplySettings;
             backButton.Click += Back;
@@ -333,6 +334,7 @@ namespace NFW
         }
         private void Save()
         {
+            AIStatus = selectAIStatus.SelectedIndex;
             string t = AIStatus.ToString();
             if (hexField.FieldHeight <= 9)
                 t += "0";
@@ -369,6 +371,14 @@ namespace NFW
                 for (int j = 0; j < 50; j++)
                     if (hexField.field[i, j].Value < 3)
                         hexField.SetHexValue(i, j, 0);
+        }
+        private void StartGame(object sender, RoutedEventArgs e)
+        {
+            Save();
+            hexField.HexClick -= HexClick;
+            mainWindow.SizeChanged -= WindowSizeChanged;
+            ThirdMode thirdMode = new ThirdMode() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            thirdMode.Build();
         }
 
 

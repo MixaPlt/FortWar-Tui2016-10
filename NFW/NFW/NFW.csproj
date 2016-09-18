@@ -55,9 +55,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Knight.cs" />
     <Compile Include="ModeSettings.cs" />
     <Compile Include="SecondModeSettings.cs" />
     <Compile Include="StartGameMenu.cs" />
+    <Compile Include="ThirdMode.cs" />
+    <Compile Include="ThirdModeMenu.cs" />
     <Compile Include="ThirdModeSettings.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
