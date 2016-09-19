@@ -75,8 +75,15 @@ namespace NFW
             Button startgame = new Button() { Margin = margin, Width = mainCanvas.Width / 6, Height = mainCanvas.Height / 12, HorizontalContentAlignment = HorizontalAlignment.Left, VerticalContentAlignment = VerticalAlignment.Center, FontSize = mainCanvas.Height / 45, Content = "Начать игру"};
             mainCanvas.Children.Add(startgame);
             margin.Top += mainCanvas.Height / 8;
-            Button back = new Button() { Margin = margin, Width = mainCanvas.Width / 6, Height = mainCanvas.Height / 12, HorizontalContentAlignment = HorizontalAlignment.Left, VerticalContentAlignment = VerticalAlignment.Center, FontSize = mainCanvas.Height / 45, Content = "Назад" };
+            Button back = new Button() { Margin = margin, Width = mainCanvas.Width / 6, Height = mainCanvas.Height / 12, HorizontalContentAlignment = HorizontalAlignment.Left, VerticalContentAlignment = VerticalAlignment.Center, FontSize = mainCanvas.Height / 45, Content = "Назад"};
+            back.Click += back_click;
             mainCanvas.Children.Add(back);
+        }
+         private void back_click(object sender, RoutedEventArgs e)
+        {
+            mainWindow.SizeChanged -= MenuBuild;
+            StartGameMenu startGameMenu = new StartGameMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            startGameMenu.Build();
         }
     }
 }
