@@ -43,7 +43,7 @@ namespace NFW
             startGameButton.Click += StartNewGame;
             mainCanvas.Children.Add(startGameButton);
             buttonMargin.Top += buttonHeight;
-            Button continueGameButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Продолжить сохранeние", FontSize = buttonHeight / 5 };
+            Button continueGameButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Загрузить сохранeние", FontSize = buttonHeight / 5 };
             continueGameButton.Click += ContinueGame;
             mainCanvas.Children.Add(continueGameButton);
             buttonMargin.Top += buttonHeight;
@@ -64,6 +64,8 @@ namespace NFW
         private void ContinueGame(object sender, RoutedEventArgs e)
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
+            Load load = new Load() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            load.Build();
         }
         private void StartSettings(object sender, RoutedEventArgs e)
         {

@@ -56,10 +56,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Knight.cs" />
+    <Compile Include="Load.cs" />
     <Compile Include="ModeSettings.cs" />
     <Compile Include="SecondModeSettings.cs" />
     <Compile Include="StartGameMenu.cs" />
     <Compile Include="ThirdMode.cs" />
+    <Compile Include="ThirdModeLoad.cs" />
     <Compile Include="ThirdModeMenu.cs" />
     <Compile Include="ThirdModeSettings.cs" />
     <Page Include="MainWindow.xaml">
