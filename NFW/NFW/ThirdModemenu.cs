@@ -22,6 +22,9 @@ namespace NFW
         private Button ContinueButton = new Button() { Content = "Продолжить" };
         private Button SaveButton = new Button() { Content = "Сохранить" };
         private Button ReturnButton = new Button() { Content = "В главное меню" };
+        private Label EnterWayInfo = new Label() { Content = "Введите название сохранения", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
+        private TextBox EnterWay = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, MaxLength = 18 };
+        private Button AgreeWay = new Button() { Content = "Ok" };
         public void Build()
         {
             mainCanvas.Children.Clear();
@@ -32,6 +35,8 @@ namespace NFW
             ContinueButton.Click += Continue;
             SaveButton.Click += Save;
             ReturnButton.Click += Return;
+            AgreeWay.Click += AgreeSave;
+            EnterWay.TextChanged += BoxChanged;
             WindowSizeChanged(null, null);
         }
         private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
@@ -54,20 +59,76 @@ namespace NFW
             ReturnButton.Height = buttonHeight;
             ReturnButton.Width = buttonHeight * 3;
             ReturnButton.FontSize = buttonHeight / 5;
+            margin.Top = mainCanvas.Height / 8 + buttonHeight;
+            EnterWayInfo.Height = buttonHeight / 2;
+            EnterWayInfo.Margin = margin;
+            EnterWayInfo.Width = buttonHeight * 3;
+            EnterWayInfo.FontSize = buttonHeight / 5;
+            margin.Top += buttonHeight / 2;
+            EnterWay.Height = buttonHeight * 3 / 8;
+            EnterWay.Width = buttonHeight * 9 / 4;
+            EnterWay.Margin = margin;
+            EnterWay.FontSize = buttonHeight / 5;
+            margin.Left += buttonHeight * 9 / 4;
+            AgreeWay.Margin = margin;
+            AgreeWay.Height = buttonHeight * 3 / 8;
+            AgreeWay.Width = buttonHeight * 3 / 4;
+            AgreeWay.FontSize = buttonHeight / 5;
         }
         private void Continue(object sender, RoutedEventArgs e)
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
+            ThirdMode thirdMode = new ThirdMode() { mainCanvas = mainCanvas, mainWindow = mainWindow, isContinue = true, LoadWay = "ThirdModeFastSave.map" };
+            thirdMode.Build();
         }
         private void Save(object sender, RoutedEventArgs e)
         {
             mainCanvas.Children.Remove(SaveButton);
+            mainCanvas.Children.Add(EnterWayInfo);
+            mainCanvas.Children.Add(EnterWay);
+            mainCanvas.Children.Add(AgreeWay);
         }
         private void Return(object sender, RoutedEventArgs e)
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
             MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
             mainMenu.Build();
+        }
+        private void AgreeSave(object sender, RoutedEventArgs e)
+        {
+            if (EnterWay.Text.Length == 0)
+                return;
+            string[] s, res;
+            try
+            {
+                s = System.IO.File.ReadAllLines("ThirdModeSaves.list");
+                res = new string[s.Length + 1];
+                res[0] = EnterWay.Text;
+                for (int i = 0; i < s.Length; i++)
+                    res[i + 1] = s[i];
+            }
+            catch { res = new string[1] { EnterWay.Text }; }
+            System.IO.File.WriteAllLines("ThirdModeSaves.list", res);
+            string r = System.IO.File.ReadAllText("ThirdModeFastSave.map");
+            System.IO.File.WriteAllText("3" + EnterWay.Text + ".save", r);
+            mainCanvas.Children.Remove(EnterWayInfo);
+            mainCanvas.Children.Remove(EnterWay);
+            mainCanvas.Children.Remove(AgreeWay);
+            mainCanvas.Children.Add(SaveButton);
+        }
+        private void BoxChanged(object sender, TextChangedEventArgs e)
+        {
+            string ans = "", t = EnterWay.Text;
+            int k = 0;
+            for (int i = 0; i < t.Length; i++)
+            {
+                if (((int)(t[i]) <= (int)'9' && (int)t[i] >= (int)'0') || ((int)(t[i]) <= (int)'Z' && (int)t[i] >= (int)'A') || ((int)(t[i]) <= (int)'z' && (int)t[i] >= (int)'a'))
+                    ans += t[i];
+                if (i == EnterWay.CaretIndex - 1)
+                    k = ans.Length;
+            }
+            EnterWay.Text = ans;
+            EnterWay.CaretIndex = k;
         }
     }
 }

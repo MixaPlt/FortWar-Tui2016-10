@@ -148,7 +148,7 @@ namespace NFW
                     t += "0";
                 t += knights[i].j.ToString();
             }
-            File.WriteAllText("ThirdModeFastSettings", t);
+            File.WriteAllText("ThirdModeFastSave.map", t);
         }
     }
 }

@@ -289,10 +289,10 @@ namespace NFW
             int k = 0;
             for (int i = 0; i < t.Length; i++)
             {
-                if (i == textBox.CaretIndex - 1)
-                    k = ans.Length + 1;
                 if (((int)(t[i]) <= (int)'9') && ((int)t[i] >= (int)'0'))
                     ans += t[i];
+                if (i == textBox.CaretIndex - 1)
+                    k = ans.Length;
             }
             textBox.Text = ans;
             textBox.CaretIndex = k;
