@@ -33,6 +33,7 @@ namespace NFW
         TextBox secondcityy = new TextBox();
         Button startgame;
         Button back;
+        Button modechange;
         public Window mainWindow;
         public Canvas mainCanvas;
         public void Build()
@@ -130,6 +131,16 @@ namespace NFW
             back = new Button() { Margin = margin, Width = mainCanvas.Width / 6, Height = mainCanvas.Height / 12, HorizontalContentAlignment = HorizontalAlignment.Left, VerticalContentAlignment = VerticalAlignment.Center, FontSize = mainCanvas.Height / 45, Content = "Назад"};
             back.Click += back_click;
             mainCanvas.Children.Add(back);
+            margin.Top -= mainCanvas.Height / 8;
+            margin.Left += (mainCanvas.Width / 3 + mainCanvas.Width / 6);
+            modechange = new Button() { Margin = margin, Width = mainCanvas.Width / 6, Height = mainCanvas.Height / 12, HorizontalContentAlignment = HorizontalAlignment.Left, VerticalContentAlignment = VerticalAlignment.Center, FontSize = mainCanvas.Height / 45, Content = "ИИ выключен" };
+            mainCanvas.Children.Add(modechange);
+            firstcityx.TextChanged += BoxChanged;
+            firstcityy.TextChanged += BoxChanged;
+            secondcityx.TextChanged += BoxChanged;
+            secondcityy.TextChanged += BoxChanged;
+            borderheight.TextChanged += BoxChanged;
+            borderwidth.TextChanged += BoxChanged;
         }
          private void back_click(object sender, RoutedEventArgs e)
         {
@@ -142,6 +153,29 @@ namespace NFW
             mainWindow.SizeChanged -= MenuBuild;
             FirstMode firstmode = new FirstMode() { mainCanvas = mainCanvas, mainWindow = mainWindow,firstcityy = Int32.Parse(firstcityy.Text),firstcityx = Int32.Parse(firstcityx.Text),secondcityx = Int32.Parse(secondcityx.Text),secondcityy = Int32.Parse(secondcityy.Text),height = Int32.Parse(borderheight.Text),width = Int32.Parse(borderwidth.Text)};
             firstmode.Build();
+        }
+        private void BoxChanged(object sender, TextChangedEventArgs e)
+        {
+            AnyBoxChanged(borderwidth);
+            AnyBoxChanged(borderheight);
+            AnyBoxChanged(firstcityx);
+            AnyBoxChanged(firstcityy);
+            AnyBoxChanged(secondcityx);
+            AnyBoxChanged(secondcityy);
+        }
+        private void AnyBoxChanged(TextBox textBox)
+        {
+            string ans = "", t = textBox.Text;
+            int k = 0;
+            for (int i = 0; i < t.Length; i++)
+            {
+                if (((int)(t[i]) <= (int)'9') && ((int)t[i] >= (int)'0'))
+                    ans += t[i];
+                if (i == textBox.CaretIndex - 1)
+                    k = ans.Length;
+            }
+            textBox.Text = ans;
+            textBox.CaretIndex = k;
         }
     }
 }
