@@ -21,34 +21,30 @@ namespace NFW
         Thickness margin;
         Label sizeinfo;
         Label xinfo;
-        TextBox borderwidth;
-        TextBox borderheight;
+        TextBox borderwidth = new TextBox();
+        TextBox borderheight = new TextBox();
         Label yinfo;
         Label startinfo;
         Label cityfinfo;
-        TextBox firstcityx;
-        TextBox firstcityy;
+        TextBox firstcityx = new TextBox();
+        TextBox firstcityy = new TextBox();
         Label citysinfo;
-        TextBox secondcityx;
-        TextBox secondcityy;
+        TextBox secondcityx = new TextBox();
+        TextBox secondcityy = new TextBox();
         Button startgame;
         Button back;
         public Window mainWindow;
         public Canvas mainCanvas;
         public void Build()
         {
-            mainWindow.SizeChanged += MenuSettings;
+            mainWindow.SizeChanged += MenuBuild;
             MenuBuild(null, null);
         } 
-        public void MenuSettings(object sender, SizeChangedEventArgs e)
-        {
-            mainCanvas.Width = mainWindow.ActualWidth - 10;
-            mainCanvas.Height = mainWindow.ActualHeight - 30;
-        }
         public void MenuBuild(object sender, SizeChangedEventArgs e)
         {
             mainCanvas.Children.Clear();
-            
+            mainCanvas.Width = mainWindow.ActualWidth - 10;
+            mainCanvas.Height = mainWindow.ActualHeight - 30;
             margin = new Thickness() { Top = 0 };
             sizeinfo = new Label() { Margin = margin, Width = mainCanvas.Width, Height = mainCanvas.Height / 8, FontSize = mainCanvas.Height / 30, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Введите размер поля" };
             mainCanvas.Children.Add(sizeinfo);
@@ -57,10 +53,22 @@ namespace NFW
             xinfo = new Label() { Margin = margin, Width = mainCanvas.Width / 8, Height = mainCanvas.Height / 18, FontSize = mainCanvas.Height / 40, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Высота" };
             mainCanvas.Children.Add(xinfo);
             margin.Left = mainCanvas.Width / 6;
-            borderheight = new TextBox() { Margin = margin, Width = mainCanvas.Width / 4, Height = mainCanvas.Height / 8, HorizontalContentAlignment = HorizontalAlignment.Left, VerticalContentAlignment = VerticalAlignment.Center, FontSize = mainCanvas.Height / 30 , TextAlignment = TextAlignment.Center};
+            borderheight.Margin = margin;
+            borderheight.Width = mainCanvas.Width / 4;
+            borderheight.Height = mainCanvas.Height / 8;
+            borderheight.HorizontalContentAlignment = HorizontalAlignment.Left;
+            borderheight.VerticalContentAlignment = VerticalAlignment.Center;
+            borderheight.FontSize = mainCanvas.Height / 30;
+            borderheight.TextAlignment = TextAlignment.Center;
             mainCanvas.Children.Add(borderheight);
             margin.Left += (mainCanvas.Width / 3 + mainCanvas.Width / 6);
-            borderwidth = new TextBox() { Margin = margin, Width = mainCanvas.Width / 4, Height = mainCanvas.Height / 8, HorizontalContentAlignment = HorizontalAlignment.Left, VerticalContentAlignment = VerticalAlignment.Center, FontSize = mainCanvas.Height / 30, TextAlignment = TextAlignment.Center};
+            borderwidth.Margin = margin;
+            borderwidth.Width = mainCanvas.Width / 4;
+            borderwidth.Height = mainCanvas.Height / 8;
+            borderwidth.HorizontalContentAlignment = HorizontalAlignment.Left;
+            borderwidth.VerticalContentAlignment = VerticalAlignment.Center;
+            borderwidth.FontSize = mainCanvas.Height / 30;
+            borderwidth.TextAlignment = TextAlignment.Center;
             mainCanvas.Children.Add(borderwidth);
             margin.Left -= mainCanvas.Width / 6;
             yinfo = new Label() { Margin = margin, Width = mainCanvas.Width / 8, Height = mainCanvas.Height / 18, FontSize = mainCanvas.Height / 40, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Ширина" };
@@ -74,20 +82,44 @@ namespace NFW
             cityfinfo = new Label() { Margin = margin, Width = mainCanvas.Width / 8, Height = mainCanvas.Height / 18, FontSize = mainCanvas.Height / 40, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Первый город"};
             mainCanvas.Children.Add(cityfinfo);
             margin.Left = mainCanvas.Width / 6;
-            firstcityx = new TextBox() {Margin = margin, Width = mainCanvas.Width / 4, Height = mainCanvas.Height / 8, HorizontalContentAlignment = HorizontalAlignment.Left, VerticalContentAlignment = VerticalAlignment.Center, FontSize = mainCanvas.Height / 30, TextAlignment = TextAlignment.Center };
+            firstcityx.Margin = margin;
+            firstcityx.Width = mainCanvas.Width / 4;
+            firstcityx.Height = mainCanvas.Height / 8;
+            firstcityx.HorizontalContentAlignment = HorizontalAlignment.Left;
+            firstcityx.VerticalContentAlignment = VerticalAlignment.Center;
+            firstcityx.FontSize = mainCanvas.Height / 30;
+            firstcityx.TextAlignment = TextAlignment.Center;
             mainCanvas.Children.Add(firstcityx);
             margin.Left += (mainCanvas.Width / 3 + mainCanvas.Width / 6);
-            firstcityy = new TextBox() { Margin = margin, Width = mainCanvas.Width / 4, Height = mainCanvas.Height / 8, HorizontalContentAlignment = HorizontalAlignment.Left, VerticalContentAlignment = VerticalAlignment.Center, FontSize = mainCanvas.Height / 30, TextAlignment = TextAlignment.Center };
+            firstcityy.Margin = margin;
+            firstcityy.Width = mainCanvas.Width / 4;
+            firstcityy.Height = mainCanvas.Height / 8;
+            firstcityy.HorizontalContentAlignment = HorizontalAlignment.Left;
+            firstcityy.VerticalContentAlignment = VerticalAlignment.Center;
+            firstcityy.FontSize = mainCanvas.Height / 30;
+            firstcityy.TextAlignment = TextAlignment.Center;
             mainCanvas.Children.Add(firstcityy);
             margin.Top += mainCanvas.Height / 6;
             margin.Left = 0;
             citysinfo = new Label() { Margin = margin, Width = mainCanvas.Width / 8, Height = mainCanvas.Height / 18, FontSize = mainCanvas.Height / 40, HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Второй город" };
             mainCanvas.Children.Add(citysinfo);
             margin.Left = mainCanvas.Width / 6;
-            secondcityx = new TextBox() { Margin = margin, Width = mainCanvas.Width / 4, Height = mainCanvas.Height / 8, HorizontalContentAlignment = HorizontalAlignment.Left, VerticalContentAlignment = VerticalAlignment.Center, FontSize = mainCanvas.Height / 30, TextAlignment = TextAlignment.Center };
+            secondcityx.Margin = margin;
+            secondcityx.Width = mainCanvas.Width / 4;
+            secondcityx.Height = mainCanvas.Height / 8;
+            secondcityx.HorizontalContentAlignment = HorizontalAlignment.Left;
+            secondcityx.VerticalContentAlignment = VerticalAlignment.Center;
+            secondcityx.FontSize = mainCanvas.Height / 30;
+            secondcityx.TextAlignment = TextAlignment.Center;
             mainCanvas.Children.Add(secondcityx);
             margin.Left += (mainCanvas.Width / 3 + mainCanvas.Width / 6);
-            secondcityy = new TextBox() { Margin = margin, Width = mainCanvas.Width / 4, Height = mainCanvas.Height / 8, HorizontalContentAlignment = HorizontalAlignment.Left, VerticalContentAlignment = VerticalAlignment.Center, FontSize = mainCanvas.Height / 30, TextAlignment = TextAlignment.Center };
+            secondcityy.Margin = margin;
+            secondcityy.Width = mainCanvas.Width / 4;
+            secondcityy.Height = mainCanvas.Height / 8;
+            secondcityy.HorizontalContentAlignment = HorizontalAlignment.Left;
+            secondcityy.VerticalContentAlignment = VerticalAlignment.Center;
+            secondcityy.FontSize = mainCanvas.Height / 30;
+            secondcityy.TextAlignment = TextAlignment.Center;
             mainCanvas.Children.Add(secondcityy);
             margin.Top += mainCanvas.Height / 6;
             margin.Left = mainCanvas.Width / 6;
