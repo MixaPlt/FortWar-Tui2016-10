@@ -18,7 +18,7 @@ namespace NFW
 {
     class Knight : Image
     {
-        public int Value = 0;
+        public int Value = 0, isTurned = 0;
         public int i = 0, j = 0;
     }
 }

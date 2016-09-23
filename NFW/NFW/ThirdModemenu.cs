@@ -108,9 +108,10 @@ namespace NFW
                     res[i + 1] = s[i];
             }
             catch { res = new string[1] { EnterWay.Text }; }
+            System.IO.Directory.CreateDirectory("Saves");
             System.IO.File.WriteAllLines("ThirdModeSaves.list", res);
             string r = System.IO.File.ReadAllText("ThirdModeFastSave.map");
-            System.IO.File.WriteAllText("3" + EnterWay.Text + ".save", r);
+            System.IO.File.WriteAllText("Saves/3" + EnterWay.Text + ".save", r);
             mainCanvas.Children.Remove(EnterWayInfo);
             mainCanvas.Children.Remove(EnterWay);
             mainCanvas.Children.Remove(AgreeWay);

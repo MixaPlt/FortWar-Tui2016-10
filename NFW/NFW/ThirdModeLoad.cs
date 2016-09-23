@@ -80,7 +80,7 @@ namespace NFW
             if(LoadList.SelectedItem != null)
             {
                 mainWindow.SizeChanged -= WindowSizeChanged;
-                ThirdMode thirdMode = new ThirdMode() { mainCanvas = mainCanvas, mainWindow = mainWindow, isContinue = true, LoadWay = "3" + LoadList.SelectedItem + ".save"};
+                ThirdMode thirdMode = new ThirdMode() { mainCanvas = mainCanvas, mainWindow = mainWindow, isContinue = true, LoadWay = "Saves/3" + LoadList.SelectedItem + ".save"};
                 thirdMode.Build();
             }
         }

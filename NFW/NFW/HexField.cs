@@ -25,6 +25,8 @@ namespace NFW
         public Hexagon[,] field = new Hexagon[51, 51];
         public delegate void HexClickHandler(int i, int j);
         public event HexClickHandler HexClick;
+        public int[] playerPoints = new int[2]  {1, 1};
+        static private int[,,] possibleSteps = new int[2, 6, 2] { { { -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, -1 } }, { { -1, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 } } };
         //Количество строчек и столбцов поля
         public int FieldHeight
         {
@@ -105,7 +107,7 @@ namespace NFW
             set { Mmargin.Top = value.Top + 10; Mmargin.Left = value.Left + 10; thisCanvas.Margin = Mmargin; }
         }
         private Thickness Mmargin;
-        private Canvas thisCanvas = new Canvas() { Background = Brushes.Black };
+        public Canvas thisCanvas = new Canvas() { Background = Brushes.Black };
         public void SetHexValue(int i, int j, int value)
         {
             field[i, j].Value = value;
@@ -235,6 +237,45 @@ namespace NFW
                         return;
                     }
             return;
+        }
+        public void Step(int line, int column, int playerSteep)
+        {
+            if (field[line, column].Value != 11 && field[line, column].Value != 12)
+                SetHexValue(line, column, 5 + playerSteep);
+            for(int i = 0; i < 6; i++)
+            {
+                int i1 = line + possibleSteps[column % 2, i, 0];
+                int j1 = column + possibleSteps[column % 2, i, 1];
+                if(i1 >= 0 && j1 >=0 && i1 < fieldHeight && j1 < fieldWidth && field[i1, j1].Value < 11)
+                {
+                    if(field[i1, j1].Value < 3)
+                    {
+                        playerPoints[playerSteep]++;
+                        switch(field[i1, j1].Value)
+                        {
+                            case 0:
+                                SetHexValue(i1, j1, 3 + playerSteep);
+                                break;
+                            case 1:
+                                SetHexValue(i1, j1, 9 + playerSteep);
+                                break;
+                            case 2:
+                                SetHexValue(i1, j1, 7 + playerSteep);
+                                break;
+                        }
+                    }
+                    else
+                    if(field[i1, j1].Value % 2 == playerSteep)
+                    {
+                        playerPoints[playerSteep]++;
+                        playerPoints[1 - playerSteep]--;
+                        if (playerSteep == 0)
+                            SetHexValue(i1, j1, field[i1, j1].Value - 1);
+                        else
+                            SetHexValue(i1, j1, field[i1, j1].Value + 1);
+                    }
+                }
+            }
         }
     }
 }
