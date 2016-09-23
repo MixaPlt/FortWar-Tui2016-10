@@ -65,8 +65,11 @@ namespace NFW
             else
                 LoadSave(LoadWay);
             WindowSizeChanged(null, null);
-            mainCanvas.Children.Add(endStepButton);
-            EndOfSteep(null, null);
+            if (!isContinue)
+            {
+                mainCanvas.Children.Add(endStepButton);
+                EndOfSteep(null, null);
+            }
         }
         private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -123,7 +126,7 @@ namespace NFW
                 generalMode = true;
                 changeGeneralModeButton.Content = "Cтроить крепости";
             }
-            MessageBox.Show(String.Format("{0}:{1}", usedKnights, numberKnights[playerSteep]));
+    //        MessageBox.Show(String.Format("{0}:{1}", usedKnights, numberKnights[playerSteep]));
         }
         private void KeyPressed(object sender, KeyEventArgs e)
         {
@@ -155,12 +158,15 @@ namespace NFW
             {
                 string t = System.IO.File.ReadAllText(way);
                 AIStatus = (int)t[0] - 48;
-                hexField.FieldHeight = (int)t[1] * 10 + t[2] - 528;
-                hexField.FieldWidth = (int)t[3] * 10 + (int)t[4] - 528;
+                maxNumberOfSteeps = (int)t[1] * 1000 + (int)t[2] * 100 + (int)t[3] * 10 + (int)t[4] - 53328;
+                numberOfKnights = (int)t[5] * 1000 + (int)t[6] * 100 + (int)t[7] * 10 + (int)t[8] - 53328;
+                hexField.FieldHeight = (int)t[9] * 10 + t[10] - 528;
+                hexField.FieldWidth = (int)t[11] * 10 + (int)t[12] - 528;
+                playerSteep = (int)t[13] - 48;
                 for (int i = 0; i < 50; i++)
                     for (int j = 0; j < 50; j++)
                     {
-                        hexField.SetHexValue(i, j, (int)t[i * 100 + j * 2 + 5] * 10 + (int)t[i * 100 + j * 2 + 6] - 528);
+                        hexField.SetHexValue(i, j, (int)t[i * 50 + j + 14] - 48);
                         if(hexField.field[i, j].Value == 11)
                         {
                             firstCityLine = i;
@@ -172,44 +178,81 @@ namespace NFW
                             secondCityColumn = j;
                         }
                     }
-                numberOfKnights = (int)t[5005] * 10 + (int)t[5006] - 528;
                 for (int i = 0; i < numberOfKnights; i++)
-                    knights[i] = new Knight() { Value = (int)t[i * 5 + 5007] - 48, i = (int)t[i * 5 + 5008] * 10 + (int)t[i * 5 + 5009] - 528, j = (int)t[i * 5 + 5010] * 10 + (int)t[i * 5 + 5011] - 528 };
-                playerSteep = (int)t[5006 + 5 * numberOfKnights] - 48;
+                {
+                    knights[i] = new Knight() { Value = (int)t[i * 6 + 2514] - 48, isTurned = (int)t[i * 6 + 2515] - 48, i = (int)t[i * 6 + 2516] * 10 + (int)t[i * 6 + 2517] - 528, j = (int)t[i * 6 + 2518] * 10 + (int)t[i * 6 + 2519] - 528 };
+                    if (knights[i].Value != 5)
+                    {
+                        hexField.field[knights[i].i, knights[i].j].Knight = i;
+                        if (knights[i].Value == 1)
+                            knights[i].Source = secondKnightSource;
+                        else
+                            knights[i].Source = firstKnightSource;
+                        hexField.thisCanvas.Children.Add(knights[i]);
+                    }
+                }
             }
             catch { MessageBox.Show("Файл сохранения повреждён"); }
+            if(playerSteep == 0)
+            {
+                if (hexField.field[firstCityLine, firstCityColumn].Knight == -1)
+                    mainCanvas.Children.Add(endStepButton);
+            }
+            else
+            {
+                if (hexField.field[secondCityLine, secondCityColumn].Knight == -1)
+                    mainCanvas.Children.Add(endStepButton);
+            }
         }
         private void Save()
         {
             string t = AIStatus.ToString();
+            if (maxNumberOfSteeps < 1000)
+            {
+                t += "0";
+                if (maxNumberOfSteeps < 100)
+                {
+                    t += "0";
+                    if (maxNumberOfSteeps < 10)
+                        t += "0";
+                }
+            }
+            t += maxNumberOfSteeps.ToString();
+            if (numberOfKnights < 1000)
+            {
+                t += "0";
+                if (numberOfKnights < 100)
+                {
+                    t += "0";
+                    if (numberOfKnights < 10)
+                        t += "0";
+                }
+            }
+            t += numberOfKnights.ToString();
             if (hexField.FieldHeight <= 9)
                 t += "0";
             t += hexField.FieldHeight.ToString();
             if (hexField.FieldWidth <= 9)
                 t += "0";
             t += hexField.FieldWidth.ToString();
+            t += playerSteep.ToString();
             for (int i = 0; i < 50; i++)
             {
                 for (int j = 0; j < 50; j++)
                 {
-                    if (hexField.field[i, j].Value <= 9)
-                        t += "0";
-                    t += hexField.field[i, j].Value.ToString();
+                    t += (char)(hexField.field[i, j].Value + 48);
                 }
             }
-            if (numberOfKnights <= 9)
-                t += "0";
-            t += numberOfKnights.ToString();
             for(int i = 0; i < numberOfKnights; i++)
             {
                 t += knights[i].Value.ToString();
+                t += knights[i].isTurned.ToString();
                 if (knights[i].i <= 9)
                     t += "0";
                 t += knights[i].i.ToString();
                 if (knights[i].j <= 9)
                     t += "0";
                 t += knights[i].j.ToString();
-                t += playerSteep.ToString();
             }
             File.WriteAllText("ThirdModeFastSave.map", t);
         }
@@ -226,7 +269,7 @@ namespace NFW
                     if (knights[hexField.field[i, j].Knight].isTurned < 2 && hexField.field[i, j].Value < 5 && hexField.field[i, j].Value != 2)
                     {
                         hexField.Step(i, j, playerSteep);
-                        knights[hexField.field[i, j].Knight].Value = -1;
+                        knights[hexField.field[i, j].Knight].Value = 5;
                         numberKnights[playerSteep]--;
                         if (knights[hexField.field[i, j].Knight].isTurned == 1)
                             usedKnights--;
