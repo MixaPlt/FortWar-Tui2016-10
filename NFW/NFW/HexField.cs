@@ -240,8 +240,11 @@ namespace NFW
         }
         public void Step(int line, int column, int playerSteep)
         {
+            if (field[line, column].Value % 2 == playerSteep && field[line, column].Value > 2)
+                playerPoints[1 - playerSteep]--;
             if (field[line, column].Value != 11 && field[line, column].Value != 12)
                 SetHexValue(line, column, 5 + playerSteep);
+            playerPoints[playerSteep]++;
             for(int i = 0; i < 6; i++)
             {
                 int i1 = line + possibleSteps[column % 2, i, 0];

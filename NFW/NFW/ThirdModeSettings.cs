@@ -23,29 +23,31 @@ namespace NFW
         private Label helpInfo = new Label() { Content = "Укажите типы участков поля посредством нажатия на них", VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, Foreground = Brushes.Red };
         private Label enterFieldPropInfo = new Label() { Content = "Задайте размеры поля", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
         private Label enterFieldHeightInfo = new Label() { Content = "Высота:", HorizontalContentAlignment = HorizontalAlignment.Right, VerticalContentAlignment = VerticalAlignment.Center };
-        private TextBox enterFieldHeightBox = new TextBox() { VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, FontWeight = FontWeights.Medium };
+        private TextBox enterFieldHeightBox = new TextBox() { VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
         private Label enterFieldWidthInfo = new Label() { Content = "Ширина:", HorizontalContentAlignment = HorizontalAlignment.Right, VerticalContentAlignment = VerticalAlignment.Center };
-        private TextBox enterFieldWidthBox = new TextBox() { VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, FontWeight = FontWeights.Medium };
+        private TextBox enterFieldWidthBox = new TextBox() { VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
         private Label enterCordInfo = new Label() { Content = "Задайте координаты\nгородов", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
         private Label lineInfo = new Label() { Content = "Строка", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
         private Label columnInfo = new Label() { Content = "Столбец", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
         private Label firstInfo = new Label() { Content = "Первый", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
         private Label secondInfo = new Label() { Content = "Второй", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
-        private TextBox firstLineBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium };
-        private TextBox firstColumnBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium };
-        private TextBox secondLineBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium };
-        private TextBox secondColumnBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium };
+        private TextBox firstLineBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
+        private TextBox firstColumnBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
+        private TextBox secondLineBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
+        private TextBox secondColumnBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
         private Button applySettings = new Button() { Content = "Применить настройки" };
         private Button startButton = new Button() { Content = "Начать игру" };
         private Button backButton = new Button() { Content = "Назад" };
         private Button resetButton = new Button() { Content = "Очистить поле" };
+        private Label enterNumberOfSteepsLabel = new Label() { Content = "Введите количество\nходов" };
+        private TextBox enterNumberOfSteps = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 5 };
         private ComboBox selectAIStatus = new ComboBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
         private HexField hexField;
-        private int firstCityLine = 0, firstCityColumn = 0, secondCityLine = 0, secondCityColumn = 1, AIStatus = 0;
+        private int firstCityLine = 0, firstCityColumn = 0, secondCityLine = 0, secondCityColumn = 1, AIStatus = 1, NumberOfSteeps = 2;
         public void Build() 
         {
             mainCanvas.Children.Clear();
-
+            mainCanvas.Children.Add(enterNumberOfSteepsLabel);
             mainCanvas.Height = mainWindow.ActualHeight - 30;
             mainCanvas.Width = mainWindow.ActualWidth - 4;
             mainCanvas.Children.Add(helpInfo);
@@ -69,6 +71,7 @@ namespace NFW
             mainCanvas.Children.Add(backButton);
             mainCanvas.Children.Add(selectAIStatus);
             mainCanvas.Children.Add(resetButton);
+            mainCanvas.Children.Add(enterNumberOfSteps);
             startButton.Click += StartGame;
             resetButton.Click += Reset;
             applySettings.Click += ApplySettings;
@@ -79,6 +82,7 @@ namespace NFW
             firstColumnBox.TextChanged += BoxChanged;
             secondColumnBox.TextChanged += BoxChanged;
             secondLineBox.TextChanged += BoxChanged;
+            enterNumberOfSteps.TextChanged += BoxChanged;
 
             {
                 string[] menu = new string[3]  { "ИИ выключен", "ИИ ходит первым", "ИИ ходит вторым"};                
@@ -218,6 +222,17 @@ namespace NFW
             selectAIStatus.Width = mainCanvas.Width * 0.23;
             selectAIStatus.Margin = margin;
             selectAIStatus.FontSize = fontSize;
+            margin.Top = 0;
+            margin.Left = mainCanvas.Width / 200;
+            enterNumberOfSteepsLabel.Margin = margin;
+            enterNumberOfSteepsLabel.Width = mainCanvas.Width / 4;
+            enterNumberOfSteepsLabel.FontSize = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 30);
+            margin.Top = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 30) * 1.8;
+            margin.Left = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 30) * 3.5;
+            enterNumberOfSteps.Margin = margin;
+            enterNumberOfSteps.Height = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 30) * 1.3;
+            enterNumberOfSteps.Width = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 30) * 2;
+            enterNumberOfSteps.FontSize = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 30);
         }
         private void Back(object sender, RoutedEventArgs e)
         {
@@ -253,7 +268,15 @@ namespace NFW
             catch (System.FormatException) { isError = true; errors += "Не заданы координаты городов\n"; };
             if(!isError)
             {
-                if(x1 > h || x2 > h || y1 > w || y2 > w || x1 <=0 || x2 <=0 || y1 <=0 || y2 <=0)
+                try
+                {
+                    NumberOfSteeps = Int32.Parse(enterNumberOfSteps.Text);
+                    if (NumberOfSteeps <= 0)
+                    { errors += "Количество ходов задано неправильно\n"; isError = true; }
+                }
+                catch (System.FormatException) { errors += "Количество ходов не задано\n"; isError = true; };
+
+                if (x1 > h || x2 > h || y1 > w || y2 > w || x1 <=0 || x2 <=0 || y1 <=0 || y2 <=0)
                 { errors += "Координаты городов превосходят размеры поля\n"; isError = true; }
             }
             if(!isError)
@@ -282,6 +305,7 @@ namespace NFW
             AnyBoxChanged(firstColumnBox);
             AnyBoxChanged(secondLineBox);
             AnyBoxChanged(secondColumnBox);
+            AnyBoxChanged(enterNumberOfSteps);
         }
         private void AnyBoxChanged(TextBox textBox)
         {
@@ -310,17 +334,18 @@ namespace NFW
             {
                 t = System.IO.File.ReadAllText("ThirdMode.map");
                 AIStatus = (int)t[0] - 48;
-                hexField.FieldHeight = (int)t[1] * 10 + (int)t[2] - 528; ;
-                hexField.FieldWidth = (int)t[3] * 10 + (int)t[4] - 528;
-                firstCityLine = (int)t[5] * 10 + (int)t[6] - 528;
-                firstCityColumn = (int)t[7] * 10 + (int)t[8] - 528;
-                secondCityLine = (int)t[9] * 10 + (int)t[10] - 528;
-                secondCityColumn = (int)t[11] * 10 + (int)t[12] - 528;
+                NumberOfSteeps = (int)t[1] * 1000 + (int)t[2] * 100 + (int)t[3] * 10 + (int)t[4] - 53328;
+                hexField.FieldHeight = (int)t[5] * 10 + (int)t[6] - 528; ;
+                hexField.FieldWidth = (int)t[7] * 10 + (int)t[8] - 528;
+                firstCityLine = (int)t[9] * 10 + (int)t[10] - 528;
+                firstCityColumn = (int)t[11] * 10 + (int)t[12] - 528;
+                secondCityLine = (int)t[13] * 10 + (int)t[14] - 528;
+                secondCityColumn = (int)t[15] * 10 + (int)t[16] - 528;
                 selectAIStatus.SelectedIndex = AIStatus;
                 for(int i = 0; i < 50; i++)
                     for(int j = 0; j < 50; j++)
                     {
-                        hexField.SetHexValue(i, j,  (int)t[i * 100 + j * 2 + 13] * 10 + (int)t[i * 100 + j * 2 + 14] - 528);
+                        hexField.SetHexValue(i, j,  (int)t[i * 100 + j * 2 + 17] * 10 + (int)t[i * 100 + j * 2 + 18] - 528);
                     }
             }
             catch { };
@@ -330,12 +355,24 @@ namespace NFW
             firstColumnBox.Text = (firstCityColumn + 1).ToString();
             secondLineBox.Text = (secondCityLine + 1).ToString();
             secondColumnBox.Text = (secondCityColumn + 1).ToString();
+            enterNumberOfSteps.Text = NumberOfSteeps.ToString();
             ApplySettings(null, null);
         }
         private void Save()
         {
             AIStatus = selectAIStatus.SelectedIndex;
             string t = AIStatus.ToString();
+            if (NumberOfSteeps < 1000)
+            {
+                t += "0";
+                if (NumberOfSteeps < 100)
+                {
+                    t += "0";
+                    if (NumberOfSteeps < 10)
+                        t += "0";
+                }
+            }
+            t += NumberOfSteeps.ToString();
             if (hexField.FieldHeight <= 9)
                 t += "0";
             t += hexField.FieldHeight.ToString();
@@ -363,6 +400,7 @@ namespace NFW
                     t += hexField.field[i, j].Value.ToString();
                 }
             }
+            
             System.IO.File.WriteAllText("ThirdMode.map", t);
         }
         private void Reset(object sender, RoutedEventArgs e)
