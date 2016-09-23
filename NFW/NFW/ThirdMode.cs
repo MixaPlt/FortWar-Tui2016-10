@@ -260,6 +260,8 @@ namespace NFW
         {
             if (hexField.field[i, j].Value == 1 || hexField.field[i, j].Value == 9 || hexField.field[i, j].Value == 10)
                 return;
+            if (hexField.field[i, j].Knight >= 0 && knights[hexField.field[i, j].Knight].Value != playerSteep)
+                return;
             if (hexField.field[i, j].Knight >= 0 && knights[hexField.field[i, j].Knight].Value == playerSteep)
             {
                 if(generalMode)
