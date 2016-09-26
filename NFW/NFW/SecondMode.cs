@@ -176,12 +176,27 @@ namespace NFW
         }
         private void HexClick(int i, int j)
         {
-
+            if(hexField.IsStepPossible(i, j, playerSteep))
+            {
+                hexField.Step(i, j, playerSteep);
+                if (playerSteep == 1)
+                    numberOfSteeps++;
+                playerSteep = 1 - playerSteep;
+                if (numberOfSteeps >= maxNumberOfSteeps)
+                    EndGame();
+            }
         }
         private void KeyPressed(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Escape)
                 OpenMenu(null, null);
+        }
+        private void EndGame()
+        {
+            MessageBox.Show("Игра окончена");
+            MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            mainWindow.SizeChanged -= WindowSizeChanged;
+            mainMenu.Build();
         }
     }
 }

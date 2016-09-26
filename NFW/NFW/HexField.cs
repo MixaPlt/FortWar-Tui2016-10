@@ -280,5 +280,20 @@ namespace NFW
                 }
             }
         }
+        public bool IsStepPossible(int i, int j, int playerStep)
+        {
+            if (field[i, j].Value != 0 && field[i, j].Value != 3 && field[i, j].Value != 4)
+                return false;
+            if (field[i, j].Value == 3 + playerStep)
+                return true; 
+            for(int l = 0; l < 6; l++)
+            {
+                int i1 = i + possibleSteps[j % 2, l, 0];
+                int j1 = j + possibleSteps[j % 2, l, 1];
+                if (i1 >= 0 && j1 >= 0 && i1 < fieldHeight && j1 < fieldWidth && field[i1, j1].Value > 2 && field[i1, j1].Value % 2 != playerStep)
+                    return true;
+            }
+            return false;
+        }
     }
 }
