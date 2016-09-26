@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 
 namespace NFW
 {
-    class ThirdModeMenu
+    class SecondModeMenu
     {
         public Canvas mainCanvas;
         public Window mainWindow;
@@ -78,8 +78,8 @@ namespace NFW
         private void Continue(object sender, RoutedEventArgs e)
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
-            ThirdMode thirdMode = new ThirdMode() { mainCanvas = mainCanvas, mainWindow = mainWindow, LoadMode = 1, LoadWay = "ThirdModeFastSave.map" };
-            thirdMode.Build();
+            SecondMode secondMode = new SecondMode() { mainCanvas = mainCanvas, mainWindow = mainWindow, LoadMode = 1, GameMode = 1, LoadWay = "SecondModeFastSave.map" };
+            secondMode.Build();
         }
         private void Save(object sender, RoutedEventArgs e)
         {
@@ -101,7 +101,7 @@ namespace NFW
             string[] s, res;
             try
             {
-                s = System.IO.File.ReadAllLines("ThirdModeSaves.list");
+                s = System.IO.File.ReadAllLines("SecondModeSaves.list");
                 res = new string[s.Length + 1];
                 res[0] = EnterWay.Text;
                 for (int i = 0; i < s.Length; i++)
@@ -111,15 +111,16 @@ namespace NFW
             try
             {
                 System.IO.Directory.CreateDirectory("Saves");
-                System.IO.File.WriteAllLines("ThirdModeSaves.list", res);
-                string r = System.IO.File.ReadAllText("ThirdModeFastSave.map");
-                System.IO.File.WriteAllText("Saves/3" + EnterWay.Text + ".save", r);
+                System.IO.File.WriteAllLines("SecondModeSaves.list", res);
+                string r = System.IO.File.ReadAllText("SecondModeFastSave.map");
+                System.IO.File.WriteAllText("Saves/2" + EnterWay.Text + ".save", r);
                 mainCanvas.Children.Remove(EnterWayInfo);
                 mainCanvas.Children.Remove(EnterWay);
                 mainCanvas.Children.Remove(AgreeWay);
                 mainCanvas.Children.Add(SaveButton);
             }
             catch { }
+            
         }
         private void BoxChanged(object sender, TextChangedEventArgs e)
         {

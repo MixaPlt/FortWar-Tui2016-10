@@ -15,7 +15,7 @@ using System.Windows.Shapes;
 
 namespace NFW
 {
-    class ThirdModeLoad
+    class SecondModeLoad
     {
         public Canvas mainCanvas;
         public Window mainWindow;
@@ -37,17 +37,17 @@ namespace NFW
             LoadButton.Click += Agree;
             try
             {
-                LoadList.ItemsSource = System.IO.File.ReadAllLines("ThirdModeSaves.list");
+                LoadList.ItemsSource = System.IO.File.ReadAllLines("SecondModeSaves.list");
             }
             catch { }
             WindowSizeChanged(null, null);
         }
-        private void WindowSizeChanged (object sender, SizeChangedEventArgs e)
+        private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
             mainCanvas.Height = mainWindow.ActualHeight - 30;
             mainCanvas.Width = mainWindow.ActualWidth - 6;
             int myHeight = (Math.Min((int)(mainCanvas.Height * 3 / 16), (int)(mainCanvas.Width - 4) / 3));
-            Thickness margin = new Thickness { Left = 0, Top = 0};
+            Thickness margin = new Thickness { Left = 0, Top = 0 };
             InfoLabel.Width = mainCanvas.Width;
             InfoLabel.Height = mainCanvas.Height / 8;
             InfoLabel.Margin = margin;
@@ -77,11 +77,11 @@ namespace NFW
         }
         private void Agree(object sender, RoutedEventArgs e)
         {
-            if(LoadList.SelectedItem != null)
+            if (LoadList.SelectedItem != null)
             {
                 mainWindow.SizeChanged -= WindowSizeChanged;
-                ThirdMode thirdMode = new ThirdMode() { mainCanvas = mainCanvas, mainWindow = mainWindow, LoadMode = 1, LoadWay = "Saves/3" + LoadList.SelectedItem + ".save"};
-                thirdMode.Build();
+                SecondMode secondMode = new SecondMode() { mainCanvas = mainCanvas, mainWindow = mainWindow, LoadMode = 1, GameMode = 1, LoadWay = "Saves/2" + LoadList.SelectedItem + ".save" };
+                secondMode.Build();
             }
         }
     }

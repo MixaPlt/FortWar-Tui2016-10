@@ -23,7 +23,7 @@ namespace NFW
         public int firstCityLine = 0, firstCityColumn = 0, secondCityLine = 9, secondCityColumn = 9;
         public Canvas mainCanvas;
         public Window mainWindow;
-        public bool isContinue = false;
+        public int LoadMode = 0;
         public string LoadWay = "";
         private HexField hexField;
         private Label infoLabel = new Label() { Content = "Ходит первый. Счёт 0:0", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Foreground = Brushes.LightGreen };
@@ -60,16 +60,18 @@ namespace NFW
             menuButton.Click += OpenMenu;
             mainCanvas.Children.Add(menuButton);
             endStepButton.Click += EndOfSteep;
-            if (!isContinue)
+            if (LoadMode == 0)
                 LoadMap();
-            else
+            if(LoadMode == 1)
                 LoadSave(LoadWay);
             WindowSizeChanged(null, null);
-            if (!isContinue)
+            if (LoadMode == 0)
             {
                 mainCanvas.Children.Add(endStepButton);
                 EndOfSteep(null, null);
             }
+            if (LoadMode == 2)
+                ReadMode(LoadWay);
         }
         private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -150,7 +152,13 @@ namespace NFW
                         if (hexField.field[i, j].Value == 12) { secondCityLine = i; secondCityColumn = j; }
                     }
             }
-            catch { MessageBox.Show("Файл с настройками повреждён"); }
+            catch
+            {
+                MessageBox.Show("Файл с настройками повреждён");
+                mainWindow.SizeChanged -= WindowSizeChanged;
+                MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+                mainMenu.Build();
+            }
         }
         private void LoadSave(string way)
         {
@@ -160,6 +168,7 @@ namespace NFW
                 AIStatus = (int)t[0] - 48;
                 maxNumberOfSteeps = (int)t[1] * 1000 + (int)t[2] * 100 + (int)t[3] * 10 + (int)t[4] - 53328;
                 numberOfKnights = (int)t[5] * 1000 + (int)t[6] * 100 + (int)t[7] * 10 + (int)t[8] - 53328;
+                numberOfSteeps = numberOfKnights / 2;
                 hexField.FieldHeight = (int)t[9] * 10 + t[10] - 528;
                 hexField.FieldWidth = (int)t[11] * 10 + (int)t[12] - 528;
                 playerSteep = (int)t[13] - 48;
@@ -192,8 +201,14 @@ namespace NFW
                     }
                 }
             }
-            catch { MessageBox.Show("Файл сохранения повреждён"); }
-            if(playerSteep == 0)
+            catch
+            {
+                MessageBox.Show("Файл сохранения повреждён");
+                mainWindow.SizeChanged -= WindowSizeChanged;
+                MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+                mainMenu.Build();
+            }
+            if (playerSteep == 0)
             {
                 if (hexField.field[firstCityLine, firstCityColumn].Knight == -1)
                     mainCanvas.Children.Add(endStepButton);
@@ -258,6 +273,8 @@ namespace NFW
         }
         private void HexClick(int i, int j)
         {
+            if (LoadMode == 2)
+                return;
             if (hexField.field[i, j].Value == 1 || hexField.field[i, j].Value == 9 || hexField.field[i, j].Value == 10)
                 return;
             if (hexField.field[i, j].Knight >= 0 && knights[hexField.field[i, j].Knight].Value != playerSteep)
@@ -388,6 +405,60 @@ namespace NFW
                 infoLabel.Content = String.Format("Ходит первый. Счёт: {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]);
             else
                 infoLabel.Content = String.Format("Ходит второй. Счёт: {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]);
+        }
+        private void ReadMode(string way)
+        {
+            try
+            {
+                StreamReader file = new StreamReader(way);
+                {
+                    string t = file.ReadLine();
+                    string[] s = t.Split(' ');
+                    hexField.FieldHeight = Int32.Parse(s[1]);
+                    hexField.FieldWidth = Int32.Parse(s[0]);
+                    maxNumberOfSteeps = Int32.Parse(s[2]);
+                }
+                {
+                    string t = file.ReadLine();
+                    string[] s = t.Split(' ');
+                    firstCityColumn = Int32.Parse(s[0]);
+                    firstCityLine = Int32.Parse(s[1]);
+                    secondCityColumn = Int32.Parse(s[2]);
+                    secondCityLine = Int32.Parse(s[3]);
+                }
+                {
+                    string t = file.ReadLine();
+                    string[] s = t.Split(' ');
+                    for(int i = 0; i < Int32.Parse(s[0]); i++)
+                    {
+                        hexField.SetHexValue(Int32.Parse(s[i * 2 + 1]), Int32.Parse(s[i * 2 + 2]), 1);
+                    }
+                }
+                {
+                    string t = file.ReadLine();
+                    string[] s = t.Split(' ');
+                    for (int i = 0; i < Int32.Parse(s[0]); i++)
+                    {
+                        hexField.SetHexValue(Int32.Parse(s[i * 2 + 1]), Int32.Parse(s[i * 2 + 2]), 2);
+                    }
+                }
+                for(int i = 0; i < maxNumberOfSteeps; i++)
+                {
+                    string t = file.ReadLine();
+                    string[] s = t.Split(' ');
+                    for(int j = 0; j < s.Length; j++)
+                    {
+
+                    }
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Некорректное содержиме файла");
+                mainWindow.SizeChanged -= WindowSizeChanged;
+                MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+                mainMenu.Build();
+            }
         }
     }
 }

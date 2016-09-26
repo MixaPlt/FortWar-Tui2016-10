@@ -59,6 +59,10 @@
     <Compile Include="Knight.cs" />
     <Compile Include="Load.cs" />
     <Compile Include="ModeSettings.cs" />
+    <Compile Include="ReadMode.cs" />
+    <Compile Include="SecondMode.cs" />
+    <Compile Include="SecondModeLoad.cs" />
+    <Compile Include="SecondModeMenu.cs" />
     <Compile Include="SecondModeSettings.cs" />
     <Compile Include="StartGameMenu.cs" />
     <Compile Include="ThirdMode.cs" />

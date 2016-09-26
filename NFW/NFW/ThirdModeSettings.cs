@@ -87,6 +87,7 @@ namespace NFW
             {
                 string[] menu = new string[3]  { "ИИ выключен", "ИИ ходит первым", "ИИ ходит вторым"};                
                 selectAIStatus.ItemsSource = menu;
+                selectAIStatus.SelectedIndex = 0;
             }
 
             hexField = new HexField() { FieldHeight = 10, FieldWidth = 10, mainCanvas = mainCanvas, mainWindow = mainWindow, Height = mainCanvas.Height * 14 / 15, Width = mainCanvas.Width * 3 / 4 };
@@ -341,7 +342,6 @@ namespace NFW
                 firstCityColumn = (int)t[11] * 10 + (int)t[12] - 528;
                 secondCityLine = (int)t[13] * 10 + (int)t[14] - 528;
                 secondCityColumn = (int)t[15] * 10 + (int)t[16] - 528;
-                selectAIStatus.SelectedIndex = AIStatus;
                 for(int i = 0; i < 50; i++)
                     for(int j = 0; j < 50; j++)
                     {
@@ -361,6 +361,7 @@ namespace NFW
         private void Save()
         {
             AIStatus = selectAIStatus.SelectedIndex;
+
             string t = AIStatus.ToString();
             if (NumberOfSteeps < 1000)
             {

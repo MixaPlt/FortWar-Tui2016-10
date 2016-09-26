@@ -71,6 +71,8 @@ namespace NFW
         private void SecondMode(object sender, RoutedEventArgs e)
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
+            SecondModeLoad secondModeLoad = new SecondModeLoad() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            secondModeLoad.Build();
         }
         private void ThirdMode(object sender, RoutedEventArgs e)
         {

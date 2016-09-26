@@ -65,6 +65,8 @@ namespace NFW
         private void ReadMode(object sender, RoutedEventArgs e)
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
+            ReadMode readMode = new NFW.ReadMode() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+            readMode.Build();
         }
         private void Back(object sender, RoutedEventArgs e)
         {
