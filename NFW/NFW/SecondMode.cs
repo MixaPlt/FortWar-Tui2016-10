@@ -52,11 +52,7 @@ namespace NFW
             }
             else
             {
-                if(LoadMode == 0)
-                {
-
-                }
-                else
+                if(LoadMode == 1)
                 {
                     LoadSave(LoadWay);
                 }
@@ -163,6 +159,8 @@ namespace NFW
                         hexField.SetHexValue(i, j, (int)t[i * 50 + j + 10] - 48);
                         if (hexField.field[i, j].Value == 11) { firstCityLine = i; firstCityColumn = j; }
                         if (hexField.field[i, j].Value == 12) { secondCityLine = i; secondCityColumn = j; }
+                        if (hexField.field[i, j].Value > 2)
+                            hexField.playerPoints[1 - hexField.field[i, j].Value % 2]++;
                     }
                 }
             }
@@ -184,6 +182,10 @@ namespace NFW
                 playerSteep = 1 - playerSteep;
                 if (numberOfSteeps >= maxNumberOfSteeps)
                     EndGame();
+                if (playerSteep == 0)
+                    infoLabel.Content = String.Format("Ходит первый. Счёт: {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]);
+                else
+                    infoLabel.Content = String.Format("Ходит второй. Счёт: {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]);
             }
         }
         private void KeyPressed(object sender, KeyEventArgs e)
@@ -193,7 +195,12 @@ namespace NFW
         }
         private void EndGame()
         {
-            MessageBox.Show("Игра окончена");
+            if(hexField.playerPoints[0] > hexField.playerPoints[1])
+                MessageBox.Show(String.Format("Игра окончена\nПобедил первый со счётом {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]));
+            if(hexField.playerPoints[0] < hexField.playerPoints[1])
+                MessageBox.Show(String.Format("Игра окончена\nПобедил второй со счётом {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]));
+            if (hexField.playerPoints[0] == hexField.playerPoints[1])
+                MessageBox.Show(String.Format("Игра окончена\nНичья со счётом {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]));
             MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
             mainWindow.SizeChanged -= WindowSizeChanged;
             mainMenu.Build();

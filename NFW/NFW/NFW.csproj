@@ -55,10 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="FirstMode.cs" />
+    <Compile Include="AI.cs" />
+    <Compile Include="FirstModeSettings.cs" />
     <Compile Include="Knight.cs" />
     <Compile Include="Load.cs" />
-    <Compile Include="ModeSettings.cs" />
     <Compile Include="ReadMode.cs" />
     <Compile Include="SecondMode.cs" />
     <Compile Include="SecondModeLoad.cs" />

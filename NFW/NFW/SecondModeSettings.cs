@@ -43,7 +43,7 @@ namespace NFW
         private TextBox enterNumberOfSteps = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 5 };
         private ComboBox selectAIStatus = new ComboBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
         private HexField hexField;
-        private int firstCityLine = 0, firstCityColumn = 0, secondCityLine = 0, secondCityColumn = 1, AIStatus = 1, NumberOfSteeps = 2;
+        private int firstCityLine = 0, firstCityColumn = 0, secondCityLine = 5, secondCityColumn = 5, AIStatus = 1, NumberOfSteeps = 2;
         public void Build()
         {
             mainCanvas.Children.Clear();
