@@ -47,8 +47,8 @@ namespace NFW
             continueGameButton.Click += ContinueGame;
             mainCanvas.Children.Add(continueGameButton);
             buttonMargin.Top += buttonHeight;
-            Button settingsButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Глобальные настройки", FontSize = buttonHeight / 5 };
-            settingsButton.Click += StartSettings;
+            Button settingsButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Авторские права", FontSize = buttonHeight / 5 };
+            //settingsButton.Click += StartSettings;
             mainCanvas.Children.Add(settingsButton);
             buttonMargin.Top += buttonHeight;
             Button exitButton = new Button() { Height = buttonHeight, Width = buttonWidth, Margin = buttonMargin, Content = "Выйти", FontSize = buttonHeight / 5 };
