@@ -233,7 +233,11 @@ namespace NFW
                 for (int j = 0; j < fieldWidth; j++)
                     if (field[i, j].isMouseOver(e))
                     {
-                        HexClick(i, j);
+                        try
+                        {
+                            HexClick(i, j);
+                        }
+                        catch { }
                         return;
                     }
             return;
@@ -242,11 +246,11 @@ namespace NFW
         {
             if (field[line, column].Value % 2 == playerSteep && field[line, column].Value > 2)
                 playerPoints[1 - playerSteep]--;
+            if (field[line, column].Value < 3 || field[line, column].Value % 2 == playerSteep)
+                playerPoints[playerSteep]++;
             if (field[line, column].Value != 11 && field[line, column].Value != 12)
                 SetHexValue(line, column, 5 + playerSteep);
-            if (field[line, column].Value < 2)
-                playerPoints[playerSteep]++;
-            for(int i = 0; i < 6; i++)
+            for (int i = 0; i < 6; i++)
             {
                 int i1 = line + possibleSteps[column % 2, i, 0];
                 int j1 = column + possibleSteps[column % 2, i, 1];

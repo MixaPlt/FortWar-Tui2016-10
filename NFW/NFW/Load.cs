@@ -19,18 +19,15 @@ namespace NFW
     {
         public Window mainWindow;
         public Canvas mainCanvas;
-        private Button FirstModeButton = new Button() { Content = "Первый режим" };
-        private Button SecondModeButton = new Button() { Content = "Второй режим" };
+        private Button SecondModeButton = new Button() { Content = "Первый и второй режимы" };
         private Button ThirdModeButton = new Button() { Content = "Третий режим" };
         private Button BackButton = new Button() { Content = "Назад" };
         public void Build()
         {
             mainCanvas.Children.Clear();
-            mainCanvas.Children.Add(FirstModeButton);
             mainCanvas.Children.Add(SecondModeButton);
             mainCanvas.Children.Add(ThirdModeButton);
             mainCanvas.Children.Add(BackButton);
-            FirstModeButton.Click += FirstMode;
             SecondModeButton.Click += SecondMode;
             ThirdModeButton.Click += ThirdMode;
             BackButton.Click += Back;
@@ -43,11 +40,6 @@ namespace NFW
             mainCanvas.Height = mainWindow.ActualHeight - 30;
             int buttonHeight = (Math.Min((int)(mainCanvas.Height * 3 / 16), (int)(mainCanvas.Width - 4) / 3));
             Thickness buttonMargin = new Thickness { Left = (mainCanvas.Width - buttonHeight * 3) / 2, Top = mainCanvas.Height / 8 };
-            FirstModeButton.Margin = buttonMargin;
-            FirstModeButton.Height = buttonHeight;
-            FirstModeButton.Width = buttonHeight * 3;
-            FirstModeButton.FontSize = buttonHeight / 5;
-            buttonMargin.Top += buttonHeight;
             SecondModeButton.Margin = buttonMargin;
             SecondModeButton.Height = buttonHeight;
             SecondModeButton.Width = buttonHeight * 3;

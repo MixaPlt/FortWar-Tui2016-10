@@ -19,176 +19,385 @@ namespace NFW
     {
         public Canvas mainCanvas;
         public Window mainWindow;
-        private Label EnterFieldPropInfo = new Label() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Введите размеры поля" };
-        private Label EnterFieldHeightInfo = new Label() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Высота:" };
-        private Label EnterFieldWidthInfo = new Label() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Ширина:" };
-        private TextBox EnterFieldHeightBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
-        private TextBox EnterFieldWidthBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
-        private Label EnterCityCordInfo = new Label() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Введите координаты городов" };
-        private Label LineInfo = new Label() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Строка" };
-        private Label ColumnInfo = new Label() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Столбец" };
-        private Label FirstInfo = new Label() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Первый" };
-        private Label SecondInfo = new Label() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Второй" };
-        private TextBox FirstLine = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
-        private TextBox FirstColumn = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
-        private TextBox SecondLine = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
-        private TextBox SecondColumn = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
-        private Label EnterTurnsInfo = new Label() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Введите количество ходов" };
-        private TextBox EnterTurns = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Right, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 4};
-        private Label AIInfo = new Label() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Content = "Режим ИИ" };
-        private ComboBox SelectAIStatus = new ComboBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
-        private Button BackButton = new Button() { Content = "Назад" };
-        private Button StartButton = new Button() { Content = "Начать игру" };
+        private Thickness margin = new Thickness();
+        private Label helpInfo = new Label() { Content = "Укажите типы участков поля посредством нажатия на них", VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, Foreground = Brushes.Red };
+        private Label enterFieldPropInfo = new Label() { Content = "Задайте размеры поля", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
+        private Label enterFieldHeightInfo = new Label() { Content = "Высота:", HorizontalContentAlignment = HorizontalAlignment.Right, VerticalContentAlignment = VerticalAlignment.Center };
+        private TextBox enterFieldHeightBox = new TextBox() { VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
+        private Label enterFieldWidthInfo = new Label() { Content = "Ширина:", HorizontalContentAlignment = HorizontalAlignment.Right, VerticalContentAlignment = VerticalAlignment.Center };
+        private TextBox enterFieldWidthBox = new TextBox() { VerticalContentAlignment = VerticalAlignment.Center, HorizontalContentAlignment = HorizontalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
+        private Label enterCordInfo = new Label() { Content = "Задайте координаты\nгородов", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
+        private Label lineInfo = new Label() { Content = "Строка", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
+        private Label columnInfo = new Label() { Content = "Столбец", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
+        private Label firstInfo = new Label() { Content = "Первый", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
+        private Label secondInfo = new Label() { Content = "Второй", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
+        private TextBox firstLineBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
+        private TextBox firstColumnBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
+        private TextBox secondLineBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
+        private TextBox secondColumnBox = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 3 };
+        private Button applySettings = new Button() { Content = "Применить настройки" };
+        private Button startButton = new Button() { Content = "Начать игру" };
+        private Button backButton = new Button() { Content = "Назад" };
+        private Button resetButton = new Button() { Content = "Очистить поле" };
+        private Label enterNumberOfSteepsLabel = new Label() { Content = "Введите количество\nходов" };
+        private TextBox enterNumberOfSteps = new TextBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, FontWeight = FontWeights.Medium, MaxLength = 5 };
+        private ComboBox selectAIStatus = new ComboBox() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center };
+        private HexField hexField;
+        private int firstCityLine = 0, firstCityColumn = 0, secondCityLine = 5, secondCityColumn = 5, AIStatus = 1, NumberOfSteeps = 2;
         public void Build()
         {
             mainCanvas.Children.Clear();
-            mainCanvas.Children.Add(EnterFieldPropInfo);
-            mainCanvas.Children.Add(EnterFieldHeightInfo);
-            mainCanvas.Children.Add(EnterFieldWidthInfo);
-            mainCanvas.Children.Add(EnterFieldHeightBox);
-            mainCanvas.Children.Add(EnterFieldWidthBox);
-            mainCanvas.Children.Add(EnterCityCordInfo);
-            mainCanvas.Children.Add(LineInfo);
-            mainCanvas.Children.Add(ColumnInfo);
-            mainCanvas.Children.Add(FirstInfo);
-            mainCanvas.Children.Add(SecondInfo);
-            mainCanvas.Children.Add(FirstLine);
-            mainCanvas.Children.Add(FirstColumn);
-            mainCanvas.Children.Add(SecondLine);
-            mainCanvas.Children.Add(SecondColumn);
-            mainCanvas.Children.Add(EnterTurnsInfo);
-            mainCanvas.Children.Add(EnterTurns);
-            mainCanvas.Children.Add(AIInfo);
-            mainCanvas.Children.Add(BackButton);
-            mainCanvas.Children.Add(StartButton);
-            BackButton.Click += Back;
-            StartButton.Click += StartGame;
-            string[] menu = new string[3] { "ИИ выключен", "ИИ ходит первым", "ИИ ходит вторым" };
-            SelectAIStatus.ItemsSource = menu;
-            mainCanvas.Children.Add(SelectAIStatus);
+            mainCanvas.Children.Add(enterNumberOfSteepsLabel);
+            mainCanvas.Height = mainWindow.ActualHeight - 30;
+            mainCanvas.Width = mainWindow.ActualWidth - 4;
+            mainCanvas.Children.Add(helpInfo);
             mainWindow.SizeChanged += WindowSizeChanged;
+            mainCanvas.Children.Add(enterFieldPropInfo);
+            mainCanvas.Children.Add(enterFieldHeightInfo);
+            mainCanvas.Children.Add(enterFieldHeightBox);
+            mainCanvas.Children.Add(enterFieldWidthInfo);
+            mainCanvas.Children.Add(enterFieldWidthBox);
+            mainCanvas.Children.Add(enterCordInfo);
+            mainCanvas.Children.Add(lineInfo);
+            mainCanvas.Children.Add(columnInfo);
+            mainCanvas.Children.Add(firstInfo);
+            mainCanvas.Children.Add(secondInfo);
+            mainCanvas.Children.Add(firstLineBox);
+            mainCanvas.Children.Add(firstColumnBox);
+            mainCanvas.Children.Add(secondLineBox);
+            mainCanvas.Children.Add(secondColumnBox);
+            mainCanvas.Children.Add(applySettings);
+            mainCanvas.Children.Add(startButton);
+            mainCanvas.Children.Add(backButton);
+            mainCanvas.Children.Add(selectAIStatus);
+            mainCanvas.Children.Add(resetButton);
+            mainCanvas.Children.Add(enterNumberOfSteps);
+            startButton.Click += StartGame;
+            resetButton.Click += Reset;
+            applySettings.Click += ApplySettings;
+            backButton.Click += Back;
+            enterFieldHeightBox.TextChanged += BoxChanged;
+            enterFieldWidthBox.TextChanged += BoxChanged;
+            firstLineBox.TextChanged += BoxChanged;
+            firstColumnBox.TextChanged += BoxChanged;
+            secondColumnBox.TextChanged += BoxChanged;
+            secondLineBox.TextChanged += BoxChanged;
+            enterNumberOfSteps.TextChanged += BoxChanged;
+
+            {
+                string[] menu = new string[3] { "ИИ выключен", "ИИ ходит первым", "ИИ ходит вторым" };
+                selectAIStatus.ItemsSource = menu;
+            }
+
+            hexField = new HexField() { FieldHeight = 10, FieldWidth = 10, mainCanvas = mainCanvas, mainWindow = mainWindow, Height = mainCanvas.Height * 14 / 15, Width = mainCanvas.Width * 3 / 4 };
+            hexField.Build();
+
+            Load();
             WindowSizeChanged(null, null);
-        }
-        private  void WindowSizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            mainCanvas.Height = Math.Min(mainWindow.Height, mainWindow.Width / 2 * 3);
-            mainCanvas.Width = mainCanvas.Height / 3 * 2;
-            Thickness margin = new Thickness() { Top = mainCanvas.Height / 8, Left = 0 };
-            EnterFieldPropInfo.Margin = margin;
-            EnterFieldPropInfo.Height = mainCanvas.Height / 10;
-            EnterFieldPropInfo.Width = mainCanvas.Width;
-            EnterFieldPropInfo.FontSize = mainCanvas.Width / 15;
-            margin.Top += mainCanvas.Height / 10;
-            margin.Left = mainCanvas.Width / 16;
-            EnterFieldHeightInfo.Margin = margin;
-            EnterFieldHeightInfo.Height = mainCanvas.Height / 16;
-            EnterFieldHeightInfo.Width = mainCanvas.Width / 4;
-            EnterFieldHeightInfo.FontSize = mainCanvas.Width / 16;
-            margin.Left += mainCanvas.Width / 4;
-            margin.Top += mainCanvas.Height / 84;
-            EnterFieldHeightBox.Margin = margin;
-            EnterFieldHeightBox.Height = mainCanvas.Height / 18;
-            EnterFieldHeightBox.Width = mainCanvas.Width / 8;
-            EnterFieldHeightBox.FontSize = mainCanvas.Width / 16;
-            margin.Top -= mainCanvas.Height / 84;
-            margin.Left += mainCanvas.Width / 5;
-            EnterFieldWidthInfo.Margin = margin;
-            EnterFieldWidthInfo.Width = mainCanvas.Width / 3.6;
-            EnterFieldWidthInfo.FontSize = mainCanvas.Width / 16;
-            margin.Left += mainCanvas.Width / 3.6;
-            margin.Top += mainCanvas.Height / 84;
-            EnterFieldWidthBox.Margin = margin;
-            EnterFieldWidthBox.Height = mainCanvas.Height / 18;
-            EnterFieldWidthBox.Width = mainCanvas.Width / 8;
-            EnterFieldWidthBox.FontSize = mainCanvas.Width / 16;
-            margin.Top += mainCanvas.Height / 16 - mainCanvas.Height / 84;
-            margin.Left = 0;
-            EnterCityCordInfo.Margin = margin;
-            EnterCityCordInfo.Width = mainCanvas.Width;
-            EnterCityCordInfo.FontSize = mainCanvas.Width / 16;
-            margin.Top += mainCanvas.Width / 10;
-            margin.Left = mainCanvas.Width / 3;
-            LineInfo.Margin = margin;
-            LineInfo.Width = mainCanvas.Width / 3;
-            LineInfo.FontSize = mainCanvas.Width / 16;
-            margin.Left += mainCanvas.Width / 3.4;
-            ColumnInfo.Margin = margin;
-            ColumnInfo.Width = mainCanvas.Width / 3;
-            ColumnInfo.FontSize = mainCanvas.Width / 16;
-            margin.Top += mainCanvas.Height / 16;
-            margin.Left = 0;
-            FirstInfo.Margin = margin;
-            FirstInfo.Width = mainCanvas.Width / 3;
-            FirstInfo.FontSize = mainCanvas.Width / 16;
-            margin.Left = mainCanvas.Width / 2;
-            margin.Top += mainCanvas.Height / 100;
-            FirstLine.Margin = margin;
-            FirstLine.Height = mainCanvas.Height / 18;
-            FirstLine.Width = mainCanvas.Width / 8;
-            FirstLine.FontSize = mainCanvas.Width / 16;
-            margin.Left += mainCanvas.Width / 6;
-            FirstColumn.Margin = margin;
-            FirstColumn.Height = mainCanvas.Height / 18;
-            FirstColumn.Width = mainCanvas.Width / 8;
-            FirstColumn.FontSize = mainCanvas.Width / 16;
-            margin.Top += mainCanvas.Height / 16 - mainCanvas.Height / 100;
-            margin.Left = 0;
-            SecondInfo.Margin = margin;
-            SecondInfo.Width = mainCanvas.Width / 3;
-            SecondInfo.FontSize = mainCanvas.Width / 16;
-            margin.Left = mainCanvas.Width / 2;
-            margin.Top += mainCanvas.Height / 100;
-            SecondLine.Margin = margin;
-            SecondLine.Height = mainCanvas.Height / 18;
-            SecondLine.Width = mainCanvas.Width / 8;
-            SecondLine.FontSize = mainCanvas.Width / 16;
-            margin.Left += mainCanvas.Width / 6;
-            SecondColumn.Margin = margin;
-            SecondColumn.Height = mainCanvas.Height / 18;
-            SecondColumn.Width = mainCanvas.Width / 8;
-            SecondColumn.FontSize = mainCanvas.Width / 16;
-            margin.Top += mainCanvas.Height / 16 - mainCanvas.Height / 100;
-            margin.Left = 0;
-            EnterTurnsInfo.Margin = margin;
-            EnterTurnsInfo.Width = mainCanvas.Width / 6 * 5;
-            EnterTurnsInfo.FontSize = mainCanvas.Width / 16;
-            margin.Left = mainCanvas.Width * 5 / 6;
-            margin.Top += mainCanvas.Height / 100;
-            EnterTurns.Margin = margin;
-            EnterTurns.Height = mainCanvas.Height / 18;
-            EnterTurns.Width = mainCanvas.Width / 8;
-            EnterTurns.FontSize = mainCanvas.Width / 16;
-            margin.Top += mainCanvas.Height / 16;
-            margin.Left = 0;
-            AIInfo.Margin = margin;
-            AIInfo.Width = mainCanvas.Width / 2;
-            AIInfo.FontSize = mainCanvas.Width / 16;
-            margin.Left += mainCanvas.Width / 2;
-            SelectAIStatus.Margin = margin;
-            SelectAIStatus.FontSize = mainCanvas.Width / 18;
-            SelectAIStatus.Height = mainCanvas.Height / 16;
-            SelectAIStatus.Width = mainCanvas.Width / 2;
-            margin.Top += mainCanvas.Height / 15;
-            margin.Left = 0;
-            BackButton.Margin = margin;
-            BackButton.Height = mainCanvas.Height / 14;
-            BackButton.Width = mainCanvas.Width / 2;
-            BackButton.FontSize = mainCanvas.Width / 16;
-            margin.Left = mainCanvas.Width / 2;
-            StartButton.Margin = margin;
-            StartButton.Height = mainCanvas.Height / 14;
-            StartButton.Width = mainCanvas.Width / 2;
-            StartButton.FontSize = mainCanvas.Width / 16;
-        }
-        private void StartGame(Object sender, RoutedEventArgs e)
-        {
 
         }
-        private void Back(Object sender, RoutedEventArgs e)
+        private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //Много однородного кода. Желательно не читать 
+            mainCanvas.Height = mainWindow.ActualHeight - 30;
+            mainCanvas.Width = mainWindow.ActualWidth - 4;
+            int fontSize = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 27);
+            margin.Left = mainCanvas.Width / 4;
+            margin.Top = 0;
+            helpInfo.Margin = margin;
+            helpInfo.Height = mainCanvas.Height / 15;
+            helpInfo.Width = mainCanvas.Width * 3 / 4;
+            helpInfo.FontSize = fontSize;
+            margin.Top = mainCanvas.Height / 10;
+            margin.Left = 0;
+            enterFieldPropInfo.Margin = margin;
+            enterFieldPropInfo.Width = mainCanvas.Width / 4;
+            enterFieldPropInfo.Height = mainCanvas.Height / 15;
+            enterFieldPropInfo.FontSize = fontSize;
+            margin.Top += mainCanvas.Height / 15;
+            enterFieldHeightInfo.Margin = margin;
+            enterFieldHeightInfo.Width = mainCanvas.Width / 8;
+            enterFieldHeightInfo.Height = mainCanvas.Height / 15;
+            enterFieldHeightInfo.FontSize = fontSize;
+            margin.Left = mainCanvas.Width / 8;
+            margin.Top += mainCanvas.Height / 60;
+            enterFieldHeightBox.Margin = margin;
+            enterFieldHeightBox.Width = mainCanvas.Width / 20;
+            enterFieldHeightBox.Height = mainCanvas.Height / 25;
+            enterFieldHeightBox.FontSize = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 32);
+            margin.Left = 0;
+            margin.Top = mainCanvas.Height * 7 / 30;
+            enterFieldWidthInfo.Margin = margin;
+            enterFieldWidthInfo.Width = mainCanvas.Width / 8;
+            enterFieldWidthInfo.Height = mainCanvas.Height / 15;
+            enterFieldWidthInfo.FontSize = fontSize;
+            margin.Left = mainCanvas.Width / 8;
+            margin.Top += mainCanvas.Height / 60;
+            enterFieldWidthBox.Margin = margin;
+            enterFieldWidthBox.Width = mainCanvas.Width / 20;
+            enterFieldWidthBox.Height = mainCanvas.Height / 25;
+            enterFieldWidthBox.FontSize = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 32);
+            margin.Left = 0;
+            margin.Top = mainCanvas.Height * 0.3;
+            enterCordInfo.Margin = margin;
+            enterCordInfo.Height = mainCanvas.Height / 9;
+            enterCordInfo.Width = mainCanvas.Width / 4;
+            enterCordInfo.FontSize = fontSize;
+            margin.Top = mainCanvas.Height * 2 / 5;
+            margin.Left = mainCanvas.Width / 14;
+            lineInfo.Margin = margin;
+            lineInfo.Height = mainCanvas.Height / 15;
+            lineInfo.Width = mainCanvas.Width / 12;
+            lineInfo.FontSize = fontSize;
+            margin.Left = mainCanvas.Width * 13 / 84;
+            columnInfo.Margin = margin;
+            columnInfo.Height = mainCanvas.Height / 15;
+            columnInfo.Width = mainCanvas.Width * 2 / 21;
+            columnInfo.FontSize = fontSize;
+            margin.Top = mainCanvas.Height * 7 / 15;
+            margin.Left = 0;
+            firstInfo.Margin = margin;
+            firstInfo.Height = mainCanvas.Height / 15;
+            firstInfo.Width = mainCanvas.Width / 8;
+            firstInfo.FontSize = fontSize;
+            margin.Left = mainCanvas.Width / 8;
+            margin.Top += mainCanvas.Height / 60;
+            firstLineBox.Margin = margin;
+            firstLineBox.Height = mainCanvas.Height / 25;
+            firstLineBox.Width = mainCanvas.Width / 20;
+            firstLineBox.FontSize = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 32);
+            margin.Left = mainCanvas.Width * 3 / 16;
+            firstColumnBox.Margin = margin;
+            firstColumnBox.Height = mainCanvas.Height / 25;
+            firstColumnBox.Width = mainCanvas.Width / 20;
+            firstColumnBox.FontSize = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 32);
+            margin.Top = mainCanvas.Height * 8 / 15;
+            margin.Left = 0;
+            secondInfo.Margin = margin;
+            secondInfo.Height = mainCanvas.Height / 15;
+            secondInfo.Width = mainCanvas.Width / 8;
+            secondInfo.FontSize = fontSize;
+            margin.Top += mainCanvas.Height / 60;
+            margin.Left = mainCanvas.Width / 8;
+            secondLineBox.Margin = margin;
+            secondLineBox.Height = mainCanvas.Height / 25;
+            secondLineBox.Width = mainCanvas.Width / 20;
+            secondLineBox.FontSize = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 32);
+            margin.Left = mainCanvas.Width * 3 / 16;
+            secondColumnBox.Height = mainCanvas.Height / 25;
+            secondColumnBox.Width = mainCanvas.Width / 20;
+            secondColumnBox.Margin = margin;
+            secondColumnBox.FontSize = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 32);
+            margin.Top = mainCanvas.Height * 2 / 3;
+            margin.Left = mainCanvas.Width / 50;
+            applySettings.Margin = margin;
+            applySettings.Height = mainCanvas.Height / 15;
+            applySettings.Width = mainCanvas.Width * 0.23;
+            applySettings.FontSize = fontSize;
+            margin.Top += mainCanvas.Height / 15;
+            startButton.Margin = margin;
+            startButton.Height = mainCanvas.Height / 15;
+            startButton.Width = mainCanvas.Width * 0.23;
+            startButton.FontSize = fontSize;
+            margin.Top = mainCanvas.Height / 15;
+            margin.Left = mainCanvas.Width * 33 / 128;
+            hexField.Margin = margin;
+            hexField.Height = mainCanvas.Height * 14 / 15;
+            hexField.Width = mainCanvas.Width * 95 / 128;
+            margin.Top = mainCanvas.Height * 4 / 5;
+            margin.Left = mainCanvas.Width / 50;
+            resetButton.Margin = margin;
+            resetButton.Height = mainCanvas.Height / 15;
+            resetButton.Width = mainCanvas.Width * 0.23;
+            resetButton.FontSize = fontSize;
+            margin.Top = mainCanvas.Height * 13 / 15;
+            margin.Left = mainCanvas.Width / 50;
+            backButton.Margin = margin;
+            backButton.Height = mainCanvas.Height / 15;
+            backButton.Width = mainCanvas.Width * 0.23;
+            backButton.FontSize = fontSize;
+            margin.Top = mainCanvas.Height * 3 / 5;
+            margin.Left = mainCanvas.Width / 50;
+            selectAIStatus.Height = mainCanvas.Height / 15;
+            selectAIStatus.Width = mainCanvas.Width * 0.23;
+            selectAIStatus.Margin = margin;
+            selectAIStatus.FontSize = fontSize;
+            margin.Top = 0;
+            margin.Left = mainCanvas.Width / 200;
+            enterNumberOfSteepsLabel.Margin = margin;
+            enterNumberOfSteepsLabel.Width = mainCanvas.Width / 4;
+            enterNumberOfSteepsLabel.FontSize = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 30);
+            margin.Top = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 30) * 1.8;
+            margin.Left = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 30) * 3.5;
+            enterNumberOfSteps.Margin = margin;
+            enterNumberOfSteps.Height = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 30) * 1.3;
+            enterNumberOfSteps.Width = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 30) * 2;
+            enterNumberOfSteps.FontSize = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 30);
+        }
+        private void Back(object sender, RoutedEventArgs e)
         {
             mainWindow.SizeChanged -= WindowSizeChanged;
-            StartGameMenu startGameMenu = new StartGameMenu() { mainWindow = mainWindow, mainCanvas = mainCanvas };
+            StartGameMenu startGameMenu = new StartGameMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
             startGameMenu.Build();
         }
+        private void ApplySettings(object sender, RoutedEventArgs e)
+        {
+            bool isError = false;
+            string errors = "Обнаружены следующие ошибки:\n";
+            int h = 0, w = 0, x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+            try
+            {
+                h = Int32.Parse(enterFieldHeightBox.Text);
+                if (h > 50 || h <= 0)
+                { errors += "Высота задана неправильно\n"; isError = true; }
+            }
+            catch (System.FormatException) { errors += "Высота не задана\n"; isError = true; };
+            try
+            {
+                w = Int32.Parse(enterFieldWidthBox.Text);
+                if (w > 50 || w <= 0)
+                { errors += "Ширина задана неправильно\n"; isError = true; }
+            }
+            catch (System.FormatException) { errors += "Ширина не задана\n"; isError = true; }
+            try
+            {
+                x1 = Int32.Parse(firstLineBox.Text); y1 = Int32.Parse(firstColumnBox.Text); x2 = Int32.Parse(secondLineBox.Text); y2 = Int32.Parse(secondColumnBox.Text);
+                if (x1 == x2 && y1 == y2)
+                { errors += "Координаты городов совпадают\n"; isError = true; }
+            }
+            catch (System.FormatException) { isError = true; errors += "Не заданы координаты городов\n"; };
+            if (!isError)
+            {
+                try
+                {
+                    NumberOfSteeps = Int32.Parse(enterNumberOfSteps.Text);
+                    if (NumberOfSteeps <= 0)
+                    { errors += "Количество ходов задано неправильно\n"; isError = true; }
+                }
+                catch (System.FormatException) { errors += "Количество ходов не задано\n"; isError = true; };
+
+                if (x1 > h || x2 > h || y1 > w || y2 > w || x1 <= 0 || x2 <= 0 || y1 <= 0 || y2 <= 0)
+                { errors += "Координаты городов превосходят размеры поля\n"; isError = true; }
+            }
+            if (!isError)
+            {
+                hexField.SetHexValue(firstCityLine, firstCityColumn, 0);
+                hexField.SetHexValue(secondCityLine, secondCityColumn, 0);
+                hexField.FieldHeight = h;
+                hexField.FieldWidth = w;
+                AIStatus = selectAIStatus.SelectedIndex;
+                firstCityLine = x1 - 1;
+                firstCityColumn = y1 - 1;
+                secondCityColumn = y2 - 1;
+                secondCityLine = x2 - 1;
+                hexField.SetHexValue(firstCityLine, firstCityColumn, 11);
+                hexField.SetHexValue(secondCityLine, secondCityColumn, 12);
+                Save();
+            }
+            else
+                MessageBox.Show(errors, "FortWar");
+        }
+        private void BoxChanged(object sender, TextChangedEventArgs e)
+        {
+            AnyBoxChanged(enterFieldHeightBox);
+            AnyBoxChanged(enterFieldWidthBox);
+            AnyBoxChanged(firstLineBox);
+            AnyBoxChanged(firstColumnBox);
+            AnyBoxChanged(secondLineBox);
+            AnyBoxChanged(secondColumnBox);
+            AnyBoxChanged(enterNumberOfSteps);
+        }
+        private void AnyBoxChanged(TextBox textBox)
+        {
+            string ans = "", t = textBox.Text;
+            int k = 0;
+            for (int i = 0; i < t.Length; i++)
+            {
+                if (((int)(t[i]) <= (int)'9') && ((int)t[i] >= (int)'0'))
+                    ans += t[i];
+                if (i == textBox.CaretIndex - 1)
+                    k = ans.Length;
+            }
+            textBox.Text = ans;
+            textBox.CaretIndex = k;
+        }
+        private void Load()
+        {
+            string t;
+            try
+            {
+                t = System.IO.File.ReadAllText("FirstMode.map");
+                AIStatus = (int)t[0] - 48;
+                NumberOfSteeps = (int)t[1] * 1000 + (int)t[2] * 100 + (int)t[3] * 10 + (int)t[4] - 53328;
+                hexField.FieldHeight = (int)t[5] * 10 + (int)t[6] - 528; ;
+                hexField.FieldWidth = (int)t[7] * 10 + (int)t[8] - 528;
+                firstCityLine = (int)t[9] * 10 + (int)t[10] - 528;
+                firstCityColumn = (int)t[11] * 10 + (int)t[12] - 528;
+                secondCityLine = (int)t[13] * 10 + (int)t[14] - 528;
+                secondCityColumn = (int)t[15] * 10 + (int)t[16] - 528;
+                selectAIStatus.SelectedIndex = AIStatus;
+            }
+            catch { };
+            enterFieldHeightBox.Text = hexField.FieldHeight.ToString();
+            enterFieldWidthBox.Text = hexField.FieldWidth.ToString();
+            firstLineBox.Text = (firstCityLine + 1).ToString();
+            firstColumnBox.Text = (firstCityColumn + 1).ToString();
+            secondLineBox.Text = (secondCityLine + 1).ToString();
+            secondColumnBox.Text = (secondCityColumn + 1).ToString();
+            enterNumberOfSteps.Text = NumberOfSteeps.ToString();
+            selectAIStatus.SelectedIndex = AIStatus;
+            ApplySettings(null, null);
+        }
+        private void Save()
+        {
+            string t = AIStatus.ToString();
+            if (NumberOfSteeps < 1000)
+            {
+                t += "0";
+                if (NumberOfSteeps < 100)
+                {
+                    t += "0";
+                    if (NumberOfSteeps < 10)
+                        t += "0";
+                }
+            }
+            t += NumberOfSteeps.ToString();
+            if (hexField.FieldHeight <= 9)
+                t += "0";
+            t += hexField.FieldHeight.ToString();
+            if (hexField.FieldWidth <= 9)
+                t += "0";
+            t += hexField.FieldWidth.ToString();
+            if (firstCityLine <= 9)
+                t += "0";
+            t += firstCityLine.ToString();
+            if (firstCityColumn <= 9)
+                t += "0";
+            t += firstCityColumn.ToString();
+            if (secondCityLine <= 9)
+                t += "0";
+            t += secondCityLine.ToString();
+            if (secondCityColumn <= 9)
+                t += "0";
+            t += secondCityColumn.ToString();
+
+            System.IO.File.WriteAllText("FirstMode.map", t);
+        }
+        private void Reset(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < 50; i++)
+                for (int j = 0; j < 50; j++)
+                    if (hexField.field[i, j].Value < 3)
+                        hexField.SetHexValue(i, j, 0);
+        }
+        private void StartGame(object sender, RoutedEventArgs e)
+        {
+            Save();
+            mainWindow.SizeChanged -= WindowSizeChanged;
+            SecondMode secondMode = new SecondMode() { mainCanvas = mainCanvas, mainWindow = mainWindow, GameMode = 0, LoadMode = 0 };
+            secondMode.Build();
+        }
+
+
     }
 }

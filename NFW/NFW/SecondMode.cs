@@ -56,7 +56,12 @@ namespace NFW
                 {
                     LoadSave(LoadWay);
                 }
+                else
+                {
+                    FirstModeLoad();
+                }
             }
+            InfoLabelChange();
         }
         private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -71,7 +76,7 @@ namespace NFW
             infoLabel.Margin = margin;
             infoLabel.Height = mainCanvas.Height / 15;
             infoLabel.FontSize = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 27);
-            infoLabel.Width = mainCanvas.Width * 2 / 5;
+            infoLabel.Width = mainCanvas.Width * 3 / 5;
             margin.Top = mainCanvas.Height / 15;
             margin.Left = 0;
             hexField.Margin = margin;
@@ -182,10 +187,33 @@ namespace NFW
                 playerSteep = 1 - playerSteep;
                 if (numberOfSteeps >= maxNumberOfSteeps)
                     EndGame();
-                if (playerSteep == 0)
-                    infoLabel.Content = String.Format("Ходит первый. Счёт: {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]);
-                else
-                    infoLabel.Content = String.Format("Ходит второй. Счёт: {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]);
+                InfoLabelChange();
+            }
+        }
+        private void FirstModeLoad()
+        {
+            try
+            {
+                string t = System.IO.File.ReadAllText("FirstMode.map");
+                AIStatus = (int)t[0] - 48;
+                maxNumberOfSteeps = (int)t[1] * 1000 + (int)t[2] * 100 + (int)t[3] * 10 + (int)t[4] - 53328;
+                hexField.FieldHeight = (int)t[5] * 10 + t[6] - 528;
+                hexField.FieldWidth = (int)t[7] * 10 + (int)t[8] - 528;
+                firstCityLine = (int)t[9] * 10 + (int)t[10] - 528;
+                firstCityColumn = (int)t[11] * 10 + (int)t[12] - 528;
+                secondCityLine = (int)t[13] * 10 + (int)t[14] - 528;
+                secondCityColumn = (int)t[15] * 10 + (int)t[16] - 528;
+                hexField.SetHexValue(firstCityLine, firstCityColumn, 11);
+                hexField.SetHexValue(secondCityLine, secondCityColumn, 12);
+                hexField.Step(firstCityLine, firstCityColumn, 0);
+                hexField.Step(secondCityLine, secondCityColumn, 1);
+            }
+            catch
+            {
+                MessageBox.Show("Файл с настройками повреждён");
+                mainWindow.SizeChanged -= WindowSizeChanged;
+                MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+                mainMenu.Build();
             }
         }
         private void KeyPressed(object sender, KeyEventArgs e)
@@ -204,6 +232,29 @@ namespace NFW
             MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
             mainWindow.SizeChanged -= WindowSizeChanged;
             mainMenu.Build();
+        }
+        private void InfoLabelChange()
+        {
+            string t = "Ходит ";
+            if (playerSteep == 0)
+            {
+                t += "первый.";
+                infoLabel.Foreground = Brushes.LawnGreen;
+            }
+            else
+            {
+                t += "второй.";
+                infoLabel.Foreground = Brushes.Red;
+            }
+            t += String.Format(" Счёт : {0}:{1}. Остал", hexField.playerPoints[0], hexField.playerPoints[1]);
+            if (maxNumberOfSteeps - numberOfSteeps == 1)
+                t += String.Format("ся 1 ход");
+            else
+                if (maxNumberOfSteeps - numberOfSteeps < 5)
+                t += String.Format("ось {0} хода", maxNumberOfSteeps - numberOfSteeps);
+            else
+                t += String.Format("ось {0} ходов", maxNumberOfSteeps - numberOfSteeps);
+            infoLabel.Content = t;
         }
     }
 }

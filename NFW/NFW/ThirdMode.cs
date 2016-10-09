@@ -26,7 +26,7 @@ namespace NFW
         public int LoadMode = 0;
         public string LoadWay = "";
         private HexField hexField;
-        private Label infoLabel = new Label() { Content = "Ходит первый. Счёт 0:0", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Foreground = Brushes.LightGreen };
+        private Label infoLabel = new Label() { HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Foreground = Brushes.LightGreen, FontWeight = FontWeights.Medium};
         private Button menuButton = new Button() { Content = "Меню", BorderBrush = Brushes.LightGray, Background = Brushes.Gray };
         private int numberOfKnights = 0, AIStatus = 0, maxNumberOfSteeps;
         private int playerSteep = 1, numberOfSteeps = 0, usedKnights = 0, ausedKnights = 0, useKnight = -1;
@@ -72,6 +72,7 @@ namespace NFW
             }
             if (LoadMode == 2)
                 ReadMode(LoadWay);
+            InfoLabelChange();
         }
         private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
         {
@@ -85,7 +86,7 @@ namespace NFW
             margin.Left = mainCanvas.Width / 5;
             infoLabel.Margin = margin;
             infoLabel.Height = mainCanvas.Height / 15;
-            infoLabel.FontSize = (int)Math.Min(mainCanvas.Width / 45, mainCanvas.Height / 27);
+            infoLabel.FontSize = (int)Math.Min(mainCanvas.Width / 52, mainCanvas.Height / 27);
             infoLabel.Width = mainCanvas.Width * 2 / 5;
             margin.Top = mainCanvas.Height / 15;
             margin.Left = 0;
@@ -294,10 +295,7 @@ namespace NFW
                             usedKnights--;
                         hexField.thisCanvas.Children.Remove(knights[hexField.field[i, j].Knight]);
                         hexField.field[i, j].Knight = -1;
-                        if (playerSteep == 0)
-                            infoLabel.Content = String.Format("Ходит первый. Счёт: {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]);
-                        else
-                            infoLabel.Content = String.Format("Ходит второй. Счёт: {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]);
+                        InfoLabelChange();
                     }
                 }
                 return;
@@ -401,10 +399,7 @@ namespace NFW
             playerSteep = 1 - playerSteep;
             usedKnights = 0;
             ausedKnights = 0;
-            if (playerSteep == 0)
-                infoLabel.Content = String.Format("Ходит первый. Счёт: {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]);
-            else
-                infoLabel.Content = String.Format("Ходит второй. Счёт: {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]);
+            InfoLabelChange();
         }
         private void ReadMode(string way)
         {
@@ -459,6 +454,29 @@ namespace NFW
                 MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
                 mainMenu.Build();
             }
+        }
+        private void InfoLabelChange()
+        {
+            string t = "Ходит ";
+            if (playerSteep == 0)
+            {
+                t += "первый.";
+                infoLabel.Foreground = Brushes.LawnGreen;
+            }
+            else
+            {
+                t += "второй.";
+                infoLabel.Foreground = Brushes.Red;
+            }
+            t += String.Format(" Счёт : {0}:{1}. Остал", hexField.playerPoints[0], hexField.playerPoints[1]);
+            if (maxNumberOfSteeps - numberOfSteeps == 1)
+                t += String.Format("ся 1 ход");
+            else
+                if (maxNumberOfSteeps - numberOfSteeps < 5)
+                t += String.Format("ось {0} хода", maxNumberOfSteeps - numberOfSteeps);
+            else
+                t += String.Format("ось {0} ходов", maxNumberOfSteeps - numberOfSteeps);
+            infoLabel.Content = t;
         }
     }
 }
