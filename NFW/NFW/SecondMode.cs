@@ -199,23 +199,21 @@ namespace NFW
                     return;
                 }
                 InfoLabelChange();
-            }
-            if(AIStatus > 0)
-            {
-                pair AIStep = AI.SecondMode(hexField, playerSteep);
-                hexField.Step(AIStep.i, AIStep.j, playerSteep);
-                if (playerSteep == 1)
-                    numberOfSteeps++;
-                playerSteep = 1 - playerSteep;
-                if (numberOfSteeps >= maxNumberOfSteeps)
+                if (AIStatus > 0)
                 {
-                    EndGame();
-                    return;
+                    pair AIStep = AI.SecondMode(hexField, playerSteep);
+                    hexField.Step(AIStep.i, AIStep.j, playerSteep);
+                    if (playerSteep == 1)
+                        numberOfSteeps++;
+                    playerSteep = 1 - playerSteep;
+                    if (numberOfSteeps >= maxNumberOfSteeps)
+                    {
+                        EndGame();
+                        return;
+                    }
+                    InfoLabelChange();
                 }
-                InfoLabelChange();
-            }
-
-            
+            }    
         }
         private void FirstModeLoad()
         {
