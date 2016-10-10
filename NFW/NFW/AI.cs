@@ -22,8 +22,9 @@ namespace NFW
     }
     class AI
     {
-        static private int[] firstPlayerPriorities = new int[11] { 1, 1, 1, 0, 2, 0, 3, 0, 2, 0, 2 };
-        static private int[] secondPlayerPriorities = new int[11] { 1, 1, 1, 2, 0, 3, 0, 2, 0, 2, 0 };
+        //0 - Пустя клеточка, 1 - горы, 2 - река, 3 - клетка первого, 4 - клеткаа второго, 5 - крепость первого, 6 - крепость второго, 7 - море первого, 8 - море второго, 9 - горы первого, 10 - горы второго, 11 - замок первого, 12 - замок второго
+        static private int[] firstPlayerPriorities = new int[11] { 2, 3, 3, 0, 4, 0, 6, 0, 6, 0, 6 };
+        static private int[] secondPlayerPriorities = new int[11] { 2, 3, 4, 4, 0, 6, 0, 6, 0, 6, 0 };
         static private int[,,] possibleSteps = new int[2, 6, 2] { { { -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, -1 } }, { { -1, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 } } };
         static public pair SecondMode(HexField hexField, int playerStep)
         {

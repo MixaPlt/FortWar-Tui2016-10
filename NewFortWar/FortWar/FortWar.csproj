@@ -106,6 +106,7 @@
     <Resource Include="Geks1.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Geks10.png" />
     <Resource Include="Geks2.png" />
   </ItemGroup>
   <ItemGroup>
@@ -122,9 +123,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Geks7.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Geks10.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Geks8.png" />
