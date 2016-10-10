@@ -61,6 +61,14 @@ namespace NFW
                     FirstModeLoad();
                 }
             }
+            if(playerSteep + 1 == AIStatus)
+            {
+                pair AIStep = AI.SecondMode(hexField, playerSteep);
+                hexField.Step(AIStep.i, AIStep.j, playerSteep);
+                if (playerSteep == 1)
+                    numberOfSteeps++;
+                playerSteep = 1 - playerSteep;
+            }
             InfoLabelChange();
         }
         private void WindowSizeChanged(object sender, SizeChangedEventArgs e)
@@ -186,9 +194,28 @@ namespace NFW
                     numberOfSteeps++;
                 playerSteep = 1 - playerSteep;
                 if (numberOfSteeps >= maxNumberOfSteeps)
+                {
                     EndGame();
+                    return;
+                }
                 InfoLabelChange();
             }
+            if(AIStatus > 0)
+            {
+                pair AIStep = AI.SecondMode(hexField, playerSteep);
+                hexField.Step(AIStep.i, AIStep.j, playerSteep);
+                if (playerSteep == 1)
+                    numberOfSteeps++;
+                playerSteep = 1 - playerSteep;
+                if (numberOfSteeps >= maxNumberOfSteeps)
+                {
+                    EndGame();
+                    return;
+                }
+                InfoLabelChange();
+            }
+
+            
         }
         private void FirstModeLoad()
         {
