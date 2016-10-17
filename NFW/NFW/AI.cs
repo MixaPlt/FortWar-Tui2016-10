@@ -28,22 +28,48 @@ namespace NFW
         static private int[,,] possibleSteps = new int[2, 6, 2] { { { -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, -1 } }, { { -1, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 } } };
         static public pair SecondMode(HexField hexField, int playerStep)
         {
-            pair ans = new pair() { i = 5, j = 5 };
-            int maxPoints = -999999;
+            pair ans = new pair() { i = 0, j = 0 };
+            int maxPoints = -99999;
             for (int i = 0; i < hexField.FieldHeight; i++)
             {
                 for (int j = 0; j < hexField.FieldWidth; j++)
                 {
                     if (hexField.IsStepPossible(i, j, playerStep))
                     {
+                        HexField newField = new HexField() { FieldHeight = hexField.FieldHeight, FieldWidth = hexField.FieldWidth, build = false};
+                        newField.Build();
+                        for(int l = 0; l < newField.FieldHeight; l++)
+                        {
+                            for(int k = 0; k < newField.FieldWidth; k++)
+                            {
+                                newField.field[l, k].Value 
+                                    = hexField.field[l, k].Value;
+                            }
+                        }
                         int p = 0;
                         if (playerStep == 0)
                             p = Points(i, j, playerStep, firstPlayerPriorities, hexField);
                         else
                             p = Points(i, j, playerStep, secondPlayerPriorities, hexField);
-                        if (p > maxPoints || maxPoints == 0)
+                        int minPoints = -9999;
+                        for(int l = 0; l < newField.FieldHeight; l++)
                         {
-                            maxPoints = p;
+                            for(int k = 0; k < newField.FieldWidth; k++)
+                            {
+                                if (newField.IsStepPossible(l, k, 1 - playerStep))
+                                {
+                                    int d = 0;
+                                    if (playerStep == 1)
+                                        d = Points(l, k, playerStep, firstPlayerPriorities, hexField);
+                                    else
+                                        d = Points(l, k, playerStep, secondPlayerPriorities, hexField);
+                                    minPoints = Math.Max(d, minPoints);
+                                }
+                            }
+                        }
+                        if (p - minPoints > maxPoints)
+                        {
+                            maxPoints = p - minPoints;
                             ans.i = i;
                             ans.j = j;
                         }

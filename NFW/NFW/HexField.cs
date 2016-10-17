@@ -26,6 +26,7 @@ namespace NFW
         public delegate void HexClickHandler(int i, int j);
         public event HexClickHandler HexClick;
         public int[] playerPoints = new int[2]  {1, 1};
+        public bool build = true;
         static private int[,,] possibleSteps = new int[2, 6, 2] { { { -1, 0 }, { -1, 1 }, { 0, 1 }, { 1, 0 }, { 0, -1 }, { -1, -1 } }, { { -1, 0 }, { 0, 1 }, { 1, 1 }, { 1, 0 }, { 1, -1 }, { 0, -1 } } };
         //Количество строчек и столбцов поля
         public int FieldHeight
@@ -116,6 +117,15 @@ namespace NFW
         private BitmapImage[] imageSources = new BitmapImage[16];
         public void Build()
         {
+            if (!build)
+                for (int i = 0; i < 50; i++)
+                {
+                    for (int j = 0; j < 50; j++)
+                    {
+                        field[i, j] = new Hexagon() { Value = 0 };
+                    }
+                }
+            else
             {
                 isBuilded = true;
                 thisCanvas.Margin = Mmargin;
@@ -184,24 +194,25 @@ namespace NFW
                 imageSources[12].BeginInit();
                 imageSources[12].UriSource = new Uri("Images/Geks2.png", UriKind.Relative);
                 imageSources[12].EndInit();
-            }
-            fieldWidth = FieldWidth;
-            thisCanvas.MouseDown += AnyHexClick;
-            for (int i = 0; i < 50; i++)
-            {
-                for (int j = 0; j < 50; j++)
+
+                fieldWidth = FieldWidth;
+                thisCanvas.MouseDown += AnyHexClick;
+                for (int i = 0; i < 50; i++)
                 {
-                    field[i, j] = new Hexagon() { Source = imageSources[0] };
+                    for (int j = 0; j < 50; j++)
+                    {
+                        field[i, j] = new Hexagon() { Source = imageSources[0] };
+                    }
                 }
-            }
-            for (int i = 0; i < fieldHeight; i++)
-            {
-                for (int j = 0; j < fieldWidth; j++)
+                for (int i = 0; i < fieldHeight; i++)
                 {
-                    thisCanvas.Children.Add(field[i, j]);
+                    for (int j = 0; j < fieldWidth; j++)
+                    {
+                        thisCanvas.Children.Add(field[i, j]);
+                    }
                 }
+                Rebuild();
             }
-            Rebuild();
         }
         private void Rebuild()
         {
