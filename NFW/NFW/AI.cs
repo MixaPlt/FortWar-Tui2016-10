@@ -82,7 +82,7 @@ namespace NFW
         static public pair[] ThirdMode(HexField hexField, Knight[] knights, int numberOfKnights, int ps, int numberOfSteeps)
         {
             pair[] ans = new pair[numberOfKnights];
-            if (numberOfSteeps > 0)
+        //    if (numberOfSteeps > 0)
             {
                 /*
                 for (int i = numberOfKnights / 2 - 1; i > 1; i--)

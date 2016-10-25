@@ -507,7 +507,25 @@ namespace NFW
         }
         private void AIStep(int ps)
         {
-            pair[] turns = AI.ThirdMode(hexField, knights, numberOfKnights, ps, maxNumberOfSteeps - numberOfSteeps);           
+            if (maxNumberOfSteeps - numberOfSteeps > 0)
+             AI.ThirdMode(hexField, knights, numberOfKnights, ps, maxNumberOfSteeps - numberOfSteeps);    
+            else
+            {
+                for(int i = 0; i < numberOfKnights / 2; i++)
+                {
+                    int i1 = knights[i * 2 + ps].i;
+                    int j1 = knights[i * 2 + ps].j;
+                    if (hexField.field[knights[i * 2 + ps].i, knights[i * 2 + ps].j].Value == 0 || (hexField.field[knights[i * 2 + ps].i, knights[i * 2 + ps].j].Value > 1 && hexField.field[knights[i * 2 + ps].i, knights[i * 2 + ps].j].Value < 11))
+                    {
+                        hexField.Step(i1, j1, ps);
+                        knights[i * 2 + ps].Value = 5;
+                        numberKnights[ps]--;                       
+                        hexField.thisCanvas.Children.Remove(knights[i * 2 + ps]);
+                        hexField.field[i1, j1].Knight = -1;
+                        InfoLabelChange();
+                    }
+                }
+            }
         }
     }
 }
