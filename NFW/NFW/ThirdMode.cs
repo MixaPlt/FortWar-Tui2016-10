@@ -447,6 +447,8 @@ namespace NFW
                     firstCityLine = Int32.Parse(s[1]);
                     secondCityColumn = Int32.Parse(s[2]);
                     secondCityLine = Int32.Parse(s[3]);
+                    hexField.SetHexValue(firstCityLine, firstCityColumn, 11);
+                    hexField.SetHexValue(secondCityLine, secondCityColumn, 12);
                 }
                 {
                     string t = file.ReadLine();

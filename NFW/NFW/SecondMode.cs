@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.IO;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -12,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
 namespace NFW
 {
     class SecondMode
@@ -22,6 +24,8 @@ namespace NFW
         public int GameMode = 0;
         public string LoadWay = "";
         private HexField hexField;
+        public bool isRead = false;
+        public string readWay;
         private int firstCityLine = 0, firstCityColumn = 0, secondCityLine = 9, secondCityColumn = 9, AIStatus = 0, maxNumberOfSteeps = 2, playerSteep = 0, numberOfSteeps = 0;
         private Label infoLabel = new Label() { Content = "Ходит первый. Счёт 1:1", HorizontalContentAlignment = HorizontalAlignment.Center, VerticalContentAlignment = VerticalAlignment.Center, Foreground = Brushes.LightGreen };
         private Button menuButton = new Button() { Content = "Меню", BorderBrush = Brushes.LightGray, Background = Brushes.Gray };
@@ -39,28 +43,33 @@ namespace NFW
             menuButton.Click += OpenMenu;
             mainCanvas.Children.Add(menuButton);
             WindowSizeChanged(null, null);
-            if(GameMode == 1)
+            if (!isRead)
             {
-                if(LoadMode == 0)
+                if (GameMode == 1)
                 {
-                    LoadMap();
+                    if (LoadMode == 0)
+                    {
+                        LoadMap();
+                    }
+                    else
+                    {
+                        LoadSave(LoadWay);
+                    }
                 }
                 else
                 {
-                    LoadSave(LoadWay);
+                    if (LoadMode == 1)
+                    {
+                        LoadSave(LoadWay);
+                    }
+                    else
+                    {
+                        FirstModeLoad();
+                    }
                 }
             }
             else
-            {
-                if(LoadMode == 1)
-                {
-                    LoadSave(LoadWay);
-                }
-                else
-                {
-                    FirstModeLoad();
-                }
-            }
+                ReadMode();
             if(playerSteep + 1 == AIStatus)
             {
                 pair AIStep = AI.SecondMode(hexField, playerSteep);
@@ -280,6 +289,102 @@ namespace NFW
             else
                 t += String.Format("ось {0} ходов", maxNumberOfSteeps - numberOfSteeps);
             infoLabel.Content = t;
+        }
+        private void ReadMode()
+        {
+            try
+            {
+                StreamReader file = new StreamReader(readWay);
+                {
+                    string t = file.ReadLine();
+                    string[] s = t.Split(' ');
+                    hexField.FieldHeight = Int32.Parse(s[1]);
+                    hexField.FieldWidth = Int32.Parse(s[0]);
+                    maxNumberOfSteeps = Int32.Parse(s[2]);
+                    GameMode = Int32.Parse(s[3]) - 1;
+                }
+                {
+                    string t = file.ReadLine();
+                    string[] s = t.Split(' ');
+                    firstCityColumn = Int32.Parse(s[0]) - 1;
+                    firstCityLine = Int32.Parse(s[1]) - 1;
+                    secondCityColumn = Int32.Parse(s[2]) - 1;
+                    secondCityLine = Int32.Parse(s[3]) - 1;
+                    hexField.SetHexValue(firstCityLine, firstCityColumn, 11);
+                    hexField.SetHexValue(secondCityLine, secondCityColumn, 12);
+                }
+                if (GameMode == 1)
+                {
+                    {
+                        string t = file.ReadLine();
+                        string[] s = t.Split(' ');
+                        int n = Int32.Parse(s[0]);
+                        for (int i = 1; i <= n; i++)
+                        {
+                            int j1 = Int32.Parse(s[i * 2 - 1]) - 1;
+                            int i1 = Int32.Parse(s[i * 2]) - 1;
+                            if ((i1 == firstCityLine && j1 == firstCityColumn) || (i1 == secondCityLine && j1 == secondCityColumn))
+                            {
+                                MessageBox.Show("Некорректное содержиме файла");
+                                mainWindow.SizeChanged -= WindowSizeChanged;
+                                MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+                                mainMenu.Build();
+                                return;
+                            }
+                            hexField.SetHexValue(i1, j1, 1);
+                        }
+                    }
+                    {
+                        string t = file.ReadLine();
+                        string[] s = t.Split(' ');
+                        int n = Int32.Parse(s[0]);
+                        for (int i = 1; i <= n; i++)
+                        {
+                            int j1 = Int32.Parse(s[i * 2 - 1]) - 1;
+                            int i1 = Int32.Parse(s[i * 2]) - 1;
+                            if((i1 == firstCityLine && j1 == firstCityColumn) || (i1 == secondCityLine && j1 == secondCityColumn))
+                            {
+                                MessageBox.Show("Некорректное содержиме файла");
+                                mainWindow.SizeChanged -= WindowSizeChanged;
+                                MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+                                mainMenu.Build();
+                                return;
+                            }
+                            hexField.SetHexValue(i1, j1, 2);
+                        }
+                    }
+                }
+                hexField.Step(firstCityLine, firstCityColumn, 0);
+                hexField.Step(secondCityLine, secondCityColumn, 1);
+                for(int i = 0; i < maxNumberOfSteeps * 2; i++)
+                {
+                    string t = file.ReadLine();
+                    string[] s = t.Split(' ');
+                    //x -> column
+                    int y = Int32.Parse(s[0]) - 1;
+                    int x = Int32.Parse(s[1]) - 1;
+                    if(hexField.IsStepPossible(x, y, i % 2))
+                        hexField.Step(x , y , i % 2);
+                    else
+                    {
+                        MessageBox.Show(String.Format("Некорректное содержиме файла   :  {0} -  {1} : {2}", i, x, y));
+                        mainWindow.SizeChanged -= WindowSizeChanged;
+                        MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+                        mainMenu.Build();
+                        return;
+                    }
+                }
+                numberOfSteeps = 0;
+                InfoLabelChange();
+                EndGame();
+            }
+            catch
+            {
+                MessageBox.Show("Некорректное содержиме файла");
+                mainWindow.SizeChanged -= WindowSizeChanged;
+                MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+                mainMenu.Build();
+            }
         }
     }
 }

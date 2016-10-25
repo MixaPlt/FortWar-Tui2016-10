@@ -70,17 +70,27 @@ namespace NFW
             {
                 string t = System.IO.File.ReadAllLines(EnterWay.Text)[0];
                 string[] s = t.Split(' ');
-                if(t.Length != 4)
+                if(s.Length != 4)
                 {
                     MessageBox.Show("Файл не существует или повреждён", "FortWar");
                     return;
                 }
-                switch(t[3])
+                switch (s[3])
                 {
-                    case '3':
+                    case "3":
                         mainWindow.SizeChanged -= WindowSizeChanged;
                         ThirdMode thirdMode = new ThirdMode() { mainCanvas = mainCanvas, mainWindow = mainWindow, LoadMode = 2, LoadWay = EnterWay.Text};
                         thirdMode.Build();
+                        break;
+                    case "1":
+                        mainWindow.SizeChanged -= WindowSizeChanged;
+                        SecondMode secondMode = new SecondMode() { mainCanvas = mainCanvas, mainWindow = mainWindow, isRead = true, readWay = EnterWay.Text };
+                        secondMode.Build();
+                        break;
+                    case "2":
+                        mainWindow.SizeChanged -= WindowSizeChanged;
+                        SecondMode secontMode = new SecondMode() { mainCanvas = mainCanvas, mainWindow = mainWindow, isRead = true, readWay = EnterWay.Text };
+                        secontMode.Build();
                         break;
                     default:
                         MessageBox.Show("Файл не существует или повреждён", "FortWar");
