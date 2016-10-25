@@ -399,6 +399,7 @@ namespace NFW
             playerSteep = 1 - playerSteep;
             usedKnights = 0;
             ausedKnights = 0;
+            useKnight = -1;
             InfoLabelChange();
         }
         private void ReadMode(string way)

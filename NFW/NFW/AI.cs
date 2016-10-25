@@ -19,6 +19,7 @@ namespace NFW
     {
         public int i;
         public int j;
+        public bool b;
     }
     class AI
     {
@@ -77,6 +78,67 @@ namespace NFW
                 }
             }
             return ans; 
+        }
+        public pair[] ThirdMode(HexField hexField, Knight[] knights, int numberOfKnights, int ps, int numberOfSteeps)
+        {
+            pair[] ans = new pair[numberOfKnights];
+            if (numberOfSteeps > 1)
+            {
+                for (int i = numberOfKnights / 2 - 1; i > 1; i--)
+                {
+                    for (int l1 = 0; l1 < 6; l1++)
+                    {
+                        int i1 = knights[i * 2 + ps].i + possibleSteps[knights[i * 2 + ps].j % 2, l1, 0];
+                        int j1 = knights[i * 2 + ps].j + possibleSteps[knights[i * 2 + ps].j % 2, l1, 1];
+                        if (i1 >= 0 && j1 >= 0 && i1 < hexField.FieldHeight && j1 < hexField.FieldWidth)
+                            if (hexField.field[i1, j1].Value != 1 && hexField.field[i1, j1].Value != 9 && hexField.field[i1, j1].Value != 10 && hexField.field[i1, j1].Knight == -1)
+                                for (int l2 = 0; l2 < 6; l2++)
+                                {
+                                    int i2 = i1 + possibleSteps[j1 % 2, l2, 0];
+                                    int j2 = j1 + possibleSteps[j1 % 2, l2, 1];
+                                    if (i2 >= 0 && j2 >= 0 && i2 < hexField.FieldHeight && j2 < hexField.FieldWidth)
+                                        if (hexField.field[i2, j2].Value != 1 && hexField.field[i2, j2].Value != 9 && hexField.field[i2, j2].Value != 10 && hexField.field[i2, j2].Knight == -1)
+                                            for (int l3 = 0; l3 < 6; l3++)
+                                            {
+                                                int i3 = i2 + possibleSteps[j2 % 2, l3, 0];
+                                                int j3 = j2 + possibleSteps[j2 % 2, l3, 1];
+                                                if (i3 >= 0 && j3 >= 0 && i3 < hexField.FieldHeight && j3 < hexField.FieldWidth)
+                                                    if (hexField.field[i3, j3].Value != 1 && hexField.field[i3, j3].Value != 9 && hexField.field[i3, j3].Value != 10 && hexField.field[i3, j3].Knight == -1)
+                                                        for (int l4 = 0; l4 < 6; l4++)
+                                                        {
+                                                            int i4 = i3 + possibleSteps[j3 % 2, l4, 0];
+                                                            int j4 = j3 + possibleSteps[j3 % 2, l4, 1];
+                                                            if (i4 >= 0 && j4 >= 0 && i4 < hexField.FieldHeight && j4 < hexField.FieldWidth)
+                                                            {
+                                                                if (hexField.field[i4, j4].Knight == i * 2 + ps - 4)
+                                                                {
+                                                                    ans[i].i = i2;
+                                                                    ans[i].j = j2;
+                                                                    ans[i].b = false;
+                                                                }
+                                                            }
+                                                        }
+                                            }
+                                }
+                    }
+                }
+                HexField newField = new HexField() { FieldHeight = hexField.FieldHeight, FieldWidth = hexField.FieldWidth, build = false };
+                newField.Build();
+
+                for (int l1 = 0; l1 < 6; l1++)
+                {
+                    int i1 = knights[ps].i + possibleSteps[knights[ps].j % 2, l1, 0];
+                    int j1 = knights[ps].j + possibleSteps[knights[ps].j % 2, l1, 1];
+                    if (i1 >= 0 && j1 >= 0 && i1 < hexField.FieldHeight && j1 < hexField.FieldWidth)
+                        if (hexField.field[i1, j1].Value == 0 ||(fdg))
+                            for (int l2 = 0; l2 < 6; l2++)
+                            {
+                                int i2 = i1 + possibleSteps[j1 % 2, l2, 0];
+                                int j2 = j1 + possibleSteps[j1 % 2, l2, 1];
+                            }
+                }
+            }
+            return ans;
         }
         static private int Points(int x, int y, int ps, int[] points, HexField hexField)
         {

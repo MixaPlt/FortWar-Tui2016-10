@@ -20,5 +20,6 @@ namespace NFW
     {
         public int Value = 0, isTurned = 0;
         public int i = 0, j = 0;
+        public pair ps;
     }
 }
