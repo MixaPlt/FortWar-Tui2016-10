@@ -356,6 +356,7 @@ namespace NFW
             secondLineBox.Text = (secondCityLine + 1).ToString();
             secondColumnBox.Text = (secondCityColumn + 1).ToString();
             enterNumberOfSteps.Text = NumberOfSteeps.ToString();
+            selectAIStatus.SelectedIndex = AIStatus;
             ApplySettings(null, null);
         }
         private void Save()

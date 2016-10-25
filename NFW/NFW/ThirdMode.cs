@@ -363,8 +363,6 @@ namespace NFW
                                         if (hexField.field[secondCityLine, secondCityColumn].Knight == -1 && !endStepButton.IsVisible)
                                             mainCanvas.Children.Add(endStepButton);
                                     }
-                                    /*             if (usedKnights >= numberKnights[playerSteep] && endStepButton.IsVisible == false)
-                                                     mainCanvas.Children.Add(endStepButton);*/
                                     return;
                                 }
                         }
@@ -400,6 +398,34 @@ namespace NFW
             usedKnights = 0;
             ausedKnights = 0;
             useKnight = -1;
+            if (AIStatus == 1 || playerSteep == 1)
+            if(AIStatus > 0)
+            {
+                AIStep(playerSteep);
+                if (playerSteep == 1 && maxNumberOfSteeps <= numberOfSteeps)
+                {
+                    MessageBox.Show("Игра окончена");
+                    mainWindow.SizeChanged -= WindowSizeChanged;
+                    MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
+                    mainMenu.Build();
+                }
+                if (playerSteep == 1)
+                {
+                    knights[numberOfKnights] = new Knight() { Height = hexField.field[0, 0].Height, i = firstCityLine, j = firstCityColumn, Margin = hexField.field[firstCityLine, firstCityColumn].Margin, Source = firstKnightSource, Value = 0 };
+                    hexField.thisCanvas.Children.Add(knights[numberOfKnights]);
+                    knights[numberOfKnights + 1] = new Knight() { Height = hexField.field[0, 0].Height, i = secondCityLine, j = secondCityColumn, Margin = hexField.field[secondCityLine, secondCityColumn].Margin, Source = secondKnightSource, Value = 1 };
+                    hexField.thisCanvas.Children.Add(knights[numberOfKnights + 1]);
+                    hexField.field[firstCityLine, firstCityColumn].Knight = numberOfKnights;
+                    hexField.field[secondCityLine, secondCityColumn].Knight = numberOfKnights + 1;
+                    numberKnights[0]++;
+                    numberKnights[1]++;
+                    numberOfKnights += 2;
+                    numberOfSteeps++;
+                    for (int i = 0; i < numberOfKnights; i++)
+                        knights[i].isTurned = 0;
+                }
+                    playerSteep = 1 - playerSteep;
+            }
             InfoLabelChange();
         }
         private void ReadMode(string way)
@@ -470,14 +496,18 @@ namespace NFW
                 infoLabel.Foreground = Brushes.Red;
             }
             t += String.Format(" Счёт : {0}:{1}. Остал", hexField.playerPoints[0], hexField.playerPoints[1]);
-            if (maxNumberOfSteeps - numberOfSteeps == 1)
+            if (maxNumberOfSteeps - numberOfSteeps == 0)
                 t += String.Format("ся 1 ход");
             else
-                if (maxNumberOfSteeps - numberOfSteeps < 5)
-                t += String.Format("ось {0} хода", maxNumberOfSteeps - numberOfSteeps);
+                if (maxNumberOfSteeps - numberOfSteeps < 4)
+                t += String.Format("ось {0} хода", maxNumberOfSteeps - numberOfSteeps + 1);
             else
-                t += String.Format("ось {0} ходов", maxNumberOfSteeps - numberOfSteeps);
+                t += String.Format("ось {0} ходов", maxNumberOfSteeps - numberOfSteeps + 1);
             infoLabel.Content = t;
+        }
+        private void AIStep(int ps)
+        {
+            pair[] turns = AI.ThirdMode(hexField, knights, numberOfKnights, ps, maxNumberOfSteeps - numberOfSteeps);           
         }
     }
 }
