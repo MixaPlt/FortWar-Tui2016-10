@@ -517,7 +517,7 @@ namespace NFW
                 {
                     int i1 = knights[i * 2 + ps].i;
                     int j1 = knights[i * 2 + ps].j;
-                    if (hexField.field[knights[i * 2 + ps].i, knights[i * 2 + ps].j].Value == 0 || (hexField.field[knights[i * 2 + ps].i, knights[i * 2 + ps].j].Value > 1 && hexField.field[knights[i * 2 + ps].i, knights[i * 2 + ps].j].Value < 11))
+                    if (hexField.field[knights[i * 2 + ps].i, knights[i * 2 + ps].j].Value == 0 || (hexField.field[knights[i * 2 + ps].i, knights[i * 2 + ps].j].Value >= 3 && hexField.field[knights[i * 2 + ps].i, knights[i * 2 + ps].j].Value < 5))
                     {
                         hexField.Step(i1, j1, ps);
                         knights[i * 2 + ps].Value = 5;
