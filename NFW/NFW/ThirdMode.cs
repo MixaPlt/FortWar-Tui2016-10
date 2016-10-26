@@ -374,7 +374,7 @@ namespace NFW
             mainCanvas.Children.Remove(endStepButton);
             if(playerSteep == 1 && maxNumberOfSteeps <= numberOfSteeps)
             {
-                MessageBox.Show("Игра окончена");
+                MessageBox.Show(String.Format("Игра окончена. Счёт: {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]));
                 mainWindow.SizeChanged -= WindowSizeChanged;
                 MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
                 mainMenu.Build();
@@ -404,7 +404,7 @@ namespace NFW
                 AIStep(playerSteep);
                 if (playerSteep == 1 && maxNumberOfSteeps <= numberOfSteeps)
                 {
-                    MessageBox.Show("Игра окончена");
+                    MessageBox.Show(String.Format("Игра окончена. Счёт: {0}:{1}", hexField.playerPoints[0], hexField.playerPoints[1]));
                     mainWindow.SizeChanged -= WindowSizeChanged;
                     MainMenu mainMenu = new MainMenu() { mainCanvas = mainCanvas, mainWindow = mainWindow };
                     mainMenu.Build();
